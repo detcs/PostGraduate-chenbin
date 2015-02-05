@@ -8,17 +8,15 @@ import com.data.model.Essense;
 
 public class EssenseUtil implements NetUtil<Essense> {
 	private int type;
-	private String queryKey;
 
-	public EssenseUtil(int type, String queryKey) {
+	public EssenseUtil(int type) {
 		this.type = type;
-		this.queryKey = queryKey;
 	}
 
 	@Override
 	public String getURL(int page, int limit) {
 		// TODO Auto-generated method stub
-		return ComputeURL.getEssenseListURL(page, limit, type, queryKey);
+		return ComputeURL.getEssenseListURL(page, limit, type);
 	}
 
 	@Override

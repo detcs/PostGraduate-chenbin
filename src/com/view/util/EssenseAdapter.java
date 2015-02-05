@@ -23,12 +23,10 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 	private Context context;
 	private DataBuffer<Essense> buffer;
 	private int type;
-	private String queryKey;
 
-	public EssenseAdapter(Context context, int dataType, String queryKey) {
+	public EssenseAdapter(Context context, int dataType) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
-		this.queryKey = queryKey;
 		type = dataType;
 		init();
 	}
@@ -89,11 +87,11 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 
 	private void initVariable() {
 		// init buffer
-		buffer = new DataBuffer<Essense>(this, new EssenseUtil(type, queryKey));
+		buffer = new DataBuffer<Essense>(this, new EssenseUtil(type));
 	}
 
 	public void search(String queryKey) {
-		buffer.clean(new EssenseUtil(type, queryKey));
+		buffer.clean(new EssenseUtil(type));
 	}
 
 	@Override

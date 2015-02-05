@@ -13,6 +13,8 @@ import android.os.Bundle;
 public class EssenseActivity extends Activity implements EssenseJump,
 		PullEssenseDetail {
 	// private static final String TAG = "EssenseActivity";
+	private static final String SHARETAG = "EssenseShareFragment";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -20,26 +22,47 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		init();
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
 	// EssenseJump
 	@Override
 	public void detail(String id) {
 		// TODO Auto-generated method stub
 		NetCall.getEssenseDetail(id, this);
+	}
+
+	@Override
+	public void query() {
+		// TODO Auto-generated method stub
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		EssenseQueryFragment fragment = new EssenseQueryFragment();
+		transaction.replace(R.id.FrameLayout1, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+
+	@Override
+	public void addShare(EssenseDetail ed) {
+		// TODO Auto-generated method stub
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		EssenseShareFragment fragment = new EssenseShareFragment();
+		transaction.setCustomAnimations(R.anim.essense_bottom_in, 0);
+		transaction.add(fragment, SHARETAG);
+		transaction.commit();
+	}
+
+	@Override
+	public void removeShare() {
+		// TODO Auto-generated method stub
+		FragmentManager manager = getFragmentManager();
+		EssenseShareFragment fragment = (EssenseShareFragment) manager
+				.findFragmentByTag(SHARETAG);
+		if (null == fragment)
+			return;
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.setCustomAnimations(0, R.anim.essense_bottom_out);
+		transaction.remove(fragment);
+		transaction.commit();
 	}
 
 	// *************init*************
@@ -69,4 +92,5 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		// TODO Auto-generated method stub
 
 	}
+
 }

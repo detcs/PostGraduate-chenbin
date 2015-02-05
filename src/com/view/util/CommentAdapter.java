@@ -25,8 +25,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	private Reply reply;
 	private Post vg;
 
-	public CommentAdapter(Context context, String postId, Reply reply,
-			Post vg) {
+	public CommentAdapter(Context context, String postId, Reply reply, Post vg) {
 		this.context = context;
 		this.postId = postId;
 		this.reply = reply;
@@ -68,14 +67,31 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	private TextView nickNameView_p;
 	private TextView timeView_p;
 	private TextView contentView_p;
+	private ImageView reserveView_p;
+	private ImageView praiseView_p;
+	private ImageView moreView_p;
 
 	private View inflatePost(View convertView, ViewGroup parent) {
 		View view = LayoutInflater.from(context).inflate(R.layout.square_post,
 				parent, false);
+		findPostViews(view);
+		initPostViews();
+		setPostListener();
+		return view;
+	}
+
+	private void findPostViews(View view) {
 		headView_p = (ImageView) view.findViewById(R.id.headView);
 		nickNameView_p = (TextView) view.findViewById(R.id.nickNameView);
 		timeView_p = (TextView) view.findViewById(R.id.timeView);
 		contentView_p = (TextView) view.findViewById(R.id.contentView);
+
+		reserveView_p = (ImageView) view.findViewById(R.id.imageView1);
+		praiseView_p = (ImageView) view.findViewById(R.id.imageView2);
+		moreView_p = (ImageView) view.findViewById(R.id.imageView3);
+	}
+
+	private void initPostViews() {
 		String headimg = vg.getImgNo();
 		Picasso.with(context).load(ComputeURL.getHeadImgURL(headimg))
 				.resize(100, 100).placeholder(R.drawable.default_head)
@@ -83,7 +99,34 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 		nickNameView_p.setText(vg.getAuthor());
 		timeView_p.setText(vg.getTime());
 		contentView_p.setText(vg.getContent());
-		return view;
+	}
+
+	private void setPostListener() {
+		reserveView_p.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// 收藏
+			}
+		});
+		praiseView_p.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// 点赞
+			}
+		});
+		moreView_p.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// bump more choice
+				reply.moreChoice();
+			}
+		});
 	}
 
 	private View inflateComment(final int position, View convertView,
@@ -147,6 +190,8 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	// *************Call back*************
 	public interface Reply {
 		public void reply(String userId, int position);
+
+		public void moreChoice();
 	}
 
 	@Override

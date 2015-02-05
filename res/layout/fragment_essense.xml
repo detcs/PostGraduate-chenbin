@@ -24,19 +24,25 @@
                 android:textSize="@dimen/essense_head_words_size" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical" >
 
-            <TextView
-                android:id="@+id/textView1"
+            <ImageView
+                android:id="@+id/backImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/essense_back_words"
-                android:textColor="@color/essense_back_words_color"
-                android:textSize="@dimen/essense_head_words_size" />
-        </LinearLayout>
+                android:src="@drawable/pause" />
+
+            <ImageView
+                android:id="@+id/queryImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/pause" />
+        </RelativeLayout>
     </FrameLayout>
 
     <TabHost
@@ -50,24 +56,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <LinearLayout
+            <TabWidget
+                android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/essense_tabs_bar_height"
+                android:layout_height="@dimen/essense_tabs_height"
                 android:gravity="center" >
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="@dimen/essense_tabs_Width"
-                    android:layout_height="@dimen/essense_tabs_height"
-                    android:gravity="center" >
-                </TabWidget>
-            </LinearLayout>
-
-            <SearchView
-                android:id="@+id/searchView1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </SearchView>
+            </TabWidget>
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -109,6 +103,21 @@
 
                     <ListView
                         android:id="@+id/listView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fastScrollEnabled="false" >
+                    </ListView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <ListView
+                        android:id="@+id/listView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

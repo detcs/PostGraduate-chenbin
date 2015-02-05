@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class SquareInformFragment extends Fragment {
@@ -25,7 +25,7 @@ public class SquareInformFragment extends Fragment {
 	private SquareJump jump;
 	private InformAdapter adapter;
 
-	private Button backBu;
+	private ImageView backBu;
 	private ListView listView1;
 
 	@Override
@@ -72,7 +72,7 @@ public class SquareInformFragment extends Fragment {
 	}
 
 	private void findViews(View view) {
-		backBu = (Button) view.findViewById(R.id.backBu);
+		backBu = (ImageView) view.findViewById(R.id.backBu);
 		listView1 = (ListView) view.findViewById(R.id.hintListView);
 	}
 

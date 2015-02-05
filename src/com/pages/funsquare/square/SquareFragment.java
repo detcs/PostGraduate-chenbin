@@ -16,14 +16,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class SquareFragment extends Fragment {
 	private View rootView;
+	
+	private ImageView backBu;
+	private ImageView informBu;
+	
 	private ListView listView1;
-	private Button backBu;
+	
 	private Button publishBu;
-	private Button informBu;
+	
 	private SquareAdapter postAdapter;
 	private SquareJump pubOrDetail;
 
@@ -65,9 +70,9 @@ public class SquareFragment extends Fragment {
 
 	private void findViews(View view) {
 		listView1 = (ListView) view.findViewById(R.id.listView1);
-		backBu = (Button) view.findViewById(R.id.backBu);
+		backBu = (ImageView) view.findViewById(R.id.backBu);
 		publishBu = (Button) view.findViewById(R.id.publishBu);
-		informBu = (Button) view.findViewById(R.id.informBu);
+		informBu = (ImageView) view.findViewById(R.id.informBu);
 	}
 
 	private void initListView() {

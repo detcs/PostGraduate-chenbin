@@ -57,37 +57,36 @@ public class ComputeURL {
 	}
 
 	// DataBuffer
-	public static String getListURL(int page, int limit, int type, String id,
-			String queryKey) {
-		String reStr;
-		switch (type) {
-		case GloableData.TYPE_EXERCISE:
-		case GloableData.TYPE_INFORMATION:
-		case GloableData.TYPE_MATERIAL:
-			reStr = getEssenseListURL(page, limit, type, queryKey);
-			break;
-		case GloableData.TYPE_POST:
-			reStr = getPostListURL(page, limit);
-			break;
-		case GloableData.TYPE_COMMENT:
-			reStr = getCommentListURL(page, limit, id);
-			break;
-		case GloableData.TYPE_INFORM:
-			reStr = getInformListURL(page, limit);
-			break;
-		default:
-			reStr = "";
-			SysCall.error("list url is error");
-			break;
-		}
-		return reStr;
-	}
+	// public static String getListURL(int page, int limit, int type, String id,
+	// String queryKey) {
+	// String reStr;
+	// switch (type) {
+	// case GloableData.TYPE_EXERCISE:
+	// case GloableData.TYPE_INFORMATION:
+	// case GloableData.TYPE_MATERIAL:
+	// reStr = getEssenseListURL(page, limit, type, queryKey);
+	// break;
+	// case GloableData.TYPE_POST:
+	// reStr = getPostListURL(page, limit);
+	// break;
+	// case GloableData.TYPE_COMMENT:
+	// reStr = getCommentListURL(page, limit, id);
+	// break;
+	// case GloableData.TYPE_INFORM:
+	// reStr = getInformListURL(page, limit);
+	// break;
+	// default:
+	// reStr = "";
+	// SysCall.error("list url is error");
+	// break;
+	// }
+	// return reStr;
+	// }
 
-	public static String getEssenseListURL(int page, int limit, int type,
-			String queryKey) {
+	public static String getEssenseListURL(int page, int limit, int type) {
 		String reStr = GloableData.URL + GloableData.ESSENSE_PATH
 				+ GloableData.getParam() + "&page=" + page + "&limit=" + limit
-				+ "&type=" + type + "&key=" + str(queryKey);
+				+ "&type=" + type;
 		return reStr;
 	}
 

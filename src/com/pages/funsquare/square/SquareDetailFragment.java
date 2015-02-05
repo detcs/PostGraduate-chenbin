@@ -8,7 +8,7 @@ import com.data.util.NetCall.UploadData;
 import com.view.util.AdapterFresh;
 import com.view.util.CommentAdapter;
 import com.view.util.CommentAdapter.Reply;
-
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,16 +18,19 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+@SuppressLint("ValidFragment")
 public class SquareDetailFragment extends Fragment implements Reply, UploadData {
 	private static final String TAG = "SquareDetailFragment";
 	// private Context context;
 	private View rootView;
+	private SquareJump jump;
 	// head bar
-	private Button backBu;
-	private Button shareBu;
+	private ImageView backBu;
+	private ImageView informBu;
 	// show zone
 	private ListView listView1;
 	// comment bar
@@ -40,9 +43,19 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	private String userId;
 	private String replyHead;
 
+	public SquareDetailFragment() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public SquareDetailFragment(Post vg) {
 		// TODO Auto-generated constructor stub
 		this.vg = vg;
+	}
+
+	@Override
+	public void onAttach(android.app.Activity activity) {
+		super.onAttach(activity);
+		jump = (SquareJump) activity;
 	}
 
 	@Override
@@ -60,9 +73,9 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 		init(rootView);
 		return rootView;
 	}
-	
+
 	@Override
-	public void onPause(){
+	public void onPause() {
 		super.onPause();
 		commentAdapter.fresh();
 	}
@@ -75,8 +88,8 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	}
 
 	private void findViews(View view) {
-		backBu = (Button) view.findViewById(R.id.backBu);
-		shareBu = (Button) view.findViewById(R.id.shareBu);
+		backBu = (ImageView) view.findViewById(R.id.backBu);
+		informBu = (ImageView) view.findViewById(R.id.informBu);
 		listView1 = (ListView) view.findViewById(R.id.listView1);
 		commentBu = (Button) view.findViewById(R.id.commentBu);
 		editText = (EditText) view.findViewById(R.id.editText);
@@ -96,12 +109,12 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 				SysCall.clickBack();
 			}
 		});
-		shareBu.setOnClickListener(new OnClickListener() {
+		informBu.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
+				jump.inform();
 			}
 		});
 
@@ -123,6 +136,7 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 		});
 	}
 
+	// Reply
 	@Override
 	public void reply(String userId, int position) {
 		// TODO Auto-generated method stub
@@ -132,6 +146,13 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 			editText.setText(replyHead);
 			SysCall.bumpSoftInput(editText, getActivity());
 		}
+	}
+
+	@Override
+	public void moreChoice() {
+		// TODO Auto-generated method stub
+		rootView.clearFocus();
+		jump.addReport(vg);
 	}
 
 	// 这两个方法仅仅是为了通知用户的，真正的通知本地数据刷新不在这里做
@@ -148,4 +169,5 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), "评论失败", Toast.LENGTH_SHORT).show();
 	}
+
 }

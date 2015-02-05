@@ -156,6 +156,8 @@
     <string name="weibosdk_demo_toast_obtain_token_success">获取 Token 成功</string>
     <string name="weibosdk_demo_toast_obtain_token_failed">获取 Token 失败</string>
     <string name="title_activity_group_search">GroupSearchActivity</string>
+   
+<!-- camera -->
     <string name="camera_close_preview">关闭</string>
     <string name="camera_pick_album">从相册选取</string>
     <string name="camera_retake">重拍</string>
@@ -165,5 +167,27 @@
     <string name="camera_edit_save">保存</string>
     <string name="essense_head_words">精华</string>
     <string name="essense_back_words">&lt;返回</string>
-
+    <string name="essense_query_head_title">搜索</string>
+    <string name="essense_email_hint_title">请设置邮箱</string>
+    <string name="essense_email_hint_content">下载前倾先设置接收邮箱</string>
+    <string name="default_quit">取消</string>
+    <string name="default_ensure">确定</string>
+    <string name="essense_share_hint_title">下载提醒</string>
+    <string name="essense_share_hint_content">精华内容，请先分享，再下载</string>
+    <string name="essense_share_hint_ino">我知道了</string>
+    <string name="essense_detail_head_title">精华详情</string>
+    <string name="default_download">下载</string>
+    <string name="square_head_title">广场</string>
+    <string name="square_post_head_title">帖子详情</string>
+    <string name="default_report">举报</string>
+    <string name="square_inform_head_title">消息提醒</string>
+    <string name="title_activity_contact">ContactActivity</string>
+    <string name="contact_head_title">联系我们</string>
+    <string name="contact_hint_words">反馈内容</string>
+    <string name="contact_hint_funcs_words">联系方式</string>
+    <string name="default_commit">提交</string>
+    <string name="contact_thanks_title">谢谢！</string>
+    <string name="contact_thanks_content">我们很重视您的意见，您的意见是我们前进的动力。</string>
+    <string name="title_activity_person">PersonActivity</string>
+    <string name="person_center_head_title">个人中心</string>
 </resources>

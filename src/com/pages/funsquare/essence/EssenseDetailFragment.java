@@ -6,41 +6,50 @@ import com.data.util.NetCall.DownloadSource;
 import com.data.util.GloableData;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
-import com.view.util.EmailSet;
-import com.view.util.EmailSet.EmainSetInterface;
-
+import com.pages.funsquare.essence.EmailHintDialog.EmailHintDialogCallBack;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+@SuppressLint("ValidFragment")
 public class EssenseDetailFragment extends Fragment implements DownloadSource,
-		EmainSetInterface {
-	// private static final String TAG = "EssenseDetailFragment";
+		EmailHintDialogCallBack {
+	private static final String TAG = "EssenseDetailFragment";
 	private View rootView;
 	private EssenseDetail ed;
+	private EssenseJump jump;
 
-	private FrameLayout FrameLayout1;
-
-	private Button backBu;
-	private Button downBu;// 不一定有
-	private WebView webView1;
+	private ImageView backBu;
+	private TextView titleView;
+	private TextView genderView;
+	private TextView sizeView;
+	private TextView visitView;
+	private TextView downView;
+	private TextView authorView;
+	private ImageView reserveView;
+	private ImageView shareView;
+	private Button downBu;
 
 	public EssenseDetailFragment(EssenseDetail ed) {
 		this.ed = ed;
 		// context = getActivity();
 	}
+	public EssenseDetailFragment() {
+
+	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+	public void onAttach(android.app.Activity activity) {
+		super.onAttach(activity);
+		jump = (EssenseJump) activity;
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,45 +59,35 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 					container, false);
 		}
 		init(rootView);
-		if (EssenseDetail.HASRESOURCE == ed.getHasDownload()) {
-			View topView = (View) inflater.inflate(R.layout.square_detail_top,
-					FrameLayout1, false);
-			FrameLayout1.addView(topView);
-			downBu = (Button) topView.findViewById(R.id.downBu);
-			downBu.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					download();
-				}
-			});
-		}
 		return rootView;
 	}
 
 	private void init(View view) {
 		findViews(view);
-		initWebView();
+		initViews();
 		setListener();
+		initDownBu();
 	}
 
 	private void findViews(View view) {
-		FrameLayout1 = (FrameLayout) view.findViewById(R.id.FrameLayout1);
-		backBu = (Button) view.findViewById(R.id.backBu);
-		webView1 = (WebView) view.findViewById(R.id.webView1);
+		backBu = (ImageView) view.findViewById(R.id.backBu);
+		titleView = (TextView) view.findViewById(R.id.titleView);
+		genderView = (TextView) view.findViewById(R.id.genderView);
+		sizeView = (TextView) view.findViewById(R.id.sizeView);
+		visitView = (TextView) view.findViewById(R.id.visitView);
+		downView = (TextView) view.findViewById(R.id.downView);
+		authorView = (TextView) view.findViewById(R.id.authorView);
+		reserveView = (ImageView) view.findViewById(R.id.reserveView);
+		shareView = (ImageView) view.findViewById(R.id.shareView);
 	}
 
-	private void initWebView() {
-		// webView1.getSettings().setJavaScriptEnabled(true);
-		webView1.loadUrl(ed.getUrl());
-		webView1.setWebViewClient(new WebViewClient() {
-			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				view.loadUrl(url);
-				return true;
-			}
-		});
+	private void initViews() {
+		titleView.setText("政治大神最新考研。。。");
+		genderView.setText("资料类别：\t视屏");
+		sizeView.setText("资料大小：\t1.26M");
+		visitView.setText("浏览次数：\t765次");
+		downView.setText("下载次数：\t586次");
+		authorView.setText("上传者：\t王小丫");
 	}
 
 	private void setListener() {
@@ -100,27 +99,65 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 				SysCall.clickBack();
 			}
 		});
+		reserveView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				SysCall.error("收藏");
+			}
+		});
+		shareView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				rootView.clearFocus();
+				jump.addShare(ed);
+			}
+		});
+	}
+
+	private void initDownBu() {
+		if (EssenseDetail.HASRESOURCE == ed.getHasDownload()) {
+			// View topView = (View)
+			// inflater.inflate(R.layout.square_detail_top,
+			// FrameLayout1, false);
+			// rootView.addView(topView);
+			downBu.setVisibility(View.VISIBLE);
+			downBu.setClickable(true);
+			downBu = (Button) rootView.findViewById(R.id.downBu);
+			downBu.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					download();
+				}
+			});
+		}
 	}
 
 	private void download() {
 		// 如果没有资源文件，则不会执行到这里
 		if (EssenseDetail.NEEDSHARE == ed.getNeedShare()) {
-			SysCall.hint(getActivity(), "share first");
+			new ShareHintDialog(getActivity()).show();
 			return;
 		}
 		if (!GloableData.hasSetEmail()) {
 			// 检验邮箱是否已经设置
-			EmailSet.setEmail(getActivity(), this);
+			new EmailHintDialog(getActivity(), this).show();
 		} else {
 			NetCall.download(ed.getId(), "314784088@qq.com",
 					ed.getResourceId(), "" + ed.getNeedShare(), this);
 		}
 	}
 
+	// DownloadSource
 	@Override
 	public void downloadSuccess() {
 		// TODO Auto-generated method stub
-		SysCall.hint(getActivity(), "download success");
+		SysCall.hint(getActivity(), "已发送至您的邮箱");
 	}
 
 	@Override
@@ -129,18 +166,16 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		SysCall.hint(getActivity(), "download fail");
 	}
 
-	// EmainSet:EmainSetInterface
+	// EmailHintDialogCallBack
 	@Override
-	public void setSuccess(String email) {
+	public void quit() {
 		// TODO Auto-generated method stub
-		NetCall.download(ed.getId(), "314784088@qq.com", ed.getResourceId(), ""
-				+ ed.getNeedShare(), this);
+		// do nothing
 	}
 
-	// EmainSet:EmainSetInterface
 	@Override
-	public void setFail() {
+	public void ensure() {
 		// TODO Auto-generated method stub
-		SysCall.hint(getActivity(), "email set fail");
+		SysCall.error(TAG + " :hint click ensure");
 	}
 }

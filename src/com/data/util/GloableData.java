@@ -11,7 +11,7 @@ public class GloableData {
 	// attention type-value:affects the EssenseFragment
 	public static final int TYPE_MATERIAL = 0, TYPE_INFORMATION = 1,
 			TYPE_EXERCISE = 2, TYPE_POST = 3, TYPE_COMMENT = 4,
-			TYPE_INFORM = 5;
+			TYPE_INFORM = 5, TYPE_NEW = 6;
 	public static final int ISNEW = 1;
 	public static final String URL = "http://114.215.196.179:8080/gs";
 	// public static final String URL = "http://192.168.0.115:8081/gs";
@@ -29,10 +29,10 @@ public class GloableData {
 	public static final String UPLOAD_SUCCESS_MSG = "发布成功";
 	public static RequestQueue requestQueue;
 	private static String param;
-	// private static String userid = "6dfae24f-a77a-11e4-9812-ac853dac2305";
-	private static String userid;
-	// private static String verify = "1";
-	private static String verify;
+	private static String userid = "6dfae24f-a77a-11e4-9812-ac853dac2305";
+	// private static String userid;
+	private static String verify = "1";
+	// private static String verify;
 	private static String email;
 
 	public static String getEmail() {
@@ -58,14 +58,14 @@ public class GloableData {
 	}
 
 	public static void init(Context context) {
-		userid = UserConfigs.getId();
-		verify = UserConfigs.getVerify();
+		// userid = UserConfigs.getId();
+		// verify = UserConfigs.getVerify();
 
-		TelephonyManager tm = (TelephonyManager) context
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		param = "&deviceid=" + tm.getDeviceId() + "&userid=" + userid
-				+ "&verify=" + verify;
-		// param = "&deviceid=" + 1 + "&userid=" + userid + "&verify=" + verify;
+		// TelephonyManager tm = (TelephonyManager) context
+		// .getSystemService(Context.TELEPHONY_SERVICE);
+		// param = "&deviceid=" + tm.getDeviceId() + "&userid=" + userid
+		// + "&verify=" + verify;
+		param = "&deviceid=" + 1 + "&userid=" + userid + "&verify=" + verify;
 	}
 
 	public static void initRequestQueue(Context context) {

@@ -11,4 +11,8 @@ public interface SquareJump {
 	public void detail(String pid);
 
 	public void inform();
+
+	public void addReport(Post vg);
+
+	public void removeReport();
 }

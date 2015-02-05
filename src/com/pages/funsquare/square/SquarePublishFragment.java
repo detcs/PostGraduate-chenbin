@@ -13,14 +13,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class SquarePublishFragment extends Fragment implements UploadData {
 	private View rootView;
 
-	private Button backBu;
-	private Button publishBu;
+	private ImageView backBu;
+	private ImageView publishBu;
 	private EditText titleText;
 	private EditText editText1;
 
@@ -52,10 +52,10 @@ public class SquarePublishFragment extends Fragment implements UploadData {
 	}
 
 	private void findViews(View view) {
-		backBu = (Button) view.findViewById(R.id.backBu);
+		backBu = (ImageView) view.findViewById(R.id.backBu);
 		titleText = (EditText) view.findViewById(R.id.titleText);
 		editText1 = (EditText) view.findViewById(R.id.editText1);
-		publishBu = (Button) view.findViewById(R.id.publishBu);
+		publishBu = (ImageView) view.findViewById(R.id.publishBu);
 	}
 
 	private void setListener() {

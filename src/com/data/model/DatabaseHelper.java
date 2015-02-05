@@ -186,8 +186,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public static int queryCourseRecordsCount(SQLiteDatabase db,String tableName)
     {
-    	//if(tableIsExist(db,tableName)==false)
-    	//	return 0;
+    	
+    	boolean tableExist=isTableExists(db,tableName);
+    	Log.e(DataConstants.TAG,"tableExist " +tableExist);
+    	if(tableExist==false)
+    		return 0;
+    	
     	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName,null); 
 	    result.moveToFirst(); 
 	    int count=0;
@@ -257,7 +261,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      return names;
     }
     
-    
+    public static boolean isTableExists(SQLiteDatabase mDatabase,String tableName) {  
+//         {  
+//            if(mDatabase == null || !mDatabase.isOpen()) {  
+//                mDatabase = getReadableDatabase();  
+//            }  
+//      
+//            if(!mDatabase.isReadOnly()) {  
+//                mDatabase.close();  
+//                mDatabase = getReadableDatabase();  
+//            }  
+//        }  
+      
+        Cursor cursor = mDatabase.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);  
+        if(cursor!=null) {  
+            if(cursor.getCount()>0) {  
+                                cursor.close();  
+                return true;  
+            }  
+                        cursor.close();  
+        }  
+        return false;  
+    }  
     public static boolean tableIsExist(SQLiteDatabase db,String tableName)
     {
         boolean result = false;
