@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.pages.notes.camera.MySurfaceView
+        android:id="@+id/mySurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/camera_top_bar_height"
+            android:background="@color/camera_float_bar"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/closeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/camera_close_preview"
+                android:textColor="@color/camera_top_bar_word"
+                android:textSize="@dimen/clickable_words_size" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/camera_bottom_bar_height"
+            android:layout_alignParentBottom="true" >
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/takeBu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="take"
+                    android:textSize="@dimen/clickable_words_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/camera_float_bar"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/pickView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_pick_album"
+                    android:textColor="@color/camera_pick_album"
+                    android:textSize="@dimen/clickable_words_size" />
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+</FrameLayout>

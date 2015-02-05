@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PostGraduate</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- user configs -->
+
+    <string name="user_config_file">userConfigs</string>
+    <string name="login_way">loginWay</string>
+    <string name="user_account">account</string>
+    <string name="user_password">password</string>
+    <string name="user_phone">phone</string>
+    <string name="user_weibo">weibo</string>
+    <string name="user_qq">qq</string>
+    <string name="user_nickname">nickname</string>
+    <string name="user_verify">verify</string>
+    <string name="user_id">userid</string>
+    <string name="course_english_name">courseEnglishName</string>
+    <string name="course_math_name">courseMathName</string>
+    <string name="course_politics_name">coursePoliticsName</string>
+    <string name="course_profess1_name">courseProfess1Name</string>
+    <string name="course_profess2_name">courseProfess2Name</string>
+    <!-- database -->
+    <string name="dbcol_photo_name">dbPicName</string>
+    <string name="dbcol_photo_base64">dbPicBase64</string>
+    <string name="dbcol_remark">dbRemark</string>
+    <string name="dbcol_time">dbTime</string>
+    <string name="dbcol_master_state">dbMasterState</string>
+    <string name="dbcol_date">dbDate</string>
+    <string name="dbcol_flag">dbFlag</string>
+    <string name="db_english_table">englishTable</string>
+    <string name="db_math_table">mathTable</string>
+    <string name="db_politics_table">politicsTable</string>
+    <string name="db_profess1_table">professOneTable</string>
+    <string name="db_profess2_table">professTwoTable</string>
+    <string name="db_footprint_table">footprintTable</string>
+    <string name="dbcol_cover_pic">dbCoverPic</string>
+    <string name="dbcol_cover_song">dbCoverSong</string>
+    <!-- <string name="dbcol_cover_song_name">dbCoverSongName</string> -->
+    <string name="dbcol_footprint_pic">dbFootprintPic</string>
+    <string name="dbcol_diary">dbDiary</string>
+    <string name="dbcol_encourage">dbEncourage</string>
+    <string name="dbcol_days">dbDays</string>
+    <string name="dbcol_daysleft">dbDaysleft</string>
+    <string name="dbcol_ifupload">dbIfUpload</string>
+    <string name="upload_no">uploadNO</string>
+	<string name="upload_yes">uploadYes</string>
+    <!-- file dir -->
+    <string name="dir_app">Android/data/ydd</string>
+    <string name="dir_cover_song">coverSong</string>
+    <string name="dir_cover_pic">coverPic</string>
+    <string name="dir_footprint_pic">footprintPic</string>
+    <string name="dir_english">EnglishDir</string>
+    <string name="dir_politics">PoliticsDir</string>
+    <string name="dir_math">MathDir</string>
+    <string name="dir_profess1">ProfessDir1</string>
+    <string name="dir_profess2">ProfessDir2</string>
+    <!-- login -->
+    <string name="account">账号</string>
+    <string name="password">密码</string>
+    <string name="phone_num">手机号</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="account_setting">账号设置</string>
+    <string name="register_illustration">为了您的账号安全，您的手机将会受到验证短信</string>
+    <string name="verify_num">验证码</string>
+    <string name="obtain_verify_num">获取验证码</string>
+    <string name="next_step">下一步</string>
+    <string name="set_password">设置密码</string>
+    <string name="set_nickname">设置昵称</string>
+    <string name="sex_select">选择性别</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="complete">完成</string>
+    <!-- note -->
+    <string name="first_use">firstUse</string>
+    <string name="today_rec">今日推荐</string>
+    <string name="diary">今天是复习的第1天</string>
+    <string name="course_choose">你只能选择四门科目</string>
+    <string name="english">英语</string>
+    <string name="english1">英语1</string>
+    <string name="english2">英语2</string>
+    <string name="english3">英语3</string>
+    <string name="politics">政治</string>
+    <string name="math">数学</string>
+    <string name="math1">数学1</string>
+    <string name="math2">数学2</string>
+    <string name="math3">数学3</string>
+    <string name="professional_course">专业课</string>
+    <string name="input_professional_course">请输入专业课名称</string>
+    <string name="back">返回</string>
+    <string name="choose">选择</string>
+    <string name="is_first_take_photo">isFirstTakePhoto</string>
+    <string name="note_class">noteClass</string>
+    <string name="reverse_review">倒序复习</string>
+    <string name="ebbinghaus_review">艾宾浩斯曲线复习</string>
+    <string name="get">get</string>
+    <string name="collect">收藏</string>
+    <string name="master">掌握</string>
+    <string name="unmaster">未掌握</string>
+    <string name="state_master">master</string>
+    <string name="state_unmaster">unmaster</string>
+    <string name="state_unknow">unknow</string>
+    <string name="remark">备注</string>
+    <string name="clock">打卡</string>
+    <string name="day">天</string>
+    <string name="task_complete">你已完成今天的所有任务</string>
+    <string name="date">2015.1.25</string>
+    <string name="problems">重难点</string>
+    <string name="myfootprint">我的足迹</string>
+    <string name="count_clock">累计打卡</string>
+    <string name="count_note">累计笔记</string>
+    <string name="today_add">今日新增</string>
+    <string name="piece">篇</string>
+    <string name="look_all">查看全部</string>
+    <!-- functions square -->
+    <string name="essence">精华</string>
+    <string name="square">广场</string>
+    <string name="vip">vip</string>
+    <string name="backup">备份</string>
+    <string name="personal_center">个人中心</string>
+
+    <!-- 登录/注销按钮 -->
+    <string name="weibosdk_demo_login_hint"><b>一键登录按钮：</b>\n（有以下三种样式，第一种为默认效果）</string>
+    <string name="weibosdk_demo_login_with_text_hint"><b>登录/注销按钮：</b>\n（有以下两种样式，第一种为默认效果，可修改）</string>
+    <string name="weibosdk_demo_logout_hint"><b>注销按钮：</b>\n（注意：该按钮不再进行封装，第三方可直接调用 LogoutAPI，<b>一个 token 不能重复注销多次</b>）</string>
+    <string name="weibosdk_demo_logout">注销</string>
+    <string name="weibosdk_demo_logout_success">已注销</string>
+    <string name="weibosdk_demo_logout_failed">注销失败</string>
+    <string name="weibosdk_demo_logout_failed_1">注销失败，请检查 Token 是否正确（一个 token 不能重复注销多次）</string>
+    <!-- 获取 Token -->
+    <string name="weibosdk_demo_obtain_token_via_sso_all_in_one">SSO 授权（ALL IN ONE）</string>
+    <string name="weibosdk_demo_obtain_token_via_web">SSO 授权（Web）</string>
+    <string name="weibosdk_demo_obtain_token_via_sso">SSO 授权（仅客户端）</string>
+    <string name="weibosdk_demo_obtain_token_via_signature">Web 授权</string>
+    <string name="weibosdk_demo_obtain_token_via_quick_sso">通过微博客户端快速授权</string>
+    <string name="weibosdk_demo_obtain_token_via_code">通过 Code 获取 Token</string>
+    <string name="weibosdk_demo_obtain_token_logout">用户登出</string>
+    <string name="weibosdk_demo_token_info">Token 信息：</string>
+    <string name="weibosdk_demo_token_has_existed">Token 仍在有效期内，无需再次登录。</string>
+    <string name="weibosdk_demo_obtain_token_hint"><b>请注意：</b>\n<li>SSO 登录需要微博客户端的支持，目前仅 3.0.0 及以上微博客户端版本支持 SSO；如果未安装，将自动转为 Oauth2.0 Web 授权认证（即第一种认证方式）</li>\n<li>如果您通过方式一和方式二获取不到 Token，而是获取到 code，那说明您的包名和签名存在问题，请到开放平台注册包名和签名。详情请查看 FAQ 文档</li></string>
+    <string name="weibosdk_demo_obtain_token_via_sso_hint">使用 SSO 登录前，请检查手机上是否已经安装新浪微博客户端，目前仅 3.0.0 及以上微博客户端版本支持 SSO；如果未安装，将自动转为 Oauth2.0 进行认证。</string>
+    <string name="weibosdk_demo_obtain_token_via_code_hint"><b>请注意：</b>基于以下几点原因，您可能不想使用前面的两种授权方式：\n<li>出于安全性的考虑，您不信任目前使用应用的包名和签名来获取 Token 的方式</li>\n<li>您不想安装微博客户端</li>\n您可以自行通过 Code 来获取 Token。通过这种方式需要使用到 APP_SECRET，请务必妥善保管好自己的 APP_SECRET，<b>不要直接暴露在程序中，泄露有风险</b>。\n<b>更多细节请查看：</b><a href="http://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E#Web.E5.BA.94.E7.94.A8.E7.9A.84.E9.AA.8C.E8.AF.81.E6.8E.88.E6.9D.83">验证授权步骤</a></string>
+    <string name="weibosdk_demo_step_to_obtain_code">第一步：获取 Code</string>
+    <string name="weibosdk_demo_step_to_obtain_token">第二步：通过 Code 获取 Token</string>
+    <string name="weibosdk_demo_code_text_hint">第一步获取到的 Code：（一次性有效）</string>
+    <string name="weibosdk_demo_token_text_hint">第二步获取到的 Token：</string>
+    <string name="weibosdk_demo_token_to_string_format">Token：%1$s \nRefresh Token：%2$s \nexpires_in：%3$s</string>
+    <string name="weibosdk_demo_token_to_string_format_1">Token：%1$s \n有效期：%2$s</string>
+    <string name="weibosdk_demo_toast_auth_success">授权成功</string>
+    <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
+    <string name="weibosdk_demo_toast_auth_canceled">取消授权</string>
+    <string name="weibosdk_demo_toast_obtain_code_success">获取 Code 成功</string>
+    <string name="weibosdk_demo_toast_obtain_code_failed">获取 Code 失败</string>
+    <string name="weibosdk_demo_toast_obtain_token_success">获取 Token 成功</string>
+    <string name="weibosdk_demo_toast_obtain_token_failed">获取 Token 失败</string>
+    <string name="title_activity_group_search">GroupSearchActivity</string>
+    <string name="camera_close_preview">关闭</string>
+    <string name="camera_pick_album">从相册选取</string>
+    <string name="camera_retake">重拍</string>
+    <string name="camera_edit">编辑</string>
+    <string name="camera_choose_default">音乐</string>
+    <string name="camera_edit_quit">取消</string>
+    <string name="camera_edit_save">保存</string>
+    <string name="essense_head_words">精华</string>
+    <string name="essense_back_words">&lt;返回</string>
+
+</resources>

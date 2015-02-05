@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_gravity="top"
+    	android:background="#ffffff"
+        >
+     	<Button
+     	    android:id="@+id/back_btn"
+     	    android:text="@string/back"
+     	    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_alignParentLeft="true"
+     	    />
+     	<Button
+     	    android:id="@+id/right_btn"
+     	    android:text="@string/choose"
+     	    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_alignParentRight="true"
+     	    />
+     </RelativeLayout>
+     <FrameLayout 
+         android:id="@+id/exercise_frame"
+         android:layout_width="match_parent"
+    	 android:layout_height="match_parent"
+         >
+         
+     </FrameLayout>
+</LinearLayout>
