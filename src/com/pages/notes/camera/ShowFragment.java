@@ -326,7 +326,7 @@ public class ShowFragment extends Fragment {
 			int flag) {
 		DatabaseHelper dbHelper = DataConstants.dbHelper;
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		CourseRecordInfo cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), flag);
+		CourseRecordInfo cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), flag,0);
 		DatabaseHelper.insertCourseRecord(getActivity(), db, tableName, cri);
 		DatabaseHelper.queryShowRecords(db, tableName);
 		db.close();

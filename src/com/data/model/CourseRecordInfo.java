@@ -10,9 +10,10 @@ public class CourseRecordInfo {
 	private String masterState;
 	private String ifUpload;
 	private int flag;
+	private int ifDeleted;
 	public CourseRecordInfo(String photoName, String photobase64,
 			String remark, String date, String time, String masterState,
-			String ifUplaod, int flag) {
+			String ifUplaod, int flag,int ifDeleted) {
 		super();
 		this.photoName = photoName;
 		this.photobase64 = photobase64;
@@ -23,6 +24,15 @@ public class CourseRecordInfo {
 		this.ifUpload = ifUplaod;
 		this.flag = flag;
 	}
+	
+	public int getIfDeleted() {
+		return ifDeleted;
+	}
+
+	public void setIfDeleted(int ifDeleted) {
+		this.ifDeleted = ifDeleted;
+	}
+
 	public String getPhotoName() {
 		return photoName;
 	}

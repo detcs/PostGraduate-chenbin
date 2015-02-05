@@ -151,14 +151,14 @@ public class MainActivity extends FragmentActivity {
 	       
 	    }
 
-	@Override
-	protected void onDestroy() {
-		if (mp.isPlaying()) {
-			mp.stop();
-		}
-		mp.release();
-		super.onDestroy();
-	}
+//	@Override
+//	protected void onDestroy() {
+//		if (mp.isPlaying()) {
+//			mp.stop();
+//		}
+//		mp.release();
+//		super.onDestroy();
+//	}
 
 	
 

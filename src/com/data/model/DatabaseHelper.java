@@ -42,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_photo_base64)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_remark)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_flag)+" INTEGER,"
+    			+context.getResources().getString(R.string.dbcol_photo_delete)+" INTEGER,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_master_state)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
@@ -135,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_master_state), cri.getMasterState());
     	cv.put(context.getResources().getString(R.string.dbcol_flag), cri.getFlag());
     	cv.put(context.getResources().getString(R.string.dbcol_ifupload), cri.getIfUpload());
+    	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
     	long rowid=db.insert(tableName, null, cv);
     	Log.e(DataConstants.TAG,"rowid:"+rowid);
     }
@@ -155,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
 //    }
     // masterState or remark update
-    public static void updateCourseRecordByPhotoName(Context context,SQLiteDatabase db,String tableName,String updateCol,String updateValue,String photoName)
+    public static void updateCourseRecordOnStringColByPhotoName(Context context,SQLiteDatabase db,String tableName,String updateCol,String updateValue,String photoName)
     {
     	Log.e(DataConstants.TAG,"updateCourseRecord "+updateCol+" "+updateValue+" where photoname="+photoName);
     	ContentValues cv=new ContentValues();
@@ -164,10 +166,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { photoName };//修改条件的参数
     	db.update(tableName,cv,whereClause,whereArgs);//执行修改
     }
-    public static void updateCourseRecordFlag(Context context,SQLiteDatabase db,String tableName,String photoname,int flag)
+    public static void updateCourseRecordOnIntColByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoname,String updateCol,int updateValue)
     {
     	ContentValues cv=new ContentValues();
-       	cv.put(context.getResources().getString(R.string.dbcol_flag), flag);
+       	cv.put(updateCol, updateValue);
     	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
     	String[] whereArgs = {photoname};//修改条件的参数
     	db.update(tableName,cv,whereClause,whereArgs);//执行修改
@@ -192,7 +194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	if(tableExist==false)
     		return 0;
     	
-    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName,null); 
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel != 0",null); 
 	    result.moveToFirst(); 
 	    int count=0;
 	    while (!result.isAfterLast()) { 

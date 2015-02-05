@@ -129,7 +129,7 @@ public class ReviewFragment extends Fragment{
 					Calendar calendar = Calendar.getInstance();
 					String date = sdf.format(calendar.getTime());
 					SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-					DataConstants.dbHelper.updateCourseRecordByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoNames.get(index));
+					DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoNames.get(index));
 					//db.close();
 				}
 			});
@@ -174,7 +174,7 @@ public class ReviewFragment extends Fragment{
 			// TODO Auto-generated method stub
 		
 				//rootView.startAnimation(animation);
-				DataConstants.dbHelper.updateCourseRecordByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_master_state), masterState, photoName);
+				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_master_state), masterState, photoName);
 				index++;
 				if(index==reviewImgPaths.size())
 				{

@@ -44,8 +44,10 @@
     <string name="dbcol_days">dbDays</string>
     <string name="dbcol_daysleft">dbDaysleft</string>
     <string name="dbcol_ifupload">dbIfUpload</string>
+    <string name="dbcol_photo_delete">dbPhotoDel</string>
     <string name="upload_no">uploadNO</string>
 	<string name="upload_yes">uploadYes</string>
+	
     <!-- file dir -->
     <string name="dir_app">Android/data/ydd</string>
     <string name="dir_cover_song">coverSong</string>
