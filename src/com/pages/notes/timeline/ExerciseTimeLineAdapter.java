@@ -34,6 +34,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	List<String> dates;
 	String tableName;
 	PhotoShowGridAdapter photoShowAdapter;
+	boolean chooseState;
  	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates) {
 		super();
 		//this.paths = paths;
@@ -86,7 +87,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths);
+		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    holder.day.setText(dates.get(position));
 	    return convertView; 
@@ -97,12 +98,12 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	    GridView grid;
 
 	} 
-	public void updateChooseState()
+	public void updateChooseState(boolean chooseState)
 	{
-		
-		Log.e(DataConstants.TAG,"timeline updatechoose");
-		photoShowAdapter.updateChooseState();
-		notifyDataSetChanged();
+		this.chooseState=chooseState;
+		//Log.e(DataConstants.TAG,"timeline updatechoose");
+		photoShowAdapter.updateChooseState(chooseState);
+		//notifyDataSetChanged();
 	}
 	
 

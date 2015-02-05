@@ -93,6 +93,7 @@
     <string name="input_professional_course">请输入专业课名称</string>
     <string name="back">返回</string>
     <string name="choose">选择</string>
+    <string name="cancel">取消</string>
     <string name="is_first_take_photo">isFirstTakePhoto</string>
     <string name="note_class">noteClass</string>
     <string name="reverse_review">倒序复习</string>
@@ -116,6 +117,7 @@
     <string name="today_add">今日新增</string>
     <string name="piece">篇</string>
     <string name="look_all">查看全部</string>
+    <string name="confirm">确认</string>
     <!-- functions square -->
     <string name="essence">精华</string>
     <string name="square">广场</string>

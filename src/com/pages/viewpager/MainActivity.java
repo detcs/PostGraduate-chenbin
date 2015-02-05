@@ -79,8 +79,9 @@ public class MainActivity extends FragmentActivity {
 	private com.mobovip.views.DirectionalViewPager viewPager;
 	final ArrayList<Fragment> fragList = new ArrayList<Fragment>();
 	FragmentManager fm;
-	MediaPlayer mp;
-
+	TodayFragment todayFragment;
+	NoteFragment noteFragment;
+	FunctionsSquareFragment funtionsSquareFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,10 +89,13 @@ public class MainActivity extends FragmentActivity {
 		// wsy 2015/2/3
 		GloableData.init(getApplicationContext());
 
-		LayoutInflater mInflater = getLayoutInflater();		
-		fragList.add(new TodayFragment());
-		fragList.add(new NoteFragment());
-		fragList.add(new FunctionsSquareFragment());
+		LayoutInflater mInflater = getLayoutInflater();	
+		todayFragment=new TodayFragment();
+		noteFragment=new NoteFragment();
+		funtionsSquareFragment=new FunctionsSquareFragment();
+		fragList.add(todayFragment);
+		fragList.add(noteFragment);
+		fragList.add(funtionsSquareFragment);
 		viewPager = (com.mobovip.views.DirectionalViewPager) findViewById(R.id.viewPager);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),fragList));
 		//viewPager.setAdapter(new MyPagerAdapter(listViews));
@@ -151,26 +155,16 @@ public class MainActivity extends FragmentActivity {
 	       
 	    }
 
-//	@Override
-//	protected void onDestroy() {
-//		if (mp.isPlaying()) {
-//			mp.stop();
-//		}
-//		mp.release();
-//		super.onDestroy();
-//	}
-
-	
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode==DataConstants.RESULTCODE_COURSE_SETTING)
+		//super.onActivityResult(requestCode, resultCode, data);
+		Log.e(DataConstants.TAG, "resultCode"+resultCode+" requestcode"+requestCode+" ");
+		if(requestCode==DataConstants.REQUEST_CODE_CAMERA | requestCode==DataConstants.REQUEST_CODE_EXERCISE)
 		{
-			//ListView courseNamelist = (ListView) listViews.get(1).findViewById(R.id.course_list);
-			//BaseAdapter ba=(BaseAdapter) courseNamelist.getAdapter();
-			//NotesClassAdapter(ba);
+			Log.e(DataConstants.TAG, resultCode+"");
+			noteFragment.updateNoteClassList();
+	
 		}
 	}
 	
