@@ -17,21 +17,6 @@
         android:layout_height="match_parent" >
 
         <LinearLayout
-            android:id="@+id/bottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/camera_bottom_bar_height"
-            android:layout_alignParentBottom="true"
-            android:background="@color/camera_float_bar"
-            android:gravity="center" >
-
-            <Button
-                android:id="@+id/saveBu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="保存" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/hideBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,67 +67,59 @@
             android:background="@color/camera_float_bar"
             android:gravity="center_vertical" >
 
-            <TextView
+            <ImageView
                 android:id="@+id/againView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/camera_retake"
-                android:textColor="@color/camera_top_bar_word"
-                android:textSize="@dimen/clickable_words_size" />
+                android:src="@drawable/pause" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/editView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/againView"
                 android:layout_alignParentRight="true"
-                android:text="@string/camera_edit"
-                android:textColor="@color/camera_top_bar_word"
-                android:textSize="@dimen/clickable_words_size" />
+                android:src="@drawable/pause" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/chooseBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/camera_choose_bar_height"
-            android:layout_above="@+id/bottomBar"
+            android:layout_alignParentBottom="true"
             android:background="@color/camera_float_bar"
             android:gravity="center" >
 
-            <RadioGroup
-                android:id="@+id/gendergroup"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal" >
+                android:layout_marginLeft="@dimen/camera_choose_item_gap"
+                android:background="@drawable/default_head"
+                android:text="TextView" />
 
-                <RadioButton
-                    android:id="@+id/radioButton1"
-                    android:background="@color/camera_choose_background"
-                    android:text="@string/camera_choose_default"
-                    android:textColor="@color/camera_choose_word" />
+            <TextView
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/camera_choose_item_gap"
+                android:background="@drawable/default_head"
+                android:text="TextView" />
 
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                    android:background="@color/camera_choose_background"
-                    android:text="@string/camera_choose_default"
-                    android:textColor="@color/camera_choose_word" />
+            <TextView
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/camera_choose_item_gap"
+                android:background="@drawable/default_head"
+                android:text="TextView" />
 
-                <RadioButton
-                    android:id="@+id/radioButton3"
-                    android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                    android:background="@color/camera_choose_background"
-                    android:text="@string/camera_choose_default"
-                    android:textColor="@color/camera_choose_word" />
-
-                <RadioButton
-                    android:id="@+id/radioButton4"
-                    android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                    android:background="@color/camera_choose_background"
-                    android:text="@string/camera_choose_default"
-                    android:textColor="@color/camera_choose_word" />
-            </RadioGroup>
+            <TextView
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/camera_choose_item_gap"
+                android:background="@drawable/default_head"
+                android:text="TextView" />
         </LinearLayout>
     </RelativeLayout>
 
