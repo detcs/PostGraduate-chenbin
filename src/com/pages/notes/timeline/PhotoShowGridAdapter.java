@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,9 @@ import android.widget.ImageView;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
+import com.pages.notes.ExerciseActivity;
+import com.pages.notes.ReviewFragment;
+import com.pages.notes.SingleNoteFragment;
 import com.squareup.picasso.Picasso;
 
 public class PhotoShowGridAdapter extends BaseAdapter
@@ -84,7 +91,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    {   
 	    	if(holder.chooseFlag.getVisibility()==View.VISIBLE)
 			holder.chooseFlag.setVisibility(View.INVISIBLE);
-	    	holder.img.setEnabled(false);
+	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(""));
 	    }
 	    return convertView; 
 	}
@@ -94,6 +101,23 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		//Log.e(DataConstants.TAG,"photoshow updatechoose "+chooseState);
 		//ReviewChooseFragment.choosedPhotoPaths=new ArrayList<String>();
 		notifyDataSetChanged();
+		
+	}
+	class CheckSingleNoteClickListener implements OnClickListener
+	{
+
+		String path;
+		
+		public CheckSingleNoteClickListener(String path) {
+			super();
+			this.path = path;
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			jumpToReview(path);
+		}
 		
 	}
 	class ChooseStateButtonClickListener implements OnClickListener
@@ -125,7 +149,19 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		}
 		
 	}
-	
+	public void jumpToReview(String path)
+	{
+		Fragment fragment=new SingleNoteFragment();
+		Bundle bundle = new Bundle();  
+        bundle.putString("type", "");
+        bundle.putString("single_path", path);
+       // bundle.putString("course_table_name", tableName);
+        fragment.setArguments(bundle);
+		FragmentManager fm=((ExerciseActivity)context).getSupportFragmentManager();
+		FragmentTransaction trans = fm.beginTransaction();  
+		trans.replace(R.id.exercise_frame, fragment);
+		trans.commit();
+	}
 }
 
 class GridViewHolder { 

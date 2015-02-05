@@ -1,70 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout 
     android:id="@+id/reviewchoose_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
+    android:layout_gravity="top"
    >
-   <LinearLayout 
-       android:id="@+id/course_transfer_choose"
-       android:visibility="invisible"
-       android:layout_alignParentBottom="true"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
-    <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_gravity="top"
-        >
-        <Button
-            android:id="@+id/couser_transfer_choose_cancel"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="@string/cancel"
-    		android:layout_weight="1"
-    		android:gravity="left"
-    		android:paddingLeft="2dp"
-            />
-        <Button
-            android:id="@+id/couser_transfer_choose_confirm"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"  		
-    		android:text="@string/confirm"
-    		android:layout_weight="1"
-    		android:gravity="right"
-    		android:paddingRight="2dp"
-            />
-    </LinearLayout>
-     <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_gravity="bottom"
-        >
-        <Button
-            android:id="@+id/couser1"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_weight="1"
-    		android:gravity="center"
-            />
-        <Button
-            android:id="@+id/couser2"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_weight="1"
-    		android:gravity="center"
-            />
-        <Button
-            android:id="@+id/couser3"
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_weight="1"
-    		android:gravity="center"
-            />
-    </LinearLayout>
 
-</LinearLayout>
 <!-- transfer -->
    <LinearLayout
        	android:id="@+id/transfer_delete"
@@ -119,4 +64,68 @@
        	android:layout_height="match_parent"
     	android:layout_above="@id/review_choose"
        />
+	
+	 
+	
 </RelativeLayout>
+	<!-- transfer 	choose -->
+	  <LinearLayout 
+	       android:id="@+id/course_transfer_choose"
+	       android:visibility="invisible"
+	       android:layout_gravity="bottom"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="top"
+	        >
+	        <Button
+	            android:id="@+id/couser_transfer_choose_cancel"
+	            android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:text="@string/cancel"
+	    		android:layout_weight="1"
+	    		android:gravity="left"
+	    		android:paddingLeft="2dp"
+	            />
+	        <Button
+	            android:id="@+id/couser_transfer_choose_confirm"
+	            android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"  		
+	    		android:text="@string/confirm"
+	    		android:layout_weight="1"
+	    		android:gravity="right"
+	    		android:paddingRight="2dp"
+	            />
+	    </LinearLayout>
+	     <LinearLayout
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="bottom"
+	        >
+	        <Button
+	            android:id="@+id/couser1"
+	            android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:gravity="center"
+	            />
+	        <Button
+	            android:id="@+id/couser2"
+	            android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:gravity="center"
+	            />
+	        <Button
+	            android:id="@+id/couser3"
+	            android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_weight="1"
+	    		android:gravity="center"
+	            />
+	    </LinearLayout>
+	</LinearLayout>
+</FrameLayout>
