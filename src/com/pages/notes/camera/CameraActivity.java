@@ -10,6 +10,13 @@ import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+/*
+ * last change:
+ * wsy 2-6
+ * 
+ * */
+//github.com/detcs/PostGraduate-chenbin.git
+
 public class CameraActivity extends Activity implements TakeJump, ShowJump {
 
 	@Override
@@ -39,6 +46,15 @@ public class CameraActivity extends Activity implements TakeJump, ShowJump {
 		fragmentTransaction.replace(R.id.FrameLayout1, showFragment);
 		fragmentTransaction.commit();
 	}
+
+	// @Override
+	// public void onBackPressed() {
+	// // TODO Auto-generated method stub
+	// Log.e(DataConstants.TAG, "camera on back");
+	// setResult(DataConstants.RESULTCODE_COURSE_SETTING);
+	// finish();
+	// //super.onBackPressed();
+	// }
 
 	// **************interface jump**************
 	@Override

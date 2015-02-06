@@ -3,6 +3,7 @@ package com.pages.notes;
 
 
 import com.app.ydd.R;
+import com.data.model.DataConstants;
 import com.pages.notes.timeline.ReviewChooseFragment;
 
 import android.app.Activity;
@@ -68,7 +69,15 @@ public class ExerciseActivity extends FragmentActivity{
 		
 		//frame.
 	}
-
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		
+		setResult(DataConstants.RESULTCODE_COURSE_SETTING);
+		finish();
+		super.onBackPressed();
+	}
+	
 	
 	
 }

@@ -36,6 +36,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class NoteFragment  extends Fragment{
 	GridView funcGridView;
+	ListView courseNamelist;
+	NotesClassAdapter noteClassAdapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
@@ -121,15 +123,14 @@ public class NoteFragment  extends Fragment{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Log.i("filp", "" + arg0.getId() + " button 1");
-
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), CameraActivity.class);
-				startActivity(intent);
+				getActivity().startActivityForResult(intent,DataConstants.REQUEST_CODE_CAMERA);
 
 			}
 		});
 		// GridView gv=(GridView)v.findViewById(R.id.notes_grid);
-		ListView courseNamelist = (ListView) v.findViewById(R.id.course_list);
+		courseNamelist = (ListView) v.findViewById(R.id.course_list);
 		final List<String> courseTableNames=new ArrayList<String>();
 		final List<String> names = new ArrayList<String>();
 		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
@@ -148,8 +149,8 @@ public class NoteFragment  extends Fragment{
 			names.add(UserConfigs.getCourseProfessTwoName());
 			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
 		}
-		
-		courseNamelist.setAdapter(new NotesClassAdapter(names,courseTableNames,getActivity()));
+		noteClassAdapter=new NotesClassAdapter(names,courseTableNames,getActivity());
+		courseNamelist.setAdapter(noteClassAdapter);
 		courseNamelist.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -166,7 +167,7 @@ public class NoteFragment  extends Fragment{
 				} else {
 					intent.putExtra("course_table_name", courseTableNames.get(position));
 					intent.putExtra("tag",getResources().getString(R.string.note_class));
-					startActivity(intent);
+					getActivity().startActivityForResult(intent, DataConstants.REQUEST_CODE_EXERCISE);
 				}
 				
 			}
@@ -197,7 +198,10 @@ public class NoteFragment  extends Fragment{
 		db.close();
 		count_note.setText(count+"");
 	}
-
+	public void updateNoteClassList()
+	{
+		noteClassAdapter.notifyDataSetChanged();
+	}
 	
 
 }

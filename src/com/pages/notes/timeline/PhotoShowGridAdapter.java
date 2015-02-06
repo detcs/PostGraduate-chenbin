@@ -1,18 +1,27 @@
 package com.pages.notes.timeline;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
+import com.pages.notes.ExerciseActivity;
+import com.pages.notes.ReviewFragment;
+import com.pages.notes.SingleNoteFragment;
 import com.squareup.picasso.Picasso;
 
 public class PhotoShowGridAdapter extends BaseAdapter
@@ -21,12 +30,15 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	List<String> imgPaths;
 	Context context;
 	LayoutInflater mInflater;
-	 static boolean chooseState=false;
-	public PhotoShowGridAdapter(Context context,List<String> imgPaths) {
+	boolean chooseState=false;
+	//List<String> choosedPhotoPaths;
+	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState) {
 		super();
 		this.imgPaths = imgPaths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.chooseState=chooseState;
+		//choosedPhotoPaths=new ArrayList<String>();
 	}
 
 	@Override
@@ -50,6 +62,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+		//Log.e(DataConstants.TAG,"photoshow getview"+chooseState);
 		GridViewHolder holder; 
 	    if (convertView == null) { 
 	        convertView = mInflater.inflate(R.layout.item_timeline_grid_item, null); 
@@ -63,21 +76,92 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    // Bind the data efficiently with the holder.
 	    //Log.e(DataConstants.TAG,"pos:"+position+" path:"+ imgPaths.get(position));
 	    int width=(DataConstants.screenWidth-10)/4;
-	    Log.e(DataConstants.TAG,"chooseState:"+chooseState);
-	    if(chooseState)
-	    	holder.chooseFlag.setVisibility(View.VISIBLE);
-	    else
-	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
+	   // Log.e(DataConstants.TAG,"chooseState:"+chooseState);
+//	    if(chooseState)
+//	    	holder.chooseFlag.setVisibility(View.VISIBLE);
+//	    else
+//	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
 	    Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
+	    if(chooseState)
+	    {
+	    	holder.img.setEnabled(true);
+	    	holder.img.setOnClickListener(new ChooseStateButtonClickListener(imgPaths.get(position), holder));
+	    }
+	    else
+	    {   
+	    	if(holder.chooseFlag.getVisibility()==View.VISIBLE)
+			holder.chooseFlag.setVisibility(View.INVISIBLE);
+	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(""));
+	    }
 	    return convertView; 
 	}
-	public void updateChooseState()
+	public void updateChooseState(boolean chooseState)
 	{
-		chooseState=true;
-		Log.e(DataConstants.TAG,"photoshow updatechoose");
+		this.chooseState=chooseState;
+		//Log.e(DataConstants.TAG,"photoshow updatechoose "+chooseState);
+		//ReviewChooseFragment.choosedPhotoPaths=new ArrayList<String>();
 		notifyDataSetChanged();
+		
 	}
-	
+	class CheckSingleNoteClickListener implements OnClickListener
+	{
+
+		String path;
+		
+		public CheckSingleNoteClickListener(String path) {
+			super();
+			this.path = path;
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			jumpToReview(path);
+		}
+		
+	}
+	class ChooseStateButtonClickListener implements OnClickListener
+	{
+
+		String path;
+		GridViewHolder holder;
+		public ChooseStateButtonClickListener(String path,GridViewHolder holder) {
+			super();
+			this.path = path;
+			this.holder=holder;
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			if(holder.chooseFlag.getVisibility()==View.INVISIBLE)
+			{
+				holder.chooseFlag.setVisibility(View.VISIBLE);
+				ReviewChooseFragment.choosedPhotoPaths.add(path);
+				Log.e(DataConstants.TAG, "choose add "+ReviewChooseFragment.choosedPhotoPaths.size());
+			}
+			else
+			{
+				holder.chooseFlag.setVisibility(View.INVISIBLE);
+				ReviewChooseFragment.choosedPhotoPaths.remove(path);
+				Log.e(DataConstants.TAG, "choose remove "+ReviewChooseFragment.choosedPhotoPaths.size());
+			}
+		}
+		
+	}
+	public void jumpToReview(String path)
+	{
+		Fragment fragment=new SingleNoteFragment();
+		Bundle bundle = new Bundle();  
+        bundle.putString("type", "");
+        bundle.putString("single_path", path);
+       // bundle.putString("course_table_name", tableName);
+        fragment.setArguments(bundle);
+		FragmentManager fm=((ExerciseActivity)context).getSupportFragmentManager();
+		FragmentTransaction trans = fm.beginTransaction();  
+		trans.replace(R.id.exercise_frame, fragment);
+		trans.commit();
+	}
 }
 
 class GridViewHolder { 

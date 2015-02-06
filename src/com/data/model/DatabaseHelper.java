@@ -138,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_ifupload), cri.getIfUpload());
     	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
     	long rowid=db.insert(tableName, null, cv);
-    	Log.e(DataConstants.TAG,"rowid:"+rowid);
+    	Log.e(DataConstants.TAG,"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
     }
     public static void updateCourseRecord(Context context,SQLiteDatabase db,String tableName,String updateCol,String updateValue,String date)
     {
@@ -157,6 +157,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
 //    }
     // masterState or remark update
+    public static CourseRecordInfo queryCourseRecordByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName)
+    {
+    	CourseRecordInfo cri=null;
+    	Cursor result=db.rawQuery("SELECT * FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_photo_name)+"='"+photoName+"'",null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) { 
+	         
+	        String id=result.getString(0); 
+	        String photoname=result.getString(1); 
+	        String photobase64=result.getString(2); 
+	        String remark=result.getString(3); 
+	        String date=result.getString(4); 
+	        String time=result.getString(5); 
+	        String masterState=result.getString(6); 
+	        String ifUplaod=result.getString(7); 
+	        int flag=result.getInt(7);
+	        int ifDeleted=result.getInt(8);
+	        
+	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUplaod, flag, ifDeleted);
+	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+id+",");
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	     return cri;
+    }
+    public static void deleteCourseRecordByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName)
+    {
+    	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
+    	String[] whereArgs = { photoName };//修改条件的参数
+    	db.delete(tableName, whereClause, whereArgs);
+    }
     public static void updateCourseRecordOnStringColByPhotoName(Context context,SQLiteDatabase db,String tableName,String updateCol,String updateValue,String photoName)
     {
     	Log.e(DataConstants.TAG,"updateCourseRecord "+updateCol+" "+updateValue+" where photoname="+photoName);
@@ -166,13 +197,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { photoName };//修改条件的参数
     	db.update(tableName,cv,whereClause,whereArgs);//执行修改
     }
-    public static void updateCourseRecordOnIntColByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoname,String updateCol,int updateValue)
+    public static void updateCourseRecordOnIntColByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName,String updateCol,int updateValue)
     {
+    	
     	ContentValues cv=new ContentValues();
        	cv.put(updateCol, updateValue);
     	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
-    	String[] whereArgs = {photoname};//修改条件的参数
-    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
+    	String[] whereArgs = {photoName};//修改条件的参数
+    	int res=db.update(tableName,cv,whereClause,whereArgs);//执行修改
+    	Log.e(DataConstants.TAG,"updateCourseRecordOnIntCol "+updateCol+" "+updateValue+" where photoname="+photoName+" res ");
     }
     public static int queryAllCourseRecordsCount(Context context,SQLiteDatabase db)
     {
@@ -190,18 +223,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
     	
     	boolean tableExist=isTableExists(db,tableName);
-    	Log.e(DataConstants.TAG,"tableExist " +tableExist);
+    	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
     	if(tableExist==false)
     		return 0;
     	
-    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel != 0",null); 
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0",null); 
 	    result.moveToFirst(); 
 	    int count=0;
 	    while (!result.isAfterLast()) { 
 	         
 	        count=result.getInt(0); 
 	       // String name=result.getString(1); 
-	        Log.e(DataConstants.TAG,"db:query count:"+tableName+":"+count);
+	       // Log.e(DataConstants.TAG,"db:query count:"+tableName+":"+count);
 	        result.moveToNext(); 
 	      } 
 	      result.close();
@@ -250,7 +283,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static List<String> queryPhotoNamesAtDate(Context context,SQLiteDatabase db,String tableName,String date)
     {
     	List<String> names=new ArrayList<String>();
-    	Cursor result=db.rawQuery("SELECT "+context.getResources().getString(R.string.dbcol_photo_name)+" FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_date)+" = '"+date+"'",null); 
+    	Cursor result=db.rawQuery("SELECT "+context.getResources().getString(R.string.dbcol_photo_name)+" FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_date)+" = '"+date+"' and "+context.getResources().getString(R.string.dbcol_photo_delete)+" = 0",null); 
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
 	         

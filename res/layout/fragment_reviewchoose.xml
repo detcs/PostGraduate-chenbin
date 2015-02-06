@@ -1,36 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-   >
-   
-   <LinearLayout
-       	android:id="@+id/review_choose"
-       	android:orientation="horizontal"
-       	android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_alignParentBottom="true"
-       >
-       <Button
-           android:id="@+id/reverse_review"
-            android:text="@string/reverse_review"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/reviewchoose_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:background="#ffffff" >
+
+        <!-- transfer -->
+
+        <LinearLayout
+            android:id="@+id/transfer_delete"
             android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-    		android:layout_weight="1"
-           />
-       <Button
-           android:id="@+id/ebbinghaus_review"
-            android:text="@string/ebbinghaus_review"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/transfer_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="转移到" />
+
+            <TextView
+                android:id="@+id/delete_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="删除" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/review_choose"
             android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-    		android:layout_weight="1"
-           />
-       </LinearLayout> 
-	<ListView
-	    android:id="@+id/exercise_timeline_list"
-       	android:layout_width="match_parent"
-       	android:layout_height="match_parent"
-    	android:layout_above="@id/review_choose"
-       />
-</RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/reverse_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/reverse_review" />
+
+            <Button
+                android:id="@+id/ebbinghaus_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ebbinghaus_review" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/exercise_timeline_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/review_choose" />
+    </RelativeLayout>
+    <!-- transfer 	choose -->
+
+    <LinearLayout
+        android:id="@+id/course_transfer_choose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" >
+
+            <Button
+                android:id="@+id/couser_transfer_choose_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:paddingLeft="2dp"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/couser_transfer_choose_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="2dp"
+                android:text="@string/confirm" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" >
+
+            <Button
+                android:id="@+id/couser1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/couser2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/couser3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

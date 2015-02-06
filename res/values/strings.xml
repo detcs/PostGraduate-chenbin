@@ -46,8 +46,8 @@
     <string name="dbcol_ifupload">dbIfUpload</string>
     <string name="dbcol_photo_delete">dbPhotoDel</string>
     <string name="upload_no">uploadNO</string>
-	<string name="upload_yes">uploadYes</string>
-	
+    <string name="upload_yes">uploadYes</string>
+
     <!-- file dir -->
     <string name="dir_app">Android/data/ydd</string>
     <string name="dir_cover_song">coverSong</string>
@@ -158,8 +158,8 @@
     <string name="weibosdk_demo_toast_obtain_token_success">获取 Token 成功</string>
     <string name="weibosdk_demo_toast_obtain_token_failed">获取 Token 失败</string>
     <string name="title_activity_group_search">GroupSearchActivity</string>
-   
-<!-- camera -->
+
+    <!-- camera -->
     <string name="camera_close_preview">关闭</string>
     <string name="camera_pick_album">从相册选取</string>
     <string name="camera_retake">重拍</string>
@@ -230,4 +230,7 @@
     <string name="reserve_top_hint">备份下来的资料对您非常重要</string>
     <string name="reserve_button_words">一键备份</string>
     <string name="default_set">设置</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+
 </resources>
