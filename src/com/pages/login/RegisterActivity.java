@@ -121,5 +121,14 @@ public class RegisterActivity extends FragmentActivity implements FragmentAction
 			return;
 		switchToFragment(mCurrentStepIndex - 1);
 	}
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		//super.onBackPressed();
+		if(mCurrentStepIndex==0)
+			finish();
+		switchToPrevious();
+	}
+	
 
 }

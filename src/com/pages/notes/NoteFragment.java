@@ -38,9 +38,12 @@ public class NoteFragment  extends Fragment{
 	GridView funcGridView;
 	ListView courseNamelist;
 	NotesClassAdapter noteClassAdapter;
+	List<String> courseTableNames;
+	List<String> names;
+	View rootView;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+		rootView = inflater.inflate(R.layout.fragment_notes, container, false);
 		initNoteView(rootView);
 		return rootView;
 	}
@@ -129,26 +132,8 @@ public class NoteFragment  extends Fragment{
 
 			}
 		});
-		// GridView gv=(GridView)v.findViewById(R.id.notes_grid);
 		courseNamelist = (ListView) v.findViewById(R.id.course_list);
-		final List<String> courseTableNames=new ArrayList<String>();
-		final List<String> names = new ArrayList<String>();
-		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
-		courseTableNames.add(getResources().getString(R.string.db_english_table));
-		names.add(getResources().getString(R.string.politics));
-		courseTableNames.add(getResources().getString(R.string.db_politics_table));
-		if(UserConfigs.getCourseMathName()!=null)
-		{
-			names.add(getResources().getString(R.string.math)+UserConfigs.getCourseMathName());
-			courseTableNames.add(getResources().getString(R.string.db_math_table));
-		}
-		names.add(UserConfigs.getCourseProfessOneName());
-		courseTableNames.add(getResources().getString(R.string.db_profess1_table));
-		if(UserConfigs.getCourseProfessTwoName()!=null)
-		{
-			names.add(UserConfigs.getCourseProfessTwoName());
-			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
-		}
+		getTableAndCourseNames();
 		noteClassAdapter=new NotesClassAdapter(names,courseTableNames,getActivity());
 		courseNamelist.setAdapter(noteClassAdapter);
 		courseNamelist.setOnItemClickListener(new OnItemClickListener() {
@@ -192,15 +177,52 @@ public class NoteFragment  extends Fragment{
 				startActivity(intent);
 			}
 		});
+		//initCountInfo(v);
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initCountInfo(rootView);
+	}
+
+	private void initCountInfo(View v)
+	{
+		TextView clockDays=(TextView)v.findViewById(R.id.count_clock);
+		clockDays.setText(UserConfigs.getClockDays()+"");
 		TextView count_note=(TextView)v.findViewById(R.id.count_note);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		int count=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
 		db.close();
 		count_note.setText(count+"");
+		
 	}
 	public void updateNoteClassList()
 	{
+		getTableAndCourseNames();
 		noteClassAdapter.notifyDataSetChanged();
+	}
+	private void getTableAndCourseNames()
+	{
+		courseTableNames=new ArrayList<String>();
+		names = new ArrayList<String>();
+		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
+		courseTableNames.add(getResources().getString(R.string.db_english_table));
+		names.add(getResources().getString(R.string.politics));
+		courseTableNames.add(getResources().getString(R.string.db_politics_table));
+		if(UserConfigs.getCourseMathName()!=null)
+		{
+			names.add(getResources().getString(R.string.math)+UserConfigs.getCourseMathName());
+			courseTableNames.add(getResources().getString(R.string.db_math_table));
+		}
+		names.add(UserConfigs.getCourseProfessOneName());
+		courseTableNames.add(getResources().getString(R.string.db_profess1_table));
+		if(UserConfigs.getCourseProfessTwoName()!=null)
+		{
+			names.add(UserConfigs.getCourseProfessTwoName());
+			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
+		}
 	}
 	
 

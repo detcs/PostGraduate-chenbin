@@ -3,9 +3,9 @@ package com.pages.notes;
 import com.app.ydd.R;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,10 +34,11 @@ public class TaskCompleteFragment extends Fragment{
 //		Bundle bundle = new Bundle();  
 //        bundle.putString("type", "");  
 //        fragment.setArguments(bundle);
-		FragmentManager fm=getActivity().getSupportFragmentManager();
+		FragmentManager fm=getActivity().getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
 		trans.commit();
 	}
+	
 	
 }

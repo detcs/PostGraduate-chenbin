@@ -15,6 +15,7 @@
     <string name="user_qq">qq</string>
     <string name="user_nickname">nickname</string>
     <string name="user_verify">verify</string>
+    <string name="user_sex">sex</string>
     <string name="user_id">userid</string>
     <string name="course_english_name">courseEnglishName</string>
     <string name="course_math_name">courseMathName</string>
@@ -106,6 +107,7 @@
     <string name="state_unknow">unknow</string>
     <string name="remark">备注</string>
     <string name="clock">打卡</string>
+    <string name="clock_days">clockDays</string>
     <string name="day">天</string>
     <string name="task_complete">你已完成今天的所有任务</string>
     <string name="date">2015.1.25</string>
@@ -116,6 +118,8 @@
     <string name="today_add">今日新增</string>
     <string name="piece">篇</string>
     <string name="look_all">查看全部</string>
+    
+    <string name="reviewchoose_fra_tag">reviewchooseFraTag</string>
     <!-- functions square -->
     <string name="essence">精华</string>
     <string name="square">广场</string>

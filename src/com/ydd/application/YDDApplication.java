@@ -53,6 +53,7 @@ public class YDDApplication extends Application {
 
 	private void initUserConfig() {
 		UserConfigs uc = new UserConfigs(getApplicationContext());
+		//uc.storeClockDay();
 	}
 
 	private void initDataBase() {
@@ -60,8 +61,7 @@ public class YDDApplication extends Application {
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		// if(!DataConstants.dbHelper.tableIsExist(db,
 		// getResources().getString(R.string.db_footprint_table)))
-		DataConstants.dbHelper
-				.createFootprintTable(getApplicationContext(), db);
+		DataConstants.dbHelper.createFootprintTable(getApplicationContext(), db);
 		db.close();
 	}
 	private void initDBandDirMap()

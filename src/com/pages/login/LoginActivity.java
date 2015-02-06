@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.GloableData;
 import com.app.ydd.R;
 import com.pages.viewpager.MainActivity;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -48,7 +49,7 @@ public class LoginActivity extends Activity{
 	Button qqLogin;
 	EditText phone;
 	EditText password;
-	TextView register;
+	Button register;
 	Button phoneLogin;
 	//weibo
 		 private AuthInfo mAuthInfo;
@@ -62,7 +63,7 @@ public class LoginActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		if(UserConfigs.getAccount()==null)//debug
+		if(UserConfigs.getId()==null)//debug
 		{
 			setContentView(R.layout.activity_login);
 			phone=(EditText)findViewById(R.id.username_edit);
@@ -78,8 +79,8 @@ public class LoginActivity extends Activity{
 					weiboLogin();
 				}
 			});
-			register=(TextView)findViewById(R.id.register_link);
-			register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+			register=(Button)findViewById(R.id.register_button);
+			//register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
 			register.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -87,6 +88,7 @@ public class LoginActivity extends Activity{
 					// TODO Auto-generated method stub
 					Intent intent=new Intent();
 					intent.setClass(LoginActivity.this, RegisterActivity.class);
+					//intent.setClass(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
 				}
 			});
@@ -143,40 +145,10 @@ public class LoginActivity extends Activity{
               // CCPConfig.storeLoginWay(getApplicationContext(), "weibo");
                String url=getLoginURL("weibo", uid+"", "");
                Log.e(DataConstants.TAG,"url:"+url);
-               RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-               JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( url, null,
-                   new Response.Listener<JSONObject>() {
-                       @Override
-                       public void onResponse(JSONObject response) {
-                           Log.i(DataConstants.TAG,"response=" + response);
-                           		parseLoginInfo(response, getResources().getString(R.string.user_weibo));
-//                           if (progressDialog.isShowing()
-//                               && progressDialog != null) {
-//                               progressDialog.dismiss();
-//                           }
-                           		Intent intent=new Intent();
-                    			intent.setClass(getApplicationContext(), MainActivity.class);
-                    			startActivity(intent);
-                       }}, 
-               	new Response.ErrorListener() {
-                       @Override
-                       public void onErrorResponse(VolleyError arg0) {
-                          // tv_1.setText(arg0.toString());
-                           Log.i(DataConstants.TAG,"sorry,Error"+arg0.toString());
-//                           if (progressDialog.isShowing()
-//                               && progressDialog != null) {
-//                               progressDialog.dismiss();
-//                           }
-                       }});
-               requestQueue.add(jsonObjectRequest);
-               //LoginTask wl=new LoginTask("weibo",mAccessToken.getUid(),LoginActivity.this);
-               //wl.execute(DataConstants.SERVER_URL);
-               //createSubAccount();
+              // RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+              serverLogin(url);
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
-                //Toast.makeText(LoginActivity.this, R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();
-                //registerSuccess();
-                
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；
@@ -265,6 +237,30 @@ public class LoginActivity extends Activity{
      // SSO 授权, ALL IN ONE
 		Log.e(DataConstants.TAG,"mSsoHandler");
         mSsoHandler.authorize(new AuthListener());
+    }
+    private void serverLogin(String url)
+    {
+    	 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( url, null,
+                 new Response.Listener<JSONObject>() {
+                     @Override
+                     public void onResponse(JSONObject response) {
+                         Log.i(DataConstants.TAG,"response=" + response);
+                         		parseLoginInfo(response, getResources().getString(R.string.user_weibo));
+                         		Intent intent=new Intent();
+                  			intent.setClass(getApplicationContext(), MainActivity.class);
+                  			startActivity(intent);
+                     }}, 
+             	new Response.ErrorListener() {
+                     @Override
+                     public void onErrorResponse(VolleyError arg0) {
+                        // tv_1.setText(arg0.toString());
+                         Log.i(DataConstants.TAG,"sorry,Error"+arg0.toString());
+//                         if (progressDialog.isShowing()
+//                             && progressDialog != null) {
+//                             progressDialog.dismiss();
+//                         }
+                     }});
+             GloableData.requestQueue.add(jsonObjectRequest);
     }
     private String getLoginURL(String loginWay,String account,String passward)
     {

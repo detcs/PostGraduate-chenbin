@@ -6,9 +6,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +31,14 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	Context context;
 	LayoutInflater mInflater;
 	boolean chooseState=false;
-	//List<String> choosedPhotoPaths;
-	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState) {
+	String tableName;
+	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState,String tableName) {
 		super();
 		this.imgPaths = imgPaths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.chooseState=chooseState;
-		//choosedPhotoPaths=new ArrayList<String>();
+		this.tableName=tableName;
 	}
 
 	@Override
@@ -155,12 +155,14 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		Bundle bundle = new Bundle();  
         bundle.putString("type", "");
         bundle.putString("single_path", path);
+        bundle.putString("single_tablename",tableName);
        // Log.e(DataConstants.TAG,"send singlepath:"+path);
        // bundle.putString("course_table_name", tableName);
         fragment.setArguments(bundle);
-		FragmentManager fm=((ExerciseActivity)context).getSupportFragmentManager();
+		FragmentManager fm=((ExerciseActivity)context).getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
+		trans.addToBackStack(null);
 		trans.commit();
 	}
 }

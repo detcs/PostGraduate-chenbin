@@ -3,67 +3,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <RelativeLayout 
+    <LinearLayout 
   	    android:id="@+id/login_div"
-  	    android:layout_width="fill_parent"
+  	    android:layout_width="match_parent"
   		android:layout_height="wrap_content"
   		android:padding="15dip"        
     	android:layout_margin="15dip" 
+    	android:orientation="vertical"
     	android:layout_centerInParent="true"
     	 >
-  		<!-- 账号 -->
-    	<TextView 
-    		android:id="@+id/login_user_input"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_alignParentTop="true"
-    		android:layout_marginTop="5dp"
-    		android:text="@string/account"
-    		/>
-    	<EditText 
-    		android:id="@+id/username_edit"
-    		android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"
-    		android:hint="@string/phone_num"
-    		android:layout_below="@id/login_user_input"
-    		android:singleLine="true"
-    		android:inputType="text"/>
-      <!-- 密码 text -->
-      <TextView 
-      	android:id="@+id/login_password_input"
-      	android:layout_width="wrap_content"
-      	android:layout_height="wrap_content"
-      	android:layout_below="@id/username_edit"
-      	android:layout_marginTop="3dp"
-      	android:text="@string/password"
-      	/>
-      <EditText 
-      	android:id="@+id/password_edit"
-      	android:layout_width="fill_parent"
-      	android:layout_height="wrap_content"
-      	android:layout_below="@id/login_password_input"
-      	android:password="true"
-      	android:singleLine="true"
-      	android:inputType="textPassword" />
-       <!-- 注册 -->
-      <TextView 
-         android:id="@+id/register_link"
-         android:text="@string/register"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@id/password_edit"
-         android:layout_alignLeft="@id/password_edit"
-         />
+    	 <LinearLayout 
+    	     android:layout_width="match_parent"
+	    	 android:layout_height="wrap_content"
+	    	 android:orientation="horizontal"
+    	     >
+	  		<!-- 账号 -->
+	    	<ImageView 
+	    		android:src="@drawable/user_phone"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_marginLeft="10dp"
+	    		android:text="@string/account"
+	    		android:layout_weight="1"
+	    		/>
+	    	<EditText 
+	    		android:id="@+id/username_edit"
+	    		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:hint="@string/phone_num"
+	    		android:background="@null"
+	    		android:singleLine="true"
+	    		android:inputType="text"
+	    		android:layout_weight="6"/>
+    	</LinearLayout>
+    	 <LinearLayout 
+    	     android:layout_width="match_parent"
+	    	 android:layout_height="wrap_content"
+	    	 android:orientation="horizontal"
+    	     >
+		      <!-- 密码 text -->
+		      <ImageView 
+		      	android:src="@drawable/password"
+		      	android:layout_width="wrap_content"
+		      	android:layout_height="wrap_content"
+		      	android:layout_marginLeft="10dp"
+				android:layout_weight="1"
+		      	/>
+		      <EditText 
+		      	android:id="@+id/password_edit"
+		      	android:layout_width="fill_parent"
+		      	android:layout_height="wrap_content"
+		      	android:password="true"
+		      	android:singleLine="true"
+		      	android:inputType="textPassword"
+		      	android:layout_weight="6"
+		      	style="?android:attr/textViewStyle" 
+		      	android:textColorLink="#ffffff"
+		      	android:background="@null" />
+		 </LinearLayout>
+       
       <!-- 登录button -->
       <Button 
       	android:id="@+id/signin_button"
-      	android:layout_width="wrap_content"
+      	android:layout_width="match_parent"
       	android:layout_height="wrap_content"
-      	android:layout_below="@id/password_edit"
-      	android:layout_alignRight="@id/password_edit"
       	android:text="@string/login"
       	 />
-  	</RelativeLayout>
+      <!-- 注册 -->
+      <Button 
+         android:id="@+id/register_button"
+         android:text="@string/register"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+                  />
+  	</LinearLayout>
   
      	
 

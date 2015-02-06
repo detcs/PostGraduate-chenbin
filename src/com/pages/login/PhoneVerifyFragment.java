@@ -2,12 +2,40 @@ package com.pages.login;
 
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.app.ydd.R;
+import com.data.model.DataConstants;
+import com.data.model.UserConfigs;
+import com.data.util.GloableData;
+import com.pages.notes.footprint.FootprintInfo;
 import com.view.util.FragmentActionListener;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,16 +66,184 @@ public class PhoneVerifyFragment extends Fragment {
 		phone=(EditText)rootView.findViewById(R.id.phone);
 		verifyNum=(EditText)rootView.findViewById(R.id.verify_num);
 		obtainVerifyNum=(Button)rootView.findViewById(R.id.get_verify_num);
+		obtainVerifyNum.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				requestVerifyNum(getObtainVeifyNumURL(phone.getText().toString()));
+//				GetPhoneVerifyNum gpv=new GetPhoneVerifyNum();
+//				 gpv.execute(DataConstants.SERVER_URL);
+			}
+		});
 		nextStep=(Button)rootView.findViewById(R.id.next_step);
 		nextStep.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				mListener.switchToNext();
+//				if(verifyNum.getText().toString().equals(arg0))
+//				mListener.switchToNext();
+				requestIsVerifyNumRight(getIsVeifyNumRightURL(phone.getText().toString(), verifyNum.getText().toString()));
 			}
 		});
 		return rootView;
 	}
+	private void requestVerifyNum(String url) {
+		//RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "requestVerifyNum response=" + response);
+						//parseFirstPageInfo(response, date);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+	}
+	private String getObtainVeifyNumURL(String phone) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MGetMobileVerify");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+		pair = new BasicNameValuePair("appid", "nju");
+		params.add(pair);
+		pair = new BasicNameValuePair("phone", phone);
+		params.add(pair);
+		
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
 
+		}
+		Log.e(DataConstants.TAG, "fpage:" + resultURL);
+		return resultURL;
+	}
+	private boolean requestIsVerifyNumRight(String url) {
+		//RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "IsVerifyNumRight response=" + response);
+						//parseFirstPageInfo(response, date);
+						try {
+							String errorCode=response.getString("errorCode");
+							if(errorCode.equals("0"))
+							{
+								mListener.switchToNext();
+								JSONObject data=response.getJSONObject("data");
+								String verify=data.getString("verify_");
+								String userid=data.getString("id_");
+								String account=data.getString("account_");
+								UserConfigs.storeVerify(verify);
+								UserConfigs.storeId(userid);
+								UserConfigs.storeAccount(account);
+								UserConfigs.storeLoginWay(getResources().getString(R.string.user_phone));
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+		return false;
+	}
+	private String getIsVeifyNumRightURL(String phone,String code) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MRegister");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+//		pair = new BasicNameValuePair("appid", "nju");
+//		params.add(pair);
+		pair = new BasicNameValuePair("phone", phone);
+		params.add(pair);
+		pair = new BasicNameValuePair("code", code);
+		params.add(pair);
+		
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
+
+		}
+		Log.e(DataConstants.TAG, "fpage:" + resultURL);
+		return resultURL;
+	}
+//	//获取手机验证码
+//		class GetPhoneVerifyNum extends AsyncTask<String, Integer, String>
+//		{
+//
+//			@Override
+//			protected String doInBackground(String... url) {
+//				// TODO Auto-generated method stub
+//				List<NameValuePair> params=new ArrayList<NameValuePair>();
+//				BasicNameValuePair pair = new BasicNameValuePair("methodno","MGetMobileVerify");
+//				params.add(pair);
+//				pair = new BasicNameValuePair("deviceid","1");
+//				params.add(pair);
+//				pair = new BasicNameValuePair("appid","nju");
+//				params.add(pair);
+//				pair = new BasicNameValuePair("phone",phone.getText().toString());
+//				params.add(pair);
+//				
+//				String result = null;
+//				try {
+//					
+//					//Log.i("com.market","PublishTask begin");
+//					//Log.i("com.market","PublishTask imgurl "+itemInfo.getImgUrl());
+//					result = doPost(params, url[0]);
+//				
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				return result;
+//			}
+//			
+//		}
+//		public static String doPost(List<NameValuePair> params,String url) throws ClientProtocolException, IOException
+//		{
+//			String result = null;
+//			String paramStr="";
+//			for(NameValuePair nvp:params)
+//			{
+//				paramStr+=nvp.getName()+"="+nvp.getValue()+"&";
+//			}
+//			//url+="?"+paramStr;
+//			//Log.i(DataConstants.TAG,url+paramStr);
+//			HttpPost httpPost=new HttpPost(url); 
+//			httpPost.setEntity(new UrlEncodedFormEntity(params,HTTP.UTF_8));
+//			HttpResponse response=new DefaultHttpClient().execute(httpPost);
+//			//Log.i(DataConstants.TAG,"code:"+response.getStatusLine().getStatusCode());
+//			if(response.getStatusLine().getStatusCode()==200)
+//			{
+//				HttpEntity entity=response.getEntity(); 
+//				result=EntityUtils.toString(entity, HTTP.UTF_8);
+//			}
+//			//Log.i("com.market",result);
+//			return result;
+//			
+//		}
 }

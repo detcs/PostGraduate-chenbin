@@ -151,10 +151,7 @@ public class TodayFragment extends Fragment {
 				String encourage = info.getString("content_");
 				String days = info.getString("days_");
 				String daysLeft = info.getString("daysLeft_");
-				// downloadHandler(DataConstants.DOWNLOAD_URL+songId,
-				// FileDataHandler.COVER_SONG_DIR_PATH+"/"+songName+".mp3");
-				// downloadHandler(DataConstants.DOWNLOAD_URL+imgId,
-				// FileDataHandler.COVER_PIC_DIR_PATH+"/"+imgId+".jpg");
+				
 				fileDownloadTask = new DownloadTask(getActivity(),
 				FileDataHandler.COVER_PIC_DIR_PATH, getResources().getString(R.string.dbcol_cover_pic), imgId,date);
 				fileDownloadTask.execute();

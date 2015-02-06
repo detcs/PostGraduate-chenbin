@@ -31,8 +31,8 @@
 			        android:layout_width="wrap_content"
 			    	android:layout_height="wrap_content"
 			    	android:lines="2"
-			    	android:maxEms="10"
 			    	android:ellipsize="end"
+			    	android:scrollbars="vertical"
 		           />
 	        	<TextView
 		            android:layout_gravity="bottom|right"
@@ -51,28 +51,32 @@
 	    	>
 	    <LinearLayout
 	       	android:orientation="horizontal"
-	       	android:layout_width="wrap_content"
+	       	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
-	    	android:layout_alignParentRight="true"
 		       >
 		       <ImageView
 		           	android:id="@+id/single_set_flag_img"
 		            android:src="@drawable/setflag"
 		            android:layout_width="wrap_content"
 		    		android:layout_height="wrap_content"
-		    		
+		    		android:gravity="center"
+		    		android:layout_weight="1"
 		           />
 		       <ImageView
 		           	android:id="@+id/single_rotate_img"
 		            android:src="@drawable/rotate"
 		            android:layout_width="wrap_content"
 		    		android:layout_height="wrap_content"
+		    		android:gravity="center"
+		    		android:layout_weight="1"
 		           />
 		       <ImageView
 		           	android:id="@+id/single_edit_remark_img"
 		            android:src="@drawable/edit_remark"
 		            android:layout_width="wrap_content"
 		    		android:layout_height="wrap_content"
+		    		android:gravity="center"
+		    		android:layout_weight="1"
 		           />
 		       </LinearLayout> 
 	       </RelativeLayout>

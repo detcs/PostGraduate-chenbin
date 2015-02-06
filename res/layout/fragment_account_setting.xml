@@ -3,7 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+    <EditText 
+	    android:id="@+id/set_nickname"
+	    android:gravity="center_horizontal"
+	    android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:hint="@string/set_nickname"
+	    />
 	<EditText 
 	    android:id="@+id/set_passward"
 	    android:gravity="center_horizontal"
@@ -12,14 +19,7 @@
     	android:layout_height="wrap_content"
     	android:hint="@string/set_password"
 	    />
-	<EditText 
-	    android:id="@+id/set_passward"
-	    android:gravity="center_horizontal"
-	    android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:hint="@string/set_nickname"
-	    />
+	
 	<Button
           android:id="@+id/complete_register"
 		  android:gravity="center_horizontal"
