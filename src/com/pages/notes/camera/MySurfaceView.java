@@ -31,6 +31,7 @@ public class MySurfaceView extends SurfaceView implements
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			camera.stopPreview();
+			camera.release();
 			camera = null;
 			Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 			// size just after take
@@ -90,7 +91,8 @@ public class MySurfaceView extends SurfaceView implements
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
-		camera.release();
+		if (camera != null)
+			camera.release();
 	}
 
 	// ***********init************

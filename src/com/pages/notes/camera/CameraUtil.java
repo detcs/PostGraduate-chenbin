@@ -15,6 +15,15 @@ import android.util.DisplayMetrics;
 public class CameraUtil {
 	// private static final String TAG = "CameraUtil";
 
+	public static Bitmap cutToScreen(Activity activity, Bitmap bitmap) {
+		DisplayMetrics dm = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int intScreenWidth = dm.widthPixels;
+		int intScreenHeight = dm.heightPixels;
+		return Bitmap.createBitmap(bitmap, 0, 0, intScreenWidth,
+				intScreenHeight);
+	}
+
 	public static Bitmap scaleToScreen(Activity activity, Bitmap bitmap) {
 		DisplayMetrics dm = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -27,7 +36,9 @@ public class CameraUtil {
 	}
 
 	// ******************************************************
-	public static final int SIZE = 0, RATIO = 1, WIDTH = 2;
+	public static final int SIZE = 0, RATIO = 1, WIDTH = 2, LB = 3;
+
+	// LB:least but bigger than request
 
 	public static Size getUsefulSize(List<Size> sizes, int w, int h, int type) {
 		Size size;
@@ -41,11 +52,32 @@ public class CameraUtil {
 		case WIDTH:
 			size = getSizeWIDTH(sizes, w, h);
 			break;
+		case LB:
+			size = getSizeLB(sizes, w, h);
+			break;
 		default:
 			size = getSizeSIZE(sizes, w, h);
 			break;
 		}
 		return size;
+	}
+
+	private static Size getSizeLB(List<Size> sizes, int w, int h) {
+		Size re = null;
+		int wantSize = w * h;
+		int minGap = wantSize;
+		for (Size size : sizes) {
+			if (getSizeGapValue(size, wantSize) > 0
+					&& getSizeGapValue(size, wantSize) < minGap) {
+				re = size;
+				minGap = getSizeGap(size, wantSize);
+			}
+		}
+		return re;
+	}
+
+	private static int getSizeGapValue(Size size, int wantSize) {
+		return size.width * size.height - wantSize;
 	}
 
 	// size 最接近要求的大小

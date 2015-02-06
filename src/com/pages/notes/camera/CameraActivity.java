@@ -9,8 +9,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class CameraActivity extends Activity implements TakeJump, ShowJump {
 
@@ -19,25 +17,6 @@ public class CameraActivity extends Activity implements TakeJump, ShowJump {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
 		toTake();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.camera, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	// *************switch fragment*************
@@ -56,6 +35,7 @@ public class CameraActivity extends Activity implements TakeJump, ShowJump {
 				.beginTransaction();
 		ShowFragment showFragment = new ShowFragment();
 		showFragment.setBitmap(bitmap);
+		// TestFragment showFragment=new TestFragment(bitmap);
 		fragmentTransaction.replace(R.id.FrameLayout1, showFragment);
 		fragmentTransaction.commit();
 	}

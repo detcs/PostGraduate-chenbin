@@ -3,13 +3,14 @@
     android:id="@+id/FrameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background" >
+    android:background="#000000" >
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:scaleType="fitXY" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -85,7 +86,7 @@
             android:id="@+id/chooseBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/camera_choose_bar_height"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/bottombar"
             android:background="@color/camera_float_bar"
             android:gravity="center" >
 
@@ -120,6 +121,20 @@
                 android:layout_marginLeft="@dimen/camera_choose_item_gap"
                 android:background="@drawable/default_head"
                 android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottombar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/saveBu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/choose" />
         </LinearLayout>
     </RelativeLayout>
 

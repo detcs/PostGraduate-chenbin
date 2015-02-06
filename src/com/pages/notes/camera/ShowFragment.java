@@ -21,7 +21,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +37,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/*
+ * last change:
+ * 
+ * authro:wsy
+ * time:2/5
+ * 
+ * */
 public class ShowFragment extends Fragment {
 	private static final String TAG = "ShowFragment";
 	private View rootView;
@@ -53,6 +64,8 @@ public class ShowFragment extends Fragment {
 	private TextView[] radios = new TextView[4];
 	private ImageView imageView1;
 	private int selectIndex = 0;
+
+	private ImageView saveBu;
 
 	public void setBitmap(Bitmap bitmap) {
 		// TODO Auto-generated constructor stub
@@ -109,11 +122,29 @@ public class ShowFragment extends Fragment {
 		for (int i = 0; i < 4; i++) {
 			radios[i] = (TextView) view.findViewById(radiosId[i]);
 		}
+
+		saveBu = (ImageView) view.findViewById(R.id.saveBu);
 	}
 
 	private void initIamge() {
+
 		imageView1.setImageBitmap(CameraUtil.scaleToScreen(getActivity(),
 				bitmap));
+		// DisplayMetrics dm = new DisplayMetrics();
+		// getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+		// int intScreenWidth = dm.widthPixels;
+		// int intScreenHeight = dm.heightPixels;
+		// Bitmap.Config c = Bitmap.Config.ARGB_8888;
+		// Bitmap aim = Bitmap.createBitmap(intScreenWidth, intScreenHeight, c);
+		// Canvas canvas = new Canvas();
+		// canvas.setBitmap(aim);
+		// Paint paint = new Paint();
+		// paint.setColor(0xff000000);
+		// paint.setStyle(Style.FILL);
+		// canvas.drawRect(0, 0, intScreenWidth, intScreenHeight, paint);
+		// imageView1.setDrawingCacheEnabled(true);
+		// canvas.drawBitmap(imageView1.getDrawingCache(true), 0, 0, paint);
+		// imageView1.setImageBitmap(aim);
 	}
 
 	private void initItem() {
@@ -139,13 +170,13 @@ public class ShowFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				for (int i = 0; i < 4; i++) {
-					radios[i].setClickable(false);
+					// radios[i].setClickable(false);
+					// radios[i].setEnabled(false);
 					if (radios[i] == v) {
 						selectIndex = i;
+						radios[i].setTextColor(0);
 					}
 				}
-				SysCall.error(TAG + "click" + selectIndex);
-				save(selectIndex);
 			}
 		};
 		for (int i = 0; i < 4; i++) {
@@ -198,6 +229,17 @@ public class ShowFragment extends Fragment {
 			}
 		});
 
+		saveBu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// wsy 2/5
+				SysCall.hint(getActivity(), "已保存");
+				save(selectIndex);
+				jump.take();
+			}
+		});
 	}
 
 	// ****************view util****************
@@ -326,7 +368,10 @@ public class ShowFragment extends Fragment {
 			int flag) {
 		DatabaseHelper dbHelper = DataConstants.dbHelper;
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		CourseRecordInfo cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), flag,0);
+		CourseRecordInfo cri = new CourseRecordInfo(photoName, photobase64,
+				remark, date, time, getResources().getString(
+						R.string.state_unknow), getResources().getString(
+						R.string.upload_no), flag, 0);
 		DatabaseHelper.insertCourseRecord(getActivity(), db, tableName, cri);
 		DatabaseHelper.queryShowRecords(db, tableName);
 		db.close();
