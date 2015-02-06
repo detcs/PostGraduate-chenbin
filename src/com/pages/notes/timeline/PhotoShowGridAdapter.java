@@ -91,7 +91,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    {   
 	    	if(holder.chooseFlag.getVisibility()==View.VISIBLE)
 			holder.chooseFlag.setVisibility(View.INVISIBLE);
-	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(""));
+	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(imgPaths.get(position)));
 	    }
 	    return convertView; 
 	}
@@ -155,6 +155,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		Bundle bundle = new Bundle();  
         bundle.putString("type", "");
         bundle.putString("single_path", path);
+       // Log.e(DataConstants.TAG,"send singlepath:"+path);
        // bundle.putString("course_table_name", tableName);
         fragment.setArguments(bundle);
 		FragmentManager fm=((ExerciseActivity)context).getSupportFragmentManager();
