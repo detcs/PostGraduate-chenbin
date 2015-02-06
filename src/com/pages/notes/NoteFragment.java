@@ -3,6 +3,7 @@ package com.pages.notes;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.app.ydd.R;
@@ -191,11 +192,17 @@ public class NoteFragment  extends Fragment{
 	{
 		TextView clockDays=(TextView)v.findViewById(R.id.count_clock);
 		clockDays.setText(UserConfigs.getClockDays()+"");
-		TextView count_note=(TextView)v.findViewById(R.id.count_note);
+		TextView countNote=(TextView)v.findViewById(R.id.count_note);
+		TextView countTodayAdd=(TextView)v.findViewById(R.id.today_add);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		int count=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
+		sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = sdf.format(new Date());
+		int todayAdd=DataConstants.dbHelper.queryAllCourseRecordsCountOnDate(getActivity(), db, date);
 		db.close();
-		count_note.setText(count+"");
+		countNote.setText(count+"");
+		countTodayAdd.setText(todayAdd+"");
 		
 	}
 	public void updateNoteClassList()

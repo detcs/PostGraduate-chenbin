@@ -69,6 +69,14 @@ public class LoginActivity extends Activity{
 			phone=(EditText)findViewById(R.id.username_edit);
 			password=(EditText)findViewById(R.id.password_edit);
 			phoneLogin=(Button)findViewById(R.id.signin_button);
+			phoneLogin.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					phoneLogin();
+				}
+			});
 			weiboLogin=(Button)findViewById(R.id.weibologin);
 			qqLogin=(Button)findViewById(R.id.qqlogin);
 			weiboLogin.setOnClickListener(new OnClickListener() {
@@ -98,6 +106,10 @@ public class LoginActivity extends Activity{
 			String loginWay=UserConfigs.getLoginWay();
 			if(loginWay.equals(getResources().getString(R.string.user_weibo)))
 				weiboLogin();
+			else if(loginWay.equals(getResources().getString(R.string.user_phone)))
+			{
+				phoneAutoLogin();
+			}
 			
 		}
 		
@@ -143,10 +155,10 @@ public class LoginActivity extends Activity{
                 mUsersAPI.show(uid, mListener);
                Log.e(DataConstants.TAG,"weibouid "+uid);
               // CCPConfig.storeLoginWay(getApplicationContext(), "weibo");
-               String url=getLoginURL("weibo", uid+"", "");
+               String url=getLoginURL(getResources().getString(R.string.user_weibo), uid+"", "");
                Log.e(DataConstants.TAG,"url:"+url);
               // RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-              serverLogin(url);
+              serverLogin(url,getResources().getString(R.string.user_weibo));
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
             } else {
@@ -238,14 +250,27 @@ public class LoginActivity extends Activity{
 		Log.e(DataConstants.TAG,"mSsoHandler");
         mSsoHandler.authorize(new AuthListener());
     }
-    private void serverLogin(String url)
+    private void phoneLogin()
+    {
+    	String loginway=getResources().getString(R.string.user_phone);
+		String url=getLoginURL(loginway,phone.getText().toString(),UserConfigs.getPassword());
+		serverLogin(url, loginway);
+    }
+    private void phoneAutoLogin()
+    {
+    	String loginway=getResources().getString(R.string.user_phone);
+		String url=getLoginURL(loginway,UserConfigs.getAccount(),UserConfigs.getPassword());
+		serverLogin(url, loginway);
+    }
+    
+    private void serverLogin(String url,final String loginway)
     {
     	 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( url, null,
                  new Response.Listener<JSONObject>() {
                      @Override
                      public void onResponse(JSONObject response) {
                          Log.i(DataConstants.TAG,"response=" + response);
-                         		parseLoginInfo(response, getResources().getString(R.string.user_weibo));
+                         		parseLoginInfo(response, loginway);
                          		Intent intent=new Intent();
                   			intent.setClass(getApplicationContext(), MainActivity.class);
                   			startActivity(intent);
@@ -273,14 +298,22 @@ public class LoginActivity extends Activity{
 		params.add(pair);
 		pair = new BasicNameValuePair("appid","nju");
 		params.add(pair);
-		if(loginWay.equals("weibo"))
+		if(loginWay.equals(getResources().getString(R.string.user_weibo)))
 			pair = new BasicNameValuePair("wbAccount",account);
-		else if(loginWay.equals("qq"))
+		else if(loginWay.equals(getResources().getString(R.string.user_qq)))
 			pair = new BasicNameValuePair("qqAccount",account);
-		else if(loginWay.equals("phone"))
+		else if(loginWay.equals(getResources().getString(R.string.user_phone)))
 		{
-			pair = new BasicNameValuePair("account",account);
-			params.add(pair);
+			if(account.length()==13)
+			{
+				pair = new BasicNameValuePair("phone",account);
+				params.add(pair);
+			}
+			else
+			{
+				pair = new BasicNameValuePair("account",account);
+				params.add(pair);
+			}
 			pair = new BasicNameValuePair("password",passward);
 		}
 		params.add(pair);

@@ -34,10 +34,14 @@ public class YDDApplication extends Application {
 
 	private void initAppDIr() {
 		FileDataHandler.init(getApplicationContext());
+		
 		if (FileDataHandler.SD_PATH != null) {
 			File dir = new File(FileDataHandler.APP_DIR_PATH);
 			if (!dir.exists())
-				dir.mkdir();
+			{
+				boolean b=dir.mkdirs();
+				Log.e(DataConstants.TAG,"sdcard "+dir.getPath()+" "+b);
+			}
 			dir = new File(FileDataHandler.COVER_PIC_DIR_PATH);
 			if (!dir.exists())
 				dir.mkdir();

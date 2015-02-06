@@ -38,6 +38,9 @@
     <string name="db_footprint_table">footprintTable</string>
     <string name="dbcol_cover_pic">dbCoverPic</string>
     <string name="dbcol_cover_song">dbCoverSong</string>
+    <string name="db_search_records_table">dbSearchRecordsTable</string>
+    <string name="dbcol_search_word">dbSearchWord</string>
+    
     <!-- <string name="dbcol_cover_song_name">dbCoverSongName</string> -->
     <string name="dbcol_footprint_pic">dbFootprintPic</string>
     <string name="dbcol_diary">dbDiary</string>

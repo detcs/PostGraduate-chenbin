@@ -22,9 +22,11 @@ public class FileDataHandler {
 
 	public static void init(Context context)
 	{
+		Log.e(DataConstants.TAG,"sdcard "+sdCardExist());
 		if(sdCardExist())
 		{
-			SD_PATH=Environment.getExternalStorageDirectory().toString();//获取跟目录 
+			SD_PATH=Environment.getExternalStorageDirectory().getPath();//获取跟目录 
+			Log.e(DataConstants.TAG,"sdcard "+SD_PATH);
 			APP_DIR_PATH=SD_PATH+"/"+context.getResources().getString(R.string.dir_app);
 			COVER_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_pic);
 			COVER_SONG_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_song);

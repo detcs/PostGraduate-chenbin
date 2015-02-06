@@ -112,19 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { date };//修改条件的参数
     	db.update(context.getResources().getString(R.string.db_footprint_table),cv,whereClause,whereArgs);//执行修改
     }
-//    public static void insertCourseRecord(Context context,SQLiteDatabase db,String tableName,String photoname,String photobase64,String remark,String date,String time,String masterState,int flag)
-//    {
-//    	ContentValues cv=new ContentValues();
-//    	cv.put(context.getResources().getString(R.string.dbcol_photo_name), photoname);
-//    	cv.put(context.getResources().getString(R.string.dbcol_photo_base64), photobase64);
-//    	cv.put(context.getResources().getString(R.string.dbcol_remark), remark);
-//    	cv.put(context.getResources().getString(R.string.dbcol_date), date);
-//    	cv.put(context.getResources().getString(R.string.dbcol_time), time);
-//    	cv.put(context.getResources().getString(R.string.dbcol_master_state), masterState);
-//    	cv.put(context.getResources().getString(R.string.dbcol_flag), flag);
-//    	long rowid=db.insert(tableName, null, cv);
-//    	Log.e(DataConstants.TAG,"rowid:"+rowid);
-//    }
+
     public static void insertCourseRecord(Context context,SQLiteDatabase db,String tableName,CourseRecordInfo cri)
     {
     	ContentValues cv=new ContentValues();
@@ -148,15 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { date };//修改条件的参数
     	db.update(tableName,cv,whereClause,whereArgs);//执行修改
     }
-//    public static void updateCourseMasterState(Context context,SQLiteDatabase db,String tableName,String updateValue,String photoName)
-//    {
-//    	ContentValues cv=new ContentValues();
-//       	cv.put(context.getResources().getString(R.string.dbcol_master_state), updateValue);
-//    	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
-//    	String[] whereArgs = { photoName };//修改条件的参数
-//    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
-//    }
-    // masterState or remark update
+
     public static CourseRecordInfo queryCourseRecordByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName)
     {
     	CourseRecordInfo cri=null;
@@ -240,6 +220,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      result.close();
 	      return count;
     }
+    public static int queryCourseRecordsCountOnDate(Context context,SQLiteDatabase db,String tableName,String date)
+    {
+    	
+    	boolean tableExist=isTableExists(db,tableName);
+    	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
+    	if(tableExist==false)
+    		return 0;
+    	
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"'",null); 
+	    result.moveToFirst(); 
+	    int count=0;
+	    while (!result.isAfterLast()) { 
+	         
+	        count=result.getInt(0); 
+	       // String name=result.getString(1); 
+	       // Log.e(DataConstants.TAG,"db:query count:"+tableName+":"+count);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	      return count;
+    }
+    public static int queryAllCourseRecordsCountOnDate(Context context,SQLiteDatabase db,String date)
+    {
+    	
+    	int count=0;
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_english_table),date);
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_politics_table),date);
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_profess1_table),date);
+    	if(UserConfigs.getCourseMathName()!=null)
+    		count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_math_table),date);
+    	if(UserConfigs.getCourseProfessTwoName()!=null)
+    		count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_profess2_table),date);
+	      return count;
+    }
     public static void dropTable(SQLiteDatabase db,String tableName){
         try
         {
@@ -296,6 +310,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      return names;
     }
     
+    public static void insertSearchWord(Context context,SQLiteDatabase db,String word,String date)
+    {
+    	ContentValues cv=new ContentValues();
+    	cv.put(context.getResources().getString(R.string.dbcol_search_word),word);
+    	cv.put(context.getResources().getString(R.string.dbcol_date),date);
+    	db.insert(context.getResources().getString(R.string.db_search_records_table), null, cv);
+    }
     public static boolean isTableExists(SQLiteDatabase mDatabase,String tableName) {  
 //         {  
 //            if(mDatabase == null || !mDatabase.isOpen()) {  
@@ -318,36 +339,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }  
         return false;  
     }  
-    public static boolean tableIsExist(SQLiteDatabase db,String tableName)
-    {
-        boolean result = false;
-        if(tableName == null)
-        {
-                return false;
-        }
-        //SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try 
-        {
-                //db = this.getReadableDatabase();
-                String sql = "select count(*) as c from "+DB_NAME+" where type ='table' and name ='"+tableName.trim()+"' ";
-                Log.e(DataConstants.TAG,"exist "+sql);
-                cursor = db.rawQuery(sql, null);
-                if(cursor.moveToNext())
-                {
-                        int count = cursor.getInt(0);
-                        if(count>0)
-                        {
-                                result = true;
-                        }
-                }
-                
-        } 
-        catch (Exception e) 
-        {
-                // TODO: handle exception
-        }               
-        Log.e(DataConstants.TAG,"exist "+result);
-        return result;
-    }
+   
 }
