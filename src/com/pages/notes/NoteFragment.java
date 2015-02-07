@@ -186,6 +186,7 @@ public class NoteFragment  extends Fragment{
 		// TODO Auto-generated method stub
 		super.onResume();
 		initCountInfo(rootView);
+		updateNoteClassList();
 	}
 
 	private void initCountInfo(View v)

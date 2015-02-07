@@ -39,7 +39,7 @@ public class FootPrintActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_footprint);
 		//tableName=getIntent().getStringExtra("tableName");
-		dates=new ArrayList<>();
+		dates=new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = sdf.format(calendar.getTime());
@@ -68,7 +68,11 @@ public class FootPrintActivity extends FragmentActivity{
 			tv.setText(dates.get(i));
 			mTabWidget.addView(tv);
 			tv.setOnClickListener(new TabClickListener(i));
-			fraList.add(new FootPrintFragment());
+			FootPrintFragment fpFrag=new FootPrintFragment();
+			Bundle b=new Bundle();
+			b.putString("footprint_date", dates.get(i));
+			fpFrag.setArguments(b);
+			fraList.add(fpFrag);
 		}
 		viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fraList));
 		viewPager.setOnPageChangeListener(mPageChangeListener);

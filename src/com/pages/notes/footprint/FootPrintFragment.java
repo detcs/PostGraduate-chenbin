@@ -13,18 +13,15 @@ public class FootPrintFragment extends Fragment{
 
 	 ListView noteList;
 	 String date;
-	public FootPrintFragment(String date) {
-		super();
-		// TODO Auto-generated constructor stub
-		
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) 
 	{
+		Bundle bundle=getArguments();
+		date=bundle.getString("footprint_date");
 		View rootView = inflater.inflate(R.layout.fragment_footprint, container, false);
 		noteList=(ListView)rootView.findViewById(R.id.footprint_list);
-		noteList.setAdapter(new FootprintNoteListAdapter(getActivity(),));
+		noteList.setAdapter(new FootprintNoteListAdapter(getActivity(),date));
 		return rootView;
 	}
 }
