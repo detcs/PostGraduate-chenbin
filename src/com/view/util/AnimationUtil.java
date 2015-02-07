@@ -12,6 +12,64 @@ import android.view.animation.TranslateAnimation;
 public class AnimationUtil {
 	private static final String TAG = "AnimationUtil";
 
+	public static Animation getShowAnim(int prePosition, int newPosition) {
+		if (prePosition < newPosition) {
+			return showFromLeft();
+		} else if (prePosition > newPosition) {
+			return showFromRight();
+		} else {
+			SysCall.error(TAG);
+			return null;
+		}
+	}
+
+	public static Animation getHideAnim(int prePosition, int newPosition) {
+		if (prePosition < newPosition) {
+			return hideToRight();
+		} else if (prePosition > newPosition) {
+			return hideToLeft();
+		} else {
+			SysCall.error(TAG);
+			return null;
+		}
+	}
+
+	public static Animation showFromLeft() {
+		Animation mShowAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF,
+				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f);
+		mShowAction.setDuration(500);
+		return mShowAction;
+	}
+
+	public static Animation showFromRight() {
+		Animation mShowAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF,
+				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f);
+		mShowAction.setDuration(500);
+		return mShowAction;
+	}
+
+	public static Animation hideToRight() {
+		Animation mShowAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f);
+		mShowAction.setDuration(500);
+		return mShowAction;
+	}
+
+	public static Animation hideToLeft() {
+		Animation mShowAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f);
+		mShowAction.setDuration(500);
+		return mShowAction;
+	}
+
 	public static Animation showAnimation() {
 		Animation mShowAction = new TranslateAnimation(
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,

@@ -1,5 +1,7 @@
 package com.pages.funsquare.essence;
 
+import java.util.ArrayList;
+
 import com.app.ydd.R;
 import com.data.model.EssenseDetail;
 import com.data.util.NetCall;
@@ -9,11 +11,12 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 public class EssenseActivity extends Activity implements EssenseJump,
 		PullEssenseDetail {
 	// private static final String TAG = "EssenseActivity";
-	private static final String SHARETAG = "EssenseShareFragment";
+	// private static final String SHARETAG = "EssenseShareFragment";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,7 @@ public class EssenseActivity extends Activity implements EssenseJump,
 	private void init() {
 		FragmentManager manager = getFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		// EssenseFragment essenseFragment = new EssenseFragment();
-		EssenseFlipFragment essenseFragment = new EssenseFlipFragment();
+		EssenseFragment essenseFragment = new EssenseFragment();
 		transaction.replace(R.id.FrameLayout1, essenseFragment);
 		transaction.commit();
 	}
@@ -69,4 +71,27 @@ public class EssenseActivity extends Activity implements EssenseJump,
 
 	}
 
+	// ********************dispatche the event to fragment
+	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
+			10);
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		for (MyOnTouchListener listener : onTouchListeners) {
+			listener.onTouch(ev);
+		}
+		return super.dispatchTouchEvent(ev);
+	}
+
+	public void registerMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+		onTouchListeners.add(myOnTouchListener);
+	}
+
+	public void unregisterMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+		onTouchListeners.remove(myOnTouchListener);
+	}
+
+	public interface MyOnTouchListener {
+		public boolean onTouch(MotionEvent ev);
+	}
 }

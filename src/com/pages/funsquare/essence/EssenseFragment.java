@@ -8,19 +8,23 @@ import com.data.util.NetCall;
 import com.data.util.NetCall.DownloadSource;
 import com.data.util.SysCall;
 import com.pages.funsquare.essence.EmailHintDialog.EmailHintDialogCallBack;
+import com.pages.funsquare.essence.EssenseActivity.MyOnTouchListener;
 import com.pages.funsquare.essence.EssenseEmailSetBump.ESBumpCallback;
 import com.pages.funsquare.essence.EssenseShareBump.ShareBumpCallback;
 import com.pages.funsquare.essence.ShareHintDialog.ShareHintCallBack;
+import com.view.util.AnimationUtil;
 import com.view.util.EssenseAdapter;
 import com.view.util.EssenseAdapter.ListDownEssense;
 import com.view.util.EssenseAdapter.ViewHolder;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -29,32 +33,28 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		EmailHintDialogCallBack, ListDownEssense, DownloadSource,
-		ShareBumpCallback, ESBumpCallback {
+		ShareBumpCallback, ESBumpCallback, OnGestureListener {
 	// private static final String TAG = "EssenseFragment";
 	private static final String TAG = "bump";
 	private View base;
 	private FrameLayout frame;
 
-	private static final String[] TABS = new String[] { "最新", "资讯", "资料", "真题" };
+	private FrameLayout content;
 	private static final int[] typeArray = new int[] { GloableData.TYPE_NEW,
 			GloableData.TYPE_MATERIAL, GloableData.TYPE_INFORMATION,
 			GloableData.TYPE_EXERCISE };
-	private ListView[] listViews;
+	private TextView[] tabs;
+	private int[] tabsId = { R.id.tab1, R.id.tab2, R.id.tab3, R.id.tab4 };
 	private EssenseAdapter[] adapters;
-	private int[] listViewsId;
-
+	private ListView[] lists;
 	private EssenseJump jump;
 	private View rootView;
 	private ImageView backImg;
 	private ImageView queryImg;
-	private TabHost tabhost;
-	private boolean isInit = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,9 +66,11 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_essense, container,
 					false);
+			initVariable(rootView);
+			frame.addView(rootView);
 		}
-		initVariable(rootView);
-		frame.addView(rootView);
+		((EssenseActivity) getActivity())
+				.registerMyOnTouchListener(myOnTouchListener);
 		return base;
 	}
 
@@ -81,75 +83,36 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		jump = (EssenseJump) activity;
 	}
 
-	@Override
-	public void onStop() {
-		for (int i = 0; i < 3; i++) {
-			adapters[i].destroy();
-		}
-		super.onStop();
-	}
-
 	// *********init variable*********
 
 	private void initVariable(View view) {
-		listViewsId = new int[] { R.id.listView1, R.id.listView2,
-				R.id.listView3, R.id.listView4 };
-		listViews = new ListView[4];
+		tabs = new TextView[4];
+		lists = new ListView[4];
+		adapters = new EssenseAdapter[4];
 		findViews(view);
-		if (isInit) {
-			initTabHost();
-			initListViews();
-		}
-		isInit = false;
+		initContent();
 		setListener();
 	}
 
 	private void findViews(View view) {
+		for (int i = 0; i < 4; i++) {
+			tabs[i] = (TextView) view.findViewById(tabsId[i]);
+			lists[i] = (ListView) LayoutInflater.from(getActivity()).inflate(
+					R.layout.fragment_essense_flip_listview, null);
+			adapters[i] = new EssenseAdapter(getActivity(), typeArray[i], this);
+			lists[i].setAdapter(adapters[i]);
+		}
 		backImg = (ImageView) view.findViewById(R.id.backImg);
 		queryImg = (ImageView) view.findViewById(R.id.queryImg);
-		tabhost = (TabHost) view.findViewById(R.id.tabhost);
-		for (int i = 0; i < 4; i++) {
-			listViews[i] = (ListView) view.findViewById(listViewsId[i]);
-		}
+		content = (FrameLayout) view.findViewById(R.id.content);
 	}
 
-	private void initListViews() {
-		Context context = getActivity().getBaseContext();
-		adapters = new EssenseAdapter[4];
-		for (int i = 0; i < 4; i++) {
-			adapters[i] = new EssenseAdapter(context, typeArray[i], this);
-			listViews[i].setAdapter(adapters[i]);
-		}
+	private void initContent() {
+		content.addView(lists[0]);
 	}
 
-	@SuppressWarnings("deprecation")
-	private void initTabHost() {
-		// Call setup() before adding tabs if loading TabHost using
-		// findViewById(). However: You do not need to call setup() after
-		// getTabHost() in TabActivity.
-		tabhost.setup();
-		int[] tabsId = { R.id.tab1, R.id.tab2, R.id.tab3, R.id.tab4 };
-		for (int i = 0; i < 4; i++) {
-			tabhost.addTab(tabhost.newTabSpec(TABS[i]).setIndicator(TABS[i])
-					.setContent(tabsId[i]));
-		}
-		for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
-			View view = tabhost.getTabWidget().getChildAt(i);
-			// // view.setBackgroundColor(R.color.essense_tabhost_background);
-			TextView textView = (TextView) view
-					.findViewById(android.R.id.title);
-			// textView.setTextSize(20);
-			// textView.setBackgroundColor(R.color.essense_tabhost_background);
-			// textView.setTextColor(R.color.essense_tabhost_word);
-			textView.setGravity(Gravity.CENTER);
-			textView.getLayoutParams().height = LayoutParams.FILL_PARENT;
-			textView.getLayoutParams().width = LayoutParams.FILL_PARENT;
-			// ImageView image = (ImageView)
-			// view.findViewById(android.R.id.icon);
-			// // image.setBackgroundColor(R.color.essense_tabhost_background);
-			// image.setBackgroundResource(R.drawable.default_head);// userful
-		}
-	}
+	// tab状态记录
+	private int preTab = 0;
 
 	private void setListener() {
 		backImg.setOnClickListener(new OnClickListener() {
@@ -168,24 +131,53 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 				jump.query();
 			}
 		});
-		OnItemClickListener listener = new OnItemClickListener() {
+		OnClickListener tabsListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				int newTab = 0;
+				for (int i = 0; i < 4; i++) {
+					if (tabs[i].equals(v)) {
+						newTab = i;
+						Log.i(TAG, "new tab: " + i);
+					}
+				}
+				flip(newTab);
+			}
+		};
+		for (int i = 0; i < 4; i++) {
+			tabs[i].setOnClickListener(tabsListener);
+		}
+		OnItemClickListener itemListener = new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				jump(view);
+				ViewHolder holder = (ViewHolder) view.getTag();
+				String essid = holder.id;
+				jump.detail(essid);
 			}
 		};
 		for (int i = 0; i < 4; i++) {
-			listViews[i].setOnItemClickListener(listener);
+			lists[i].setOnItemClickListener(itemListener);
 		}
 	}
 
-	private void jump(View view) {
-		ViewHolder holder = (ViewHolder) view.getTag();
-		String id = holder.id;
-		jump.detail(id);
+	private void flip(int newTab) {
+		if (newTab != preTab) {
+			// newTab:for move animation; result:for result record
+			int result = (newTab + 4) % 4;
+			lists[preTab].startAnimation(AnimationUtil.getHideAnim(preTab,
+					newTab));
+			content.removeView(lists[preTab]);
+
+			content.addView(lists[result]);
+			lists[result].startAnimation(AnimationUtil.getShowAnim(preTab,
+					newTab));
+			preTab = result;
+		}
 	}
 
 	private Essense ed;// 用户希望下载的那个
@@ -265,5 +257,66 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 	public void setSuccess() {
 		// TODO Auto-generated method stub
 
+	}
+
+	// **************gesture listener**************
+
+	private MyOnTouchListener myOnTouchListener = new MyOnTouchListener() {
+		@Override
+		public boolean onTouch(MotionEvent ev) {
+			boolean result = detector.onTouchEvent(ev);
+			return result;
+		}
+	};
+	private GestureDetector detector = new GestureDetector(getActivity(), this);
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private static final int verticalMinDistance = 500;
+	private static final int minVelocity = 0;
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		if (e1.getX() - e2.getX() > verticalMinDistance
+				&& Math.abs(velocityX) > minVelocity) {
+			// left
+			flip(preTab + 1);
+		} else if (e2.getX() - e1.getX() > verticalMinDistance
+				&& Math.abs(velocityX) > minVelocity) {
+			// right
+			flip(preTab - 1);
+		}
+		return false;
 	}
 }
