@@ -66,6 +66,7 @@ public class YDDApplication extends Application {
 		// if(!DataConstants.dbHelper.tableIsExist(db,
 		// getResources().getString(R.string.db_footprint_table)))
 		DataConstants.dbHelper.createFootprintTable(getApplicationContext(), db);
+		DataConstants.dbHelper.createSearchRecordsTable(getApplicationContext(), db);
 		db.close();
 	}
 	private void initDBandDirMap()

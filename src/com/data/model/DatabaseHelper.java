@@ -309,13 +309,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      result.close();
 	      return names;
     }
-    
-    public static void insertSearchWord(Context context,SQLiteDatabase db,String word,String date)
+    // SearchRecordsTable
+    public static void createSearchRecordsTable( Context context,SQLiteDatabase db)
+    {
+    	String sql = "create table if not exists "+context.getResources().getString(R.string.db_search_records_table)
+    			+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+    			+context.getResources().getString(R.string.dbcol_search_word)+" TEXT not null , "
+    			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
+        Log.e(DataConstants.TAG, "sql:"+sql);
+    	db.execSQL(sql);
+    }
+    public static void insertSearchRecord(Context context,SQLiteDatabase db,String word,String date)
     {
     	ContentValues cv=new ContentValues();
     	cv.put(context.getResources().getString(R.string.dbcol_search_word),word);
     	cv.put(context.getResources().getString(R.string.dbcol_date),date);
     	db.insert(context.getResources().getString(R.string.db_search_records_table), null, cv);
+    }
+    public static List<String> querySearchRecord(Context context,SQLiteDatabase db)
+    {
+    	List<String> names=new ArrayList<String>();
+    	Cursor result=db.rawQuery("SELECT "+context.getResources().getString(R.string.dbcol_search_word)+" FROM "+context.getResources().getString(R.string.db_search_records_table),null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) { 
+	         
+	        String name=result.getString(0); 
+	        names.add(name); 
+	        Log.e(DataConstants.TAG,"db:query SearchRecord:"+name);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	      return names;
+    }
+    public static void deleteAllSearchRecord(Context context,SQLiteDatabase db)
+    {
+    	//String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
+    	//String[] whereArgs = { photoName };//修改条件的参数
+    	db.delete(context.getResources().getString(R.string.db_search_records_table), null, null);
     }
     public static boolean isTableExists(SQLiteDatabase mDatabase,String tableName) {  
 //         {  

@@ -253,7 +253,8 @@ public class LoginActivity extends Activity{
     private void phoneLogin()
     {
     	String loginway=getResources().getString(R.string.user_phone);
-		String url=getLoginURL(loginway,phone.getText().toString(),UserConfigs.getPassword());
+		String url=getLoginURL(loginway,phone.getText().toString(),password.getText().toString());
+		UserConfigs.storePassword(password.getText().toString());
 		serverLogin(url, loginway);
     }
     private void phoneAutoLogin()
@@ -269,11 +270,12 @@ public class LoginActivity extends Activity{
                  new Response.Listener<JSONObject>() {
                      @Override
                      public void onResponse(JSONObject response) {
-                         Log.i(DataConstants.TAG,"response=" + response);
+                         Log.e(DataConstants.TAG,"response=" + response);
+                         		
                          		parseLoginInfo(response, loginway);
                          		Intent intent=new Intent();
-                  			intent.setClass(getApplicationContext(), MainActivity.class);
-                  			startActivity(intent);
+                  			    intent.setClass(getApplicationContext(), MainActivity.class);
+                  			    startActivity(intent);
                      }}, 
              	new Response.ErrorListener() {
                      @Override
@@ -304,7 +306,8 @@ public class LoginActivity extends Activity{
 			pair = new BasicNameValuePair("qqAccount",account);
 		else if(loginWay.equals(getResources().getString(R.string.user_phone)))
 		{
-			if(account.length()==13)
+			Log.e(DataConstants.TAG,account+" "+account.length());
+			if(account.length()==11)
 			{
 				pair = new BasicNameValuePair("phone",account);
 				params.add(pair);
@@ -315,14 +318,16 @@ public class LoginActivity extends Activity{
 				params.add(pair);
 			}
 			pair = new BasicNameValuePair("password",passward);
+			params.add(pair);
 		}
-		params.add(pair);
+		//params.add(pair);
 		String resultURL=DataConstants.SERVER_URL+"?";
 		for(NameValuePair nvp:params)
 		{
 			resultURL+=nvp.getName()+"="+nvp.getValue()+"&";
 			
 		}
+		Log.e(DataConstants.TAG,resultURL);
 		return  resultURL;
 	}
     private void parseLoginInfo(JSONObject job,String loginWay)

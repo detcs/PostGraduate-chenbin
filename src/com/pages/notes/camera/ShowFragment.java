@@ -340,7 +340,7 @@ public class ShowFragment extends Fragment {
 								R.string.dir_profess1);
 					}
 				} else if (index == 3) {
-					if (UserConfigs.getCourseProfessOneName() == null) {
+					if (UserConfigs.getCourseProfessOneName() != null) {
 						tableName = getResources().getString(
 								R.string.db_profess1_table);
 						storePath += getResources().getString(
