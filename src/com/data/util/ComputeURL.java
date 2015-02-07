@@ -2,6 +2,12 @@ package com.data.util;
 
 public class ComputeURL {
 	// private static final String TAG = "ComputeURL";
+	public static String getRecommendKeyURL(String key) {
+		String re = GloableData.URL + GloableData.RECOMMENDKEYS_PATH
+				+ GloableData.getParam() + "&key=" + str(key);
+		return re;
+	}
+
 	// ************IMAGE************
 	private static final int HEAD_WIDTH = 100;
 	private static final int HEAD_HEIGHT = 100;
@@ -56,34 +62,10 @@ public class ComputeURL {
 		return reStr;
 	}
 
-	// DataBuffer
-	// public static String getListURL(int page, int limit, int type, String id,
-	// String queryKey) {
-	// String reStr;
-	// switch (type) {
-	// case GloableData.TYPE_EXERCISE:
-	// case GloableData.TYPE_INFORMATION:
-	// case GloableData.TYPE_MATERIAL:
-	// reStr = getEssenseListURL(page, limit, type, queryKey);
-	// break;
-	// case GloableData.TYPE_POST:
-	// reStr = getPostListURL(page, limit);
-	// break;
-	// case GloableData.TYPE_COMMENT:
-	// reStr = getCommentListURL(page, limit, id);
-	// break;
-	// case GloableData.TYPE_INFORM:
-	// reStr = getInformListURL(page, limit);
-	// break;
-	// default:
-	// reStr = "";
-	// SysCall.error("list url is error");
-	// break;
-	// }
-	// return reStr;
-	// }
-
 	public static String getEssenseListURL(int page, int limit, int type) {
+		if (GloableData.TYPE_NEW == type) {
+			type = 3;
+		}
 		String reStr = GloableData.URL + GloableData.ESSENSE_PATH
 				+ GloableData.getParam() + "&page=" + page + "&limit=" + limit
 				+ "&type=" + type;

@@ -3,6 +3,7 @@ package com.pages.notes.camera;
 import com.app.ydd.R;
 import com.data.util.SysCall;
 import com.pages.notes.camera.MySurfaceView.MyCallBack;
+import com.view.util.AnimationUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,12 +22,14 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -38,6 +41,7 @@ public class TakeFragment extends Fragment implements MyCallBack {
 	private View rootView;
 	private MySurfaceView surfaceView;
 
+	private static final int DEGREE = 90;
 	private SensorManager sensorMgr;
 	private float x, y, z;
 	private Matrix matrix;
@@ -198,46 +202,26 @@ public class TakeFragment extends Fragment implements MyCallBack {
 
 	private void rotate(float x) {
 		int state = 0;
-		float degrees = 0;
 		if (x > 7) {
-			state = 10;
-			degrees = 90;
+			state = 1;
 		} else if (x < -7) {
-			degrees = -90;
-			state = -10;
+			state = -1;
 		}
 		if (state == preState) {
 			return;
 		} else {
+			Animation a = AnimationUtil.rotateAnimation(getActivity(),
+					(state - preState) * DEGREE);
+			// a.setFillAfter(true);
+			pickView.startAnimation(a);
+			matrix.reset();
+			matrix.setRotate((state - preState) * DEGREE); // 设置旋转
+			// 注意要正方形的，否则宽度大于原本的就会有问题
+			showBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth,
+					bitmapHeight, matrix, true);
+			pickView.setImageBitmap(showBitmap);
+			bitmap = showBitmap;
 			preState = state;
 		}
-		matrix.reset();
-		matrix.setRotate(degrees); // 设置旋转
-		// if (showBitmap != null && !showBitmap.isRecycled()) {
-		// showBitmap.recycle();
-		// }
-		showBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth,
-				bitmapHeight, matrix, true);
-		pickView.setImageBitmap(showBitmap);
-		// ObjectAnimator anim1 = ObjectAnimator.ofFloat(pickView, "rotationX",
-		// 90f, 0f);
-		// // anim1.addUpdateListener(new AnimatorUpdateListener() {
-		// // @Override
-		// // public void onAnimationUpdate(ValueAnimator animation) {
-		// // pickView.postInvalidate();
-		// // pickView.invalidate();
-		// // }
-		// // });
-		// ObjectAnimator anim2 = ObjectAnimator.ofFloat(takeBu, "rotationY",
-		// 90f,
-		// 0f);
-		// ObjectAnimator anim3 = ObjectAnimator.ofFloat(closeView, "rotationZ",
-		// 90f, 0f);
-		// AnimatorSet animSet = new AnimatorSet();
-		// animSet.setDuration(2000);
-		// animSet.setInterpolator(new LinearInterpolator());
-		// animSet.playTogether(anim1, anim2, anim3);
-		// animSet.start();
 	}
-
 }

@@ -95,7 +95,7 @@ public class PersonCenterFragment extends Fragment {
 				View email = frame.findViewWithTag(TAG);
 				if (null == email) {
 					email = LayoutInflater.from(getActivity()).inflate(
-							R.layout.fragment_person_email_set, null);
+							R.layout.fragment_email_set, null);
 					email.setTag(TAG);
 					frame.addView(email);
 					email.startAnimation(AnimationUtil.showAnimation());

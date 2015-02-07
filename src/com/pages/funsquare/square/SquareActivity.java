@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 public class SquareActivity extends Activity implements SquareJump,
 		PullViewGenerator {
-	private static final String MORETAG = "SquareReportFragment";
+	// private static final String MORETAG = "SquareReportFragment";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,31 +23,6 @@ public class SquareActivity extends Activity implements SquareJump,
 	}
 
 	// SquareJump
-	@Override
-	public void addReport(Post vg) {
-		// TODO Auto-generated method stub
-		FragmentManager manager = getFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.essense_bottom_in, 0);
-		SquareReportFragment fragment = new SquareReportFragment(vg);
-		transaction.add(fragment, MORETAG);
-		transaction.commit();
-	}
-
-	@Override
-	public void removeReport() {
-		// TODO Auto-generated method stub
-		FragmentManager manager = getFragmentManager();
-		SquareReportFragment fragment = (SquareReportFragment) manager
-				.findFragmentByTag(MORETAG);
-		if (null == fragment) {
-			return;
-		}
-		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.setCustomAnimations(0, R.anim.essense_bottom_out);
-		transaction.remove(fragment);
-		transaction.commit();
-	}
 
 	@Override
 	public void publish() {

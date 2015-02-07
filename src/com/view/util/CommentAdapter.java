@@ -22,10 +22,11 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	private Context context;
 	private DataBuffer<Comment> buffer;
 	private String postId;// id of post
-	private Reply reply;
+	private PostDetailCallback reply;
 	private Post vg;
 
-	public CommentAdapter(Context context, String postId, Reply reply, Post vg) {
+	public CommentAdapter(Context context, String postId,
+			PostDetailCallback reply, Post vg) {
 		this.context = context;
 		this.postId = postId;
 		this.reply = reply;
@@ -63,12 +64,34 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 		}
 	}
 
+	// **************init**************
+	private void init() {
+		buffer = new DataBuffer<Comment>(this, new CommentUtil(postId));
+	}
+
+	// AdapterFresh
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		buffer.destroy();
+	}
+
+	// *************Call back*************
+	public interface PostDetailCallback {
+		public void reply(String userId, int position);
+
+		public void moreChoice();
+
+		public void share();
+	}
+
+	// ******************post******************
 	private ImageView headView_p;
+	private ImageView sexView_p;
 	private TextView nickNameView_p;
 	private TextView timeView_p;
 	private TextView contentView_p;
-	private ImageView reserveView_p;
-	private ImageView praiseView_p;
+	private ImageView shareView_p;
 	private ImageView moreView_p;
 
 	private View inflatePost(View convertView, ViewGroup parent) {
@@ -81,17 +104,18 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	}
 
 	private void findPostViews(View view) {
+		sexView_p = (ImageView) view.findViewById(R.id.sexImage);
 		headView_p = (ImageView) view.findViewById(R.id.headView);
 		nickNameView_p = (TextView) view.findViewById(R.id.nickNameView);
 		timeView_p = (TextView) view.findViewById(R.id.timeView);
 		contentView_p = (TextView) view.findViewById(R.id.contentView);
 
-		reserveView_p = (ImageView) view.findViewById(R.id.imageView1);
-		praiseView_p = (ImageView) view.findViewById(R.id.imageView2);
-		moreView_p = (ImageView) view.findViewById(R.id.imageView3);
+		shareView_p = (ImageView) view.findViewById(R.id.shareView);
+		moreView_p = (ImageView) view.findViewById(R.id.moreView);
 	}
 
 	private void initPostViews() {
+		// sexView_p.setImageBitmap(null);
 		String headimg = vg.getImgNo();
 		Picasso.with(context).load(ComputeURL.getHeadImgURL(headimg))
 				.resize(100, 100).placeholder(R.drawable.default_head)
@@ -102,20 +126,20 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	}
 
 	private void setPostListener() {
-		reserveView_p.setOnClickListener(new OnClickListener() {
+		shareView_p.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// 收藏
+
 			}
 		});
-		praiseView_p.setOnClickListener(new OnClickListener() {
+		moreView_p.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				// 点赞
+
 			}
 		});
 		moreView_p.setOnClickListener(new OnClickListener() {
@@ -128,6 +152,8 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 			}
 		});
 	}
+
+	// *********************comments*********************
 
 	private View inflateComment(final int position, View convertView,
 			ViewGroup parent) {
@@ -182,21 +208,4 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 		TextView contentView;
 	}
 
-	// **************init**************
-	private void init() {
-		buffer = new DataBuffer<Comment>(this, new CommentUtil(postId));
-	}
-
-	// *************Call back*************
-	public interface Reply {
-		public void reply(String userId, int position);
-
-		public void moreChoice();
-	}
-
-	@Override
-	public void fresh() {
-		// TODO Auto-generated method stub
-		buffer.clean();
-	}
 }

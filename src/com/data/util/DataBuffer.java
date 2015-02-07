@@ -15,11 +15,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 public class DataBuffer<D> {
-	// private static final String TAG = "DataBuffer";
+	private static final String TAG = "DataBuffer";
 	private final RequestQueue requestQueue;
 	private final BaseAdapter adapter;
 	private static final int ITEMPERSCREEN = 10;// 控制屏幕的“长度”
 	private static final int TRIGGER = 1;
+	private static final int TIMES = 3;
 
 	// 刷新databuffer需要初始化的数据
 	private int items_number;
@@ -29,32 +30,29 @@ public class DataBuffer<D> {
 	private NetUtil<D> nu;
 
 	public DataBuffer(BaseAdapter adapter, NetUtil<D> nu) {
+		if (null == nu) {
+			items_number = 0;
+		} else {
+			items_number = TRIGGER;
+			this.nu = nu;
+		}
 		requestQueue = GloableData.requestQueue;
 		this.adapter = adapter;
 
-		cache = new LruCache<Integer, Object>(2 * ITEMPERSCREEN);
+		cache = new LruCache<Integer, Object>(TIMES * ITEMPERSCREEN);
 		coefficient = 0;
-		items_number = TRIGGER;
-		this.nu = nu;
 	}
 
-	// **************fresh**************
-	public void clean(NetUtil<D> nu) {
+	public void destroy() {
 		requestQueue.cancelAll(nu);
-
-		cache = new LruCache<Integer, Object>(2 * ITEMPERSCREEN);
-		coefficient = 0;
-		items_number = TRIGGER;
-		this.nu = nu;// reset the NetUtil
-		adapter.notifyDataSetChanged();
+		cache = null;
 	}
 
-	public void clean() {
-		requestQueue.cancelAll(nu);
-		cache = new LruCache<Integer, Object>(2 * ITEMPERSCREEN);
+	public void reset() {
+		destroy();
+		cache = new LruCache<Integer, Object>(TIMES * ITEMPERSCREEN);
 		coefficient = 0;
 		items_number = TRIGGER;
-
 		adapter.notifyDataSetChanged();
 	}
 
@@ -93,13 +91,14 @@ public class DataBuffer<D> {
 						freshDataSet(index, list);
 						// notify the adapter
 						adapter.notifyDataSetChanged();
-
 					}
 				}, new Response.ErrorListener() {
 					@Override
 					public void onErrorResponse(VolleyError arg0) {
 						// TODO Auto-generated method stub
-						Log.i("error", "wsy");
+						Log.i(TAG,
+								"net request error: "
+										+ nu.getURL(page, ITEMPERSCREEN));
 					}
 				});
 		jsonObjectRequest.setTag(nu);

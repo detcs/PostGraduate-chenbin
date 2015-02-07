@@ -38,11 +38,11 @@ public class SquareInformFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
-	public void onPause(){
-		super.onPause();
-		adapter.fresh();
+	public void onStop() {
+		adapter.destroy();
+		super.onStop();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class SquareInformFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		Log.i(TAG, "resume");
-		((AdapterFresh) adapter).fresh();
+		((AdapterFresh) adapter).destroy();
 	}
 
 	// ****************init****************

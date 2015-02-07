@@ -82,8 +82,8 @@ public class InformAdapter extends BaseAdapter implements AdapterFresh {
 	}
 
 	@Override
-	public void fresh() {
+	public void destroy() {
 		// TODO Auto-generated method stub
-		buffer.clean();
+		buffer.destroy();
 	}
 }

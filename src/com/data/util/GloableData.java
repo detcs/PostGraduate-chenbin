@@ -2,16 +2,14 @@ package com.data.util;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.data.model.UserConfigs;
 
 import android.content.Context;
-import android.telephony.TelephonyManager;
 
 public class GloableData {
 	// attention type-value:affects the EssenseFragment
 	public static final int TYPE_MATERIAL = 0, TYPE_INFORMATION = 1,
 			TYPE_EXERCISE = 2, TYPE_POST = 3, TYPE_COMMENT = 4,
-			TYPE_INFORM = 5, TYPE_NEW = 6;
+			TYPE_INFORM = 5, TYPE_NEW = 6, TYPE_SEARCH = 100;
 	public static final int ISNEW = 1;
 	public static final String URL = "http://114.215.196.179:8080/gs";
 	// public static final String URL = "http://192.168.0.115:8081/gs";
@@ -25,6 +23,7 @@ public class GloableData {
 	public static final String PUBLISH_POST_PATH = "/mobile?methodno=MPostPublish&debug=1";
 	public static final String INFORM_PATH = "/mobile?methodno=MCommentsToMe&debug=1";
 	public static final String DOWNLOAD_PATH = "/mobile?methodno=MBaiheNewsList";
+	public static final String RECOMMENDKEYS_PATH = "/mobile?methodno=MRecommendKeys";
 
 	public static final String UPLOAD_SUCCESS_MSG = "发布成功";
 	public static RequestQueue requestQueue;

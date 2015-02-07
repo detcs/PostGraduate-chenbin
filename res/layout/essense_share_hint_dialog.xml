@@ -17,10 +17,22 @@
         android:layout_height="wrap_content"
         android:text="@string/essense_share_hint_content" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/essense_share_hint_ino" />
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/quitBu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_quit" />
+
+        <Button
+            android:id="@+id/shareBu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_share" />
+    </LinearLayout>
 
 </LinearLayout>

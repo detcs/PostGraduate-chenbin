@@ -12,7 +12,4 @@ public interface SquareJump {
 
 	public void inform();
 
-	public void addReport(Post vg);
-
-	public void removeReport();
 }

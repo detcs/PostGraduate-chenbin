@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="20dp" >
 
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
@@ -33,6 +33,14 @@
             android:layout_alignLeft="@+id/nickNameView"
             android:layout_below="@+id/nickNameView"
             android:text="time" />
+
+        <ImageView
+            android:id="@+id/sexImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/timeView"
+            android:layout_toRightOf="@+id/nickNameView"
+            android:src="@drawable/pause" />
     </RelativeLayout>
 
     <TextView
@@ -46,23 +54,16 @@
         android:layout_height="wrap_content" >
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/shareView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/pause" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/moreView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/play" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:src="@drawable/edit_remark" />
-
     </LinearLayout>
 
 </LinearLayout>

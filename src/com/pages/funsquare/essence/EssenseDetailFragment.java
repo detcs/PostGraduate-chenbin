@@ -7,6 +7,10 @@ import com.data.util.GloableData;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.pages.funsquare.essence.EmailHintDialog.EmailHintDialogCallBack;
+import com.pages.funsquare.essence.EssenseEmailSetBump.ESBumpCallback;
+import com.pages.funsquare.essence.EssenseShareBump.ShareBumpCallback;
+import com.pages.funsquare.essence.ShareHintDialog.ShareHintCallBack;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -15,16 +19,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-@SuppressLint("ValidFragment")
 public class EssenseDetailFragment extends Fragment implements DownloadSource,
-		EmailHintDialogCallBack {
+		EmailHintDialogCallBack, ShareHintCallBack, ShareBumpCallback,
+		ESBumpCallback {
 	private static final String TAG = "EssenseDetailFragment";
+	private View base;
+	private FrameLayout frame;
+
 	private View rootView;
 	private EssenseDetail ed;
-	private EssenseJump jump;
 
 	private ImageView backBu;
 	private TextView titleView;
@@ -41,25 +48,25 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		this.ed = ed;
 		// context = getActivity();
 	}
+
 	public EssenseDetailFragment() {
 
 	}
 
 	@Override
-	public void onAttach(android.app.Activity activity) {
-		super.onAttach(activity);
-		jump = (EssenseJump) activity;
-	};
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
+		if (null == base) {
+			base = inflater.inflate(R.layout.frame, container, false);
+		}
+		frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_essense_detail,
 					container, false);
 		}
 		init(rootView);
-		return rootView;
+		frame.addView(rootView);
+		return base;
 	}
 
 	private void init(View view) {
@@ -109,24 +116,25 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		});
 		shareView.setOnClickListener(new OnClickListener() {
 
+			@SuppressLint("InflateParams")
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				rootView.clearFocus();
-				jump.addShare(ed);
+				if (null == frame.findViewWithTag(TAG)) {
+					rootView.clearFocus();
+					new EssenseShareBump(frame, getActivity(), TAG,
+							EssenseDetailFragment.this).show();
+				}
 			}
 		});
 	}
 
 	private void initDownBu() {
-		if (EssenseDetail.HASRESOURCE == ed.getHasDownload()) {
-			// View topView = (View)
-			// inflater.inflate(R.layout.square_detail_top,
-			// FrameLayout1, false);
-			// rootView.addView(topView);
+		if (EssenseDetail.HASRESOURCE == ed.getHasDownload_()) {
+
+			downBu = (Button) rootView.findViewById(R.id.downBu);
 			downBu.setVisibility(View.VISIBLE);
 			downBu.setClickable(true);
-			downBu = (Button) rootView.findViewById(R.id.downBu);
 			downBu.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -138,22 +146,23 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		}
 	}
 
+	// ***********************download***********************
 	private void download() {
 		// 如果没有资源文件，则不会执行到这里
-		if (EssenseDetail.NEEDSHARE == ed.getNeedShare()) {
-			new ShareHintDialog(getActivity()).show();
+		if (EssenseDetail.NEEDSHARE == ed.getNeedShare_()) {
+			new ShareHintDialog(getActivity(), this).show();
 			return;
 		}
 		if (!GloableData.hasSetEmail()) {
 			// 检验邮箱是否已经设置
 			new EmailHintDialog(getActivity(), this).show();
 		} else {
-			NetCall.download(ed.getId(), "314784088@qq.com",
-					ed.getResourceId(), "" + ed.getNeedShare(), this);
+			NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
+					+ ed.getNeedShare_(), this);
 		}
 	}
 
-	// DownloadSource
+	// NetCall.DownloadSource
 	@Override
 	public void downloadSuccess() {
 		// TODO Auto-generated method stub
@@ -167,15 +176,47 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 	}
 
 	// EmailHintDialogCallBack
-	@Override
-	public void quit() {
-		// TODO Auto-generated method stub
-		// do nothing
-	}
 
 	@Override
 	public void ensure() {
 		// TODO Auto-generated method stub
-		SysCall.error(TAG + " :hint click ensure");
+		if (null == frame.findViewWithTag(TAG)) {
+			new EssenseEmailSetBump(frame, getActivity(), TAG, this).show();
+		}
+	}
+
+	// ShareHintCallBack
+	@Override
+	public void ensureShare() {
+		// TODO Auto-generated method stub
+		if (null == frame.findViewWithTag(TAG)) {
+			new EssenseShareBump(frame, getActivity(), TAG, this).show();
+		}
+	}
+
+	// EssenseShareBump.ShareBumpCallback
+	@Override
+	public void shareSuccess() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void shareFail() {
+		// TODO Auto-generated method stub
+
+	}
+
+	// EssenseEmailSetBump.ESBumpCallback
+	@Override
+	public void setFail() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setSuccess() {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
     <FrameLayout
         android:id="@+id/FrameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -38,34 +41,51 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/FrameLayout1" >
 
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/searchView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
-        </AutoCompleteTextView>
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="@string/default_search" >
 
-        <Button
+            <requestFocus />
+        </EditText>
+
+        <ImageView
             android:id="@+id/searchBu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/essense_query_head_title" />
+            android:layout_weight="1"
+            android:src="@drawable/pause" />
+
+        <TextView
+            android:id="@+id/quitView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:layout_weight="1"
+            android:text="@string/default_quit" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/hintZone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </FrameLayout>
-
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/resultList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/searchBar" >
     </ListView>
 
-</LinearLayout>
+    <ListView
+        android:id="@+id/hintList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchBar" >
+    </ListView>
+
+</RelativeLayout>

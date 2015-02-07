@@ -21,14 +21,14 @@ import android.widget.ListView;
 
 public class SquareFragment extends Fragment {
 	private View rootView;
-	
+
 	private ImageView backBu;
 	private ImageView informBu;
-	
+
 	private ListView listView1;
-	
+
 	private Button publishBu;
-	
+
 	private SquareAdapter postAdapter;
 	private SquareJump pubOrDetail;
 
@@ -55,9 +55,9 @@ public class SquareFragment extends Fragment {
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-		postAdapter.fresh();
+	public void onStop() {
+		postAdapter.destroy();
+		super.onStop();
 	}
 
 	// ******************init******************

@@ -5,9 +5,11 @@ import com.data.model.Post;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.data.util.NetCall.UploadData;
+import com.pages.funsquare.square.SquarePostShareBump.PostShareCallBack;
 import com.view.util.AdapterFresh;
 import com.view.util.CommentAdapter;
-import com.view.util.CommentAdapter.Reply;
+import com.view.util.CommentAdapter.PostDetailCallback;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -18,14 +20,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 @SuppressLint("ValidFragment")
-public class SquareDetailFragment extends Fragment implements Reply, UploadData {
+public class SquareDetailFragment extends Fragment implements
+		PostDetailCallback, UploadData, PostShareCallBack {
 	private static final String TAG = "SquareDetailFragment";
-	// private Context context;
+	private View base;
+	private FrameLayout frame;
+
 	private View rootView;
 	private SquareJump jump;
 	// head bar
@@ -59,25 +65,25 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
+		if (null == base) {
+			base = inflater.inflate(R.layout.frame, container, false);
+			frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
+		}
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_square_detail,
 					container, false);
 		}
 		init(rootView);
-		return rootView;
+		frame.addView(rootView);
+		return base;
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-		commentAdapter.fresh();
+	public void onStop() {
+		commentAdapter.destroy();
+		super.onStop();
 	}
 
 	// ***************init***************
@@ -136,7 +142,7 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 		});
 	}
 
-	// Reply
+	// CommentAdapter.PostDetailCallback
 	@Override
 	public void reply(String userId, int position) {
 		// TODO Auto-generated method stub
@@ -152,7 +158,15 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	public void moreChoice() {
 		// TODO Auto-generated method stub
 		rootView.clearFocus();
-		jump.addReport(vg);
+		if (null == frame.findViewWithTag(TAG)) {
+			new SquarePostShareBump(frame, getActivity(), TAG, this).show();
+		}
+	}
+
+	@Override
+	public void share() {
+		// TODO Auto-generated method stub
+		rootView.clearFocus();
 	}
 
 	// 这两个方法仅仅是为了通知用户的，真正的通知本地数据刷新不在这里做
@@ -160,7 +174,7 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	public void updateSuccess() {
 		// TODO Auto-generated method stub
 		SysCall.hint(getActivity(), "评论成功");
-		((AdapterFresh) commentAdapter).fresh();
+		((AdapterFresh) commentAdapter).destroy();
 		editText.setText("");
 	}
 
@@ -168,6 +182,19 @@ public class SquareDetailFragment extends Fragment implements Reply, UploadData 
 	public void updatetFail() {
 		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), "评论失败", Toast.LENGTH_SHORT).show();
+	}
+
+	// SquarePostShareBump.PostShareCallBack
+	@Override
+	public void shareSuccess() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void shareFail() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

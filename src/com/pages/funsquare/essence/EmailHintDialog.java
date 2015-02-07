@@ -31,7 +31,7 @@ public class EmailHintDialog {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				callback.quit();
+				dialog.dismiss();
 			}
 		});
 		ensureBu.setOnClickListener(new OnClickListener() {
@@ -39,6 +39,7 @@ public class EmailHintDialog {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				dialog.dismiss();
 				callback.ensure();
 			}
 		});
@@ -50,7 +51,6 @@ public class EmailHintDialog {
 	}
 
 	public interface EmailHintDialogCallBack {
-		public void quit();
 
 		public void ensure();
 	}

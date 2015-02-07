@@ -65,6 +65,8 @@ public class SquareAdapter extends BaseAdapter implements AdapterFresh {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.square_list_item, parent, false);
 			holder = new ViewHolder();
+			holder.sexImage = (ImageView) convertView
+					.findViewById(R.id.sexImage);
 			holder.head = (ImageView) convertView.findViewById(R.id.headView);
 			holder.nickName = (TextView) convertView
 					.findViewById(R.id.nickName);
@@ -79,6 +81,7 @@ public class SquareAdapter extends BaseAdapter implements AdapterFresh {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.vg = vg;
+		// holder.sexImage.setImageBitmap(null);
 		holder.nickName.setText(vg.getAuthor());
 		holder.time.setText(vg.getTime());
 		holder.comments.setText(vg.getComments() + "條評論");
@@ -92,6 +95,7 @@ public class SquareAdapter extends BaseAdapter implements AdapterFresh {
 
 	public static class ViewHolder {
 		public Post vg;// for information trans
+		ImageView sexImage;
 		TextView nickName;
 		TextView time;
 		TextView title;
@@ -106,9 +110,9 @@ public class SquareAdapter extends BaseAdapter implements AdapterFresh {
 	}
 
 	@Override
-	public void fresh() {
+	public void destroy() {
 		// TODO Auto-generated method stub
-		buffer.clean();
+		buffer.destroy();
 	}
 
 }

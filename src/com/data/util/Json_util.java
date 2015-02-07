@@ -45,19 +45,38 @@ public class Json_util {
 
 	public static EssenseDetail getEssenseDetail(JSONObject json) {
 		EssenseDetail ed = null;
+		String author = "";
+		String title = "";
+		String time = "";
+		String id = "";
+		int needShare_;// 是否需要分享才可以下载
+		int hasDownload_;// 有无附件下载
+		int isDownloaded_;// 是否下载过
+		int resType_;
+		String url_ = "";
+		String resid_ = "";
+		String resSize_ = "";
+		String browseTimes_ = "";
+		String downloadTimes_ = "";
+		JSONObject item;
 		try {
-			JSONObject data = (JSONObject) json.get("data");
-			String id = data.getString("id_");
-			String url = data.getString("url_");
-			int hasDownload = data.getInt("hasDownload_");
-			String resourceId = "";
-			if (EssenseDetail.HASRESOURCE == hasDownload) {
-				resourceId = data.getString("resid_");
-			}
-			int isDownloaded = data.getInt("isDownloaded_");
-			int needShare = data.getInt("needShare_");
-			ed = new EssenseDetail(id, url, hasDownload, resourceId,
-					isDownloaded, needShare);
+			item = (JSONObject) json.get("data");
+			author = item.getString("source_");
+			title = item.getString("title_");
+			time = item.getString("time_");
+			id = item.getString("id_");
+			url_ = item.getString("url_");
+			needShare_ = item.getInt("needShare_");
+			hasDownload_ = item.getInt("hasDownload_");
+			isDownloaded_ = item.getInt("isDownloaded_");
+			resType_ = item.getInt("resType_");
+			resid_ = item.getString("resid_");
+			resSize_ = item.getString("resSize_");
+			browseTimes_ = item.getString("browseTimes_");
+			downloadTimes_ = item.getString("downloadTimes_");
+			ed = new EssenseDetail(title, author, time, id, needShare_,
+					hasDownload_, isDownloaded_, resType_, url_, resid_,
+					resSize_, browseTimes_, downloadTimes_);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,12 +222,26 @@ public class Json_util {
 			String title = "";
 			String time = "";
 			String id = "";
+			int needShare_;// 是否需要分享才可以下载
+			int hasDownload_;// 有无附件下载
+			int isDownloaded_;// 是否下载过
+			int resType_;
+			String url_ = "";
+			String resid_ = "";
 			for (int i = 0; i < array.length(); i++) {
 				item = array.getJSONObject(i);
+				author = item.getString("source_");
 				title = item.getString("title_");
 				time = item.getString("time_");
 				id = item.getString("id_");
-				vg = new Essense(title, author, time, id);
+				url_ = item.getString("url_");
+				needShare_ = item.getInt("needShare_");
+				hasDownload_ = item.getInt("hasDownload_");
+				isDownloaded_ = item.getInt("isDownloaded_");
+				resType_ = item.getInt("resType_");
+				resid_ = item.getString("resid_");
+				vg = new Essense(title, author, time, id, needShare_,
+						hasDownload_, isDownloaded_, resType_, url_, resid_);
 				reList.add(vg);
 			}
 		} catch (JSONException e) {

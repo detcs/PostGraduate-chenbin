@@ -8,8 +8,10 @@ import com.data.util.EssenseUtil;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -21,13 +23,16 @@ import android.widget.TextView;
 
 public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 	private Context context;
-	private DataBuffer<Essense> buffer;
+	protected DataBuffer<Essense> buffer;
 	private int type;
+	private static ListDownEssense callback;
 
-	public EssenseAdapter(Context context, int dataType) {
+	public EssenseAdapter(Context context, int dataType,
+			ListDownEssense callbackin) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		type = dataType;
+		callback = callbackin;
 		init();
 	}
 
@@ -62,6 +67,12 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 			holder.author = (TextView) convertView
 					.findViewById(R.id.authorView);
 			holder.time = (TextView) convertView.findViewById(R.id.timeView);
+			holder.typeImage = (ImageView) convertView
+					.findViewById(R.id.typeImage);
+			holder.downImage = (ImageView) convertView
+					.findViewById(R.id.downImage);
+			holder.shareImg = (ImageView) convertView
+					.findViewById(R.id.shareImg);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -69,15 +80,35 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 		holder.author.setText(vg.getAuthor());
 		holder.title.setText(vg.getTitle());
 		holder.time.setText(vg.getTime());
+		// holder.typeImage.setImageBitmap(null);
+		// holder.downImage.setImageBitmap(null);
+		// holder.shareImage.setImageBitmap(null);
+		holder.e = vg;
 		holder.id = vg.getId();
+		holder.init();
 		return convertView;
 	}
 
 	public static class ViewHolder {
+		ImageView typeImage;
+		ImageView downImage;
+		ImageView shareImg;
 		TextView title;
 		TextView author;
 		TextView time;
+		public Essense e;
 		public String id;
+
+		void init() {
+			downImage.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					callback.down(e);
+				}
+			});
+		}
 	}
 
 	// *********************init*********************
@@ -85,18 +116,18 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 		initVariable();
 	}
 
-	private void initVariable() {
+	protected void initVariable() {
 		// init buffer
 		buffer = new DataBuffer<Essense>(this, new EssenseUtil(type));
 	}
 
-	public void search(String queryKey) {
-		buffer.clean(new EssenseUtil(type));
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		buffer.destroy();
 	}
 
-	@Override
-	public void fresh() {
-		// TODO Auto-generated method stub
-		buffer.clean();
+	public interface ListDownEssense {
+		public void down(Essense e);
 	}
 }

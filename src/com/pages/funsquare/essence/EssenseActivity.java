@@ -40,31 +40,6 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		transaction.commit();
 	}
 
-	@Override
-	public void addShare(EssenseDetail ed) {
-		// TODO Auto-generated method stub
-		FragmentManager manager = getFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		EssenseShareFragment fragment = new EssenseShareFragment();
-		transaction.setCustomAnimations(R.anim.essense_bottom_in, 0);
-		transaction.add(fragment, SHARETAG);
-		transaction.commit();
-	}
-
-	@Override
-	public void removeShare() {
-		// TODO Auto-generated method stub
-		FragmentManager manager = getFragmentManager();
-		EssenseShareFragment fragment = (EssenseShareFragment) manager
-				.findFragmentByTag(SHARETAG);
-		if (null == fragment)
-			return;
-		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.setCustomAnimations(0, R.anim.essense_bottom_out);
-		transaction.remove(fragment);
-		transaction.commit();
-	}
-
 	// *************init*************
 	private void init() {
 		FragmentManager manager = getFragmentManager();

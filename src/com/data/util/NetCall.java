@@ -1,5 +1,9 @@
 package com.data.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +21,43 @@ public class NetCall {
 	// private static final String TAG = "NetCall";
 
 	private static RequestQueue requestQueue = GloableData.requestQueue;
+
+	public static void askRecommendKeys(String key,
+			final RecommendKeysCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, ComputeURL.getRecommendKeyURL(key), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								JSONObject data = (JSONObject) response
+										.get("data");
+								JSONArray array = (JSONArray) data.get("key_");
+								List<String> keys = new ArrayList<String>();
+								for (int i = 0; i < array.length(); i++) {
+									keys.add(array.get(i).toString());
+								}
+								callback.success(keys);
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface RecommendKeysCallback {
+		public void success(List<String> keys);
+	}
 
 	public static void download(String id, String email, String resourceId,
 			String isShared, final DownloadSource ds) {
