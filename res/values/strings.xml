@@ -79,6 +79,8 @@
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="complete">完成</string>
+    <!-- today -->
+    <string name="start_day">startDay</string>
     <!-- note -->
     <string name="first_use">firstUse</string>
     <string name="today_rec">今日推荐</string>
@@ -115,12 +117,15 @@
     <string name="task_complete">你已完成今天的所有任务</string>
     <string name="date">2015.1.25</string>
     <string name="problems">重难点</string>
-    <string name="myfootprint">我的足迹</string>
+    
     <string name="count_clock">累计打卡</string>
     <string name="count_note">累计笔记</string>
     <string name="today_add">今日新增</string>
+    <string name="append_note">新增的笔记</string>
     <string name="piece">篇</string>
     <string name="look_all">查看全部</string>
+    <!-- footprint -->
+    <string name="myfootprint">我的足迹</string>
     
     <string name="reviewchoose_fra_tag">reviewchooseFraTag</string>
     <!-- functions square -->

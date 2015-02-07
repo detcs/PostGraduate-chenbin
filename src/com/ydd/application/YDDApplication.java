@@ -1,6 +1,8 @@
 package com.ydd.application;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
@@ -58,6 +60,14 @@ public class YDDApplication extends Application {
 	private void initUserConfig() {
 		UserConfigs uc = new UserConfigs(getApplicationContext());
 		//uc.storeClockDay();
+		if(UserConfigs.getStartDay()==null)
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calendar = Calendar.getInstance();
+			//calendar.roll(Calendar.DAY_OF_YEAR,1);
+			String date = sdf.format(calendar.getTime());
+			UserConfigs.storeStartDay(date);
+		}
 	}
 
 	private void initDataBase() {

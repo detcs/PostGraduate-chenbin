@@ -201,4 +201,14 @@ public class UserConfigs
 	{		
 		return sp.getInt(context.getResources().getString(R.string.clock_days),0);
 	}
+	public static void storeStartDay(String date)
+	{
+		editor= sp.edit();//获取编辑器
+		editor.putString(context.getResources().getString(R.string.start_day),date);
+		editor.commit();//提交修改
+	}
+	public static String getStartDay()
+	{
+		return sp.getString(context.getResources().getString(R.string.start_day),null);
+	}
 }
