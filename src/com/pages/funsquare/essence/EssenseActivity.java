@@ -44,7 +44,8 @@ public class EssenseActivity extends Activity implements EssenseJump,
 	private void init() {
 		FragmentManager manager = getFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		EssenseFragment essenseFragment = new EssenseFragment();
+		// EssenseFragment essenseFragment = new EssenseFragment();
+		EssenseFlipFragment essenseFragment = new EssenseFlipFragment();
 		transaction.replace(R.id.FrameLayout1, essenseFragment);
 		transaction.commit();
 	}
