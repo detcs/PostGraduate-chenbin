@@ -5,6 +5,7 @@ package com.data.model;
  * 
  * */
 public class Essense {
+
 	private String author;
 	private String title;
 	private String time;
@@ -16,10 +17,11 @@ public class Essense {
 	private int hasDownload_;// 有无附件下载
 	private int isDownloaded_;// 是否下载过
 	private int resType_;
+	private int isCollected_;
 
 	public Essense(String title, String author, String time, String id,
 			int needShare_, int hasDownload_, int isDownloaded_, int resType_,
-			String url_, String resid_) {
+			String url_, String resid_, int isCollected_) {
 		this.title = title;
 		this.time = time;
 		this.author = author;
@@ -30,6 +32,15 @@ public class Essense {
 		this.resType_ = resType_;
 		this.url_ = url_;
 		this.resid_ = resid_;
+		this.isCollected_ = isCollected_;
+	}
+
+	public void setIsCollected_(int isCollected_) {
+		this.isCollected_ = isCollected_;
+	}
+
+	public int getIsCollected_() {
+		return isCollected_;
 	}
 
 	public String getResid_() {

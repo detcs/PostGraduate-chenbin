@@ -22,6 +22,160 @@ public class NetCall {
 
 	private static RequestQueue requestQueue = GloableData.requestQueue;
 
+	public static void changeInfo(String nickname, String headimg,
+			String email, final InfoChangeCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, ComputeURL.getInfoChangeURL(nickname,
+						headimg,  email), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								JSONObject data = (JSONObject) response
+										.get("data");
+								int code_ = data.getInt("code_");
+								if (1 == code_) {
+									callback.changeSuccess();
+									return;
+								}
+							}
+							callback.changeFail();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+						callback.changeFail();
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface InfoChangeCallback {
+		public void changeSuccess();
+
+		public void changeFail();
+	}
+
+	public static void reserve(String id, int type,
+			final ReserveCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, ComputeURL.getReserveURL(id, type), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								callback.requestSuccess();
+							} else {
+								callback.requestFail();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+						callback.requestFail();
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface ReserveCallback {
+		public void requestSuccess();
+
+		public void requestFail();
+	}
+
+	public static void contactUs(String content, String contact,
+			final ContactCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET,
+				ComputeURL.getContactUsURL(content, contact), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								callback.contactSuccess();
+							} else {
+								callback.contactFail();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+						callback.contactFail();
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface ContactCallback {
+		public void contactSuccess();
+
+		public void contactFail();
+	}
+
+	public static void changePw(String oldpw, String pw,
+			final PwChangeCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, ComputeURL.getPwChangeURL(oldpw, pw), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								JSONObject data = (JSONObject) response
+										.get("data");
+								int resultcode = data.getInt("code_");
+								if (1 == resultcode) {
+									callback.changeSuccess();
+								} else {
+									callback.changeFail(PwChangeCallback.OLDPWERROR);
+								}
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+						callback.changeFail(PwChangeCallback.NETERROR);
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface PwChangeCallback {
+		public static final int NETERROR = 0, OLDPWERROR = 1;
+
+		public void changeSuccess();
+
+		public void changeFail(int error);
+	}
+
 	public static void askRecommendKeys(String key,
 			final RecommendKeysCallback callback) {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

@@ -34,9 +34,9 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 	// private String TAG = "EssenseQueryFragment";
 	private View rootView;
 	private EssenseJump jump;
-	private View backImg;
 
 	private EditText searchView;
+	private View cleanView;
 	private View searchBu;
 	private View quitView;
 	private ListView resultList;
@@ -70,9 +70,9 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 	}
 
 	private void findViews(View view) {
-		backImg = view.findViewById(R.id.backImg);
 		hintList = (ListView) view.findViewById(R.id.hintList);
 		searchView = (EditText) view.findViewById(R.id.searchView);
+		cleanView = view.findViewById(R.id.cleanView);
 		searchBu = view.findViewById(R.id.searchBu);
 		quitView = view.findViewById(R.id.quitView);
 		resultList = (ListView) view.findViewById(R.id.resultList);
@@ -92,12 +92,13 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 	}
 
 	private void setListener() {
-		backImg.setOnClickListener(new OnClickListener() {
+
+		cleanView.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SysCall.clickBack();
+				searchView.setText("");
 			}
 		});
 
@@ -112,6 +113,7 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 				String key = searchView.getText().toString();
 				initListView();
 				adapter.search(key);
+				SysCall.error("save the search key");
 			}
 		});
 		quitView.setOnClickListener(new OnClickListener() {
@@ -119,7 +121,7 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				searchView.setText("");
+				SysCall.clickBack();
 			}
 		});
 		resultList.setOnItemClickListener(new OnItemClickListener() {
@@ -157,6 +159,16 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 				// hint better choices
+				String str = s.toString();
+				if (str.length() > 5) {
+					cleanView.setVisibility(View.VISIBLE);
+					cleanView.setClickable(true);
+					cleanView.setEnabled(true);
+				} else {
+					cleanView.setVisibility(View.INVISIBLE);
+					cleanView.setClickable(false);
+					cleanView.setEnabled(false);
+				}
 			}
 		});
 	}
@@ -176,9 +188,18 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 					return LayoutInflater.from(getActivity()).inflate(
 							R.layout.essense_query_hisroty_hint, parent, false);
 				} else if (history.size() + 1 == position) {
-					return LayoutInflater.from(getActivity()).inflate(
-							R.layout.essense_query_clean_his_hint, parent,
-							false);
+					View his_bottom = LayoutInflater.from(getActivity())
+							.inflate(R.layout.essense_query_clean_his_hint,
+									parent, false);
+					his_bottom.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							SysCall.error("clean history records");
+						}
+					});
+					return his_bottom;
 				} else {
 					View view = LayoutInflater.from(getActivity()).inflate(
 							R.layout.essense_query_hint_item, parent, false);

@@ -19,8 +19,8 @@ import android.widget.ImageView;
 public class SquarePublishFragment extends Fragment implements UploadData {
 	private View rootView;
 
-	private ImageView backBu;
-	private ImageView publishBu;
+	private View backBu;
+	private View publishBu;
 	private EditText titleText;
 	private EditText editText1;
 
@@ -52,10 +52,10 @@ public class SquarePublishFragment extends Fragment implements UploadData {
 	}
 
 	private void findViews(View view) {
-		backBu = (ImageView) view.findViewById(R.id.backBu);
+		backBu = view.findViewById(R.id.backBu);
 		titleText = (EditText) view.findViewById(R.id.titleText);
 		editText1 = (EditText) view.findViewById(R.id.editText1);
-		publishBu = (ImageView) view.findViewById(R.id.publishBu);
+		publishBu = view.findViewById(R.id.publishBu);
 	}
 
 	private void setListener() {

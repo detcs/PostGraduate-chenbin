@@ -234,10 +234,22 @@
     <string name="confirm">确认</string>
     <string name="default_share">分享</string>
     <string name="default_search">搜索</string>
+    <string name="default_search_history">搜索历史</string>
     <string name="essense_query_clean_his">清除搜索记录</string>
     <string name="essense_newest">最新</string>
     <string name="essense_information">资讯</string>
     <string name="essense_material">资料</string>
     <string name="essense_exercises">真题</string>
+    <string name="person_contact_hint1">用的不爽，来吐吐槽吧~~~</string>
+    <string name="person_contact_hint2">QQ号/邮箱/手机号</string>
+    <string name="person_contact_hint3">官方微博@研大大</string>
+    <string name="person_contact_hint4">客服QQ：872898799</string>
+    <string name="essense_detail_gender">资料类别</string>
+    <string name="essense_detail_size">资料大小</string>
+    <string name="essense_detail_downtimes">下载次数</string>
+    <string name="essense_detail_viewtimes">浏览次数</string>
+    <string name="essense_detail_upsource">上传者</string>
+    <string name="default_publish">发布</string>
+    <string name="default_comment">评论</string>
 
 </resources>

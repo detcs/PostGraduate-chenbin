@@ -58,6 +58,7 @@ public class Json_util {
 		String resSize_ = "";
 		String browseTimes_ = "";
 		String downloadTimes_ = "";
+		int isCollected_;
 		JSONObject item;
 		try {
 			item = (JSONObject) json.get("data");
@@ -74,9 +75,10 @@ public class Json_util {
 			resSize_ = item.getString("resSize_");
 			browseTimes_ = item.getString("browseTimes_");
 			downloadTimes_ = item.getString("downloadTimes_");
+			isCollected_ = item.getInt("isCollected_");
 			ed = new EssenseDetail(title, author, time, id, needShare_,
 					hasDownload_, isDownloaded_, resType_, url_, resid_,
-					resSize_, browseTimes_, downloadTimes_);
+					resSize_, browseTimes_, downloadTimes_, isCollected_);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,6 +117,47 @@ public class Json_util {
 			e.printStackTrace();
 		}
 		return vg;
+	}
+
+	// reserve parse
+	public static List<Reserve> transToReserve(JSONObject json) {
+		List<Reserve> reList = new ArrayList<Reserve>();
+		try {
+			JSONObject data = (JSONObject) json.get("data");
+			JSONArray array = (JSONArray) data.get("essence_");
+			String id_;
+			String title_;// 标题
+			String source_;// 来源
+			String content_;
+			int hasDownload_;// 有无附件下载
+			String resid_;// 附件资源的id
+			int isDownloaded_;// 是否下载过
+			String time_;
+			int type_; // 类别
+			int resType_;
+			JSONObject item;
+			Reserve vg = null;
+			for (int i = 0; i < array.length(); i++) {
+				item = array.getJSONObject(i);
+				id_ = item.getString("id_");
+				title_ = item.getString("title_");
+				source_ = item.getString("source_");
+				content_ = item.getString("content_");
+				hasDownload_ = item.getInt("hasDownload_");
+				resid_ = item.getString("resid_");
+				isDownloaded_ = item.getInt("isDownloaded_");
+				time_ = item.getString("time_");
+				type_ = item.getInt("type_");
+				resType_ = item.getInt("resType_");
+				vg = new Reserve(id_, title_, source_, content_, hasDownload_,
+						resid_, isDownloaded_, time_, type_, resType_);
+				reList.add(vg);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return reList;
 	}
 
 	public static List<Inform> transToInform(JSONObject json) {
@@ -228,6 +271,7 @@ public class Json_util {
 			int resType_;
 			String url_ = "";
 			String resid_ = "";
+			int isCollected_;
 			for (int i = 0; i < array.length(); i++) {
 				item = array.getJSONObject(i);
 				author = item.getString("source_");
@@ -240,8 +284,10 @@ public class Json_util {
 				isDownloaded_ = item.getInt("isDownloaded_");
 				resType_ = item.getInt("resType_");
 				resid_ = item.getString("resid_");
+				isCollected_ = item.getInt("isCollected_");
 				vg = new Essense(title, author, time, id, needShare_,
-						hasDownload_, isDownloaded_, resType_, url_, resid_);
+						hasDownload_, isDownloaded_, resType_, url_, resid_,
+						isCollected_);
 				reList.add(vg);
 			}
 		} catch (JSONException e) {

@@ -1,7 +1,45 @@
 package com.data.util;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class ComputeURL {
 	// private static final String TAG = "ComputeURL";
+	public static String getInfoChangeURL(String nickname, String headimg,
+			String email) {
+		String re = GloableData.URL + GloableData.INFOCHANGE_PATH
+				+ GloableData.getParam() + "&nickname=" + str(nickname)
+				+ "&headimg=" + str(headimg) + "&email=" + str(email);
+		return re;
+	}
+
+	public static String getReserveURL(String id, int type) {
+		String re = GloableData.URL + GloableData.RESERVE_PATH
+				+ GloableData.getParam() + "&id=" + str(id) + "&type=" + type;
+		return re;
+	}
+
+	public static String getContactUsURL(String content, String contact) {
+		String re = GloableData.URL + GloableData.CONTACT_US_PATH
+				+ GloableData.getParam() + "&content=" + str(content)
+				+ "&contact=" + str(contact);
+		return re;
+	}
+
+	public static String getReserveListURL() {
+		String re = GloableData.URL + GloableData.RESERVE_LIST_PATH
+				+ GloableData.getParam();
+		return re;
+	}
+
+	public static String getPwChangeURL(String oldpw, String pw) {
+		String re = GloableData.URL + GloableData.CHANGEPW_PATH
+				+ GloableData.getParam() + "&password=" + stringToMD5(str(pw))
+				+ "&passwordOld=" + stringToMD5(str(oldpw));
+		return re;
+	}
+
 	public static String getRecommendKeyURL(String key) {
 		String re = GloableData.URL + GloableData.RECOMMENDKEYS_PATH
 				+ GloableData.getParam() + "&key=" + str(key);
@@ -98,5 +136,29 @@ public class ComputeURL {
 		} else {
 			return in;
 		}
+	}
+
+	private static String stringToMD5(String string) {
+		byte[] hash;
+
+		try {
+			hash = MessageDigest.getInstance("MD5").digest(
+					string.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return null;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		StringBuilder hex = new StringBuilder(hash.length * 2);
+		for (byte b : hash) {
+			if ((b & 0xFF) < 0x10)
+				hex.append("0");
+			hex.append(Integer.toHexString(b & 0xFF));
+		}
+
+		return hex.toString();
 	}
 }

@@ -24,6 +24,13 @@ public class GloableData {
 	public static final String INFORM_PATH = "/mobile?methodno=MCommentsToMe&debug=1";
 	public static final String DOWNLOAD_PATH = "/mobile?methodno=MBaiheNewsList";
 	public static final String RECOMMENDKEYS_PATH = "/mobile?methodno=MRecommendKeys";
+	public static final String CHANGEPW_PATH = "/mobile?methodno=MPasswdChange";
+	public static final String RESERVE_LIST_PATH = "/mobile?methodno=MMyEssences";
+	public static final String CONTACT_US_PATH = "/mobile?methodno=MFeedback";
+	public static final String RESERVE_PATH = "/mobile?methodno=MEssenceCollect";
+	public static final String INFOCHANGE_PATH = "/mobile?methodno=MUpdateUserInfo";
+
+	public static int RESERVE_QUIT = 0, RESERVE_ENSURE = 1;
 
 	public static final String UPLOAD_SUCCESS_MSG = "发布成功";
 	public static RequestQueue requestQueue;

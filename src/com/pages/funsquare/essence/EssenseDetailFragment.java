@@ -5,6 +5,7 @@ import com.data.model.EssenseDetail;
 import com.data.util.NetCall.DownloadSource;
 import com.data.util.GloableData;
 import com.data.util.NetCall;
+import com.data.util.NetCall.ReserveCallback;
 import com.data.util.SysCall;
 import com.pages.funsquare.essence.EmailHintDialog.EmailHintDialogCallBack;
 import com.pages.funsquare.essence.EssenseEmailSetBump.ESBumpCallback;
@@ -22,10 +23,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		EmailHintDialogCallBack, ShareHintCallBack, ShareBumpCallback,
-		ESBumpCallback {
+		ESBumpCallback, ReserveCallback {
 	private static final String TAG = "EssenseDetailFragment";
 	private View base;
 	private FrameLayout frame;
@@ -46,7 +48,6 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 
 	public EssenseDetailFragment(EssenseDetail ed) {
 		this.ed = ed;
-		// context = getActivity();
 	}
 
 	public EssenseDetailFragment() {
@@ -89,12 +90,16 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 	}
 
 	private void initViews() {
+		SysCall.error("init views");
+		if (GloableData.RESERVE_ENSURE == ed.getIsCollected_()) {
+			shareView.setImageBitmap(null);
+		}
 		titleView.setText("政治大神最新考研。。。");
-		genderView.setText("资料类别：\t视屏");
-		sizeView.setText("资料大小：\t1.26M");
-		visitView.setText("浏览次数：\t765次");
-		downView.setText("下载次数：\t586次");
-		authorView.setText("上传者：\t王小丫");
+		genderView.setText("视屏");
+		sizeView.setText("1.26M");
+		visitView.setText("765次");
+		downView.setText("586次");
+		authorView.setText("王小丫");
 	}
 
 	private void setListener() {
@@ -111,7 +116,14 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SysCall.error("收藏");
+				String id = ed.getId();
+				int type;
+				if (GloableData.RESERVE_ENSURE == ed.getIsCollected_()) {
+					type = GloableData.RESERVE_QUIT;
+				} else {
+					type = GloableData.RESERVE_ENSURE;
+				}
+				NetCall.reserve(id, type, EssenseDetailFragment.this);
 			}
 		});
 		shareView.setOnClickListener(new OnClickListener() {
@@ -132,9 +144,13 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 	private void initDownBu() {
 		if (EssenseDetail.HASRESOURCE == ed.getHasDownload_()) {
 
+			if (GloableData.hasSetEmail()) {
+				downBu.setText("下载至" + GloableData.getEmail());
+			}
 			downBu = (Button) rootView.findViewById(R.id.downBu);
 			downBu.setVisibility(View.VISIBLE);
 			downBu.setClickable(true);
+			downBu.setEnabled(true);
 			downBu.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -149,30 +165,17 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 	// ***********************download***********************
 	private void download() {
 		// 如果没有资源文件，则不会执行到这里
+		if (!GloableData.hasSetEmail()) {
+			// 检验邮箱是否已经设置
+			new EmailHintDialog(getActivity(), this).show();
+			return;
+		}
 		if (EssenseDetail.NEEDSHARE == ed.getNeedShare_()) {
 			new ShareHintDialog(getActivity(), this).show();
 			return;
 		}
-		if (!GloableData.hasSetEmail()) {
-			// 检验邮箱是否已经设置
-			new EmailHintDialog(getActivity(), this).show();
-		} else {
-			NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
-					+ ed.getNeedShare_(), this);
-		}
-	}
-
-	// NetCall.DownloadSource
-	@Override
-	public void downloadSuccess() {
-		// TODO Auto-generated method stub
-		SysCall.hint(getActivity(), "已发送至您的邮箱");
-	}
-
-	@Override
-	public void downloadFail() {
-		// TODO Auto-generated method stub
-		SysCall.hint(getActivity(), "download fail");
+		NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
+				+ ed.getNeedShare_(), this);
 	}
 
 	// EmailHintDialogCallBack
@@ -194,29 +197,67 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		}
 	}
 
+	// NetCall.DownloadSource
+	@SuppressLint("ShowToast")
+	@Override
+	public void downloadSuccess() {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "已发送至您的邮箱", 500);
+	}
+
+	@SuppressLint("ShowToast")
+	@Override
+	public void downloadFail() {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "下载失败", 500);
+	}
+
 	// EssenseShareBump.ShareBumpCallback
+	@SuppressLint("ShowToast")
 	@Override
 	public void shareSuccess() {
 		// TODO Auto-generated method stub
-
+		// 分享
+		Toast.makeText(getActivity(), "分享成功", 500);
+		download();
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void shareFail() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getActivity(), "分享失败，请重新分享", 500);
 	}
 
 	// EssenseEmailSetBump.ESBumpCallback
-	@Override
-	public void setFail() {
-		// TODO Auto-generated method stub
+	// @SuppressLint("ShowToast")
+	// @Override
+	// public void setFail() {
+	// // TODO Auto-generated method stub
+	// Toast.makeText(getActivity(), "邮箱设置失败", 500);
+	// }
 
-	}
-
+	@SuppressLint("ShowToast")
 	@Override
 	public void setSuccess() {
 		// TODO Auto-generated method stub
+		// Toast.makeText(getActivity(), "邮箱设置成功", 500);
+		download();
+	}
 
+	// NetCall.ReserveCallback
+	@Override
+	public void requestSuccess() {
+		// TODO Auto-generated method stub
+		ed.setIsCollected_((ed.getIsCollected_() + 1) % 2);
+		SysCall.error("change the share image");
+		// shareView.setImageBitmap(null);
+	}
+
+	@SuppressLint("ShowToast")
+	@Override
+	public void requestFail() {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "操作失败", 500);
 	}
 }

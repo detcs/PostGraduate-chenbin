@@ -4,6 +4,7 @@ import com.app.ydd.R;
 import com.data.model.Essense;
 import com.data.util.DataBuffer;
 import com.data.util.EssenseUtil;
+import com.data.util.SysCall;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -80,9 +81,16 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 		holder.author.setText(vg.getAuthor());
 		holder.title.setText(vg.getTitle());
 		holder.time.setText(vg.getTime());
-		// holder.typeImage.setImageBitmap(null);
+		
+		SysCall.error("wait for picture");
+		// if (1 == vg.getHasDownload_()) {
 		// holder.downImage.setImageBitmap(null);
-		// holder.shareImage.setImageBitmap(null);
+		// holder.typeImage.setImageBitmap(null);
+		// if (1 == vg.getNeedShare_()) {
+		// holder.shareImg.setImageBitmap(null);
+		// }
+		// }
+
 		holder.e = vg;
 		holder.id = vg.getId();
 		holder.init();

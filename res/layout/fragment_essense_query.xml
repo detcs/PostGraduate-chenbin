@@ -7,85 +7,65 @@
     android:orientation="vertical" >
 
     <FrameLayout
-        android:id="@+id/FrameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_height="wrap_content" >
 
         <LinearLayout
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:text="@string/default_search" />
 
             <ImageView
-                android:id="@+id/backImg"
+                android:id="@+id/searchBu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:src="@drawable/pause" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/titleView"
+                android:id="@+id/quitView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/essense_query_head_title" />
+                android:layout_marginTop="21dp"
+                android:layout_weight="1"
+                android:text="@string/default_quit" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/cleanView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="100dp"
+                android:clickable="false"
+                android:src="@drawable/edit_remark"
+                android:visibility="invisible" />
+        </RelativeLayout>
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/searchBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/FrameLayout1" >
-
-        <EditText
-            android:id="@+id/searchView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:text="@string/default_search" >
-
-            <requestFocus />
-        </EditText>
-
-        <ImageView
-            android:id="@+id/searchBu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/pause" />
-
-        <TextView
-            android:id="@+id/quitView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="21dp"
-            android:layout_weight="1"
-            android:text="@string/default_quit" />
-    </LinearLayout>
 
     <ListView
         android:id="@+id/resultList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/searchBar" >
+        android:layout_alignParentBottom="true" >
     </ListView>
 
     <ListView
         android:id="@+id/hintList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchBar" >
+        android:layout_height="wrap_content" >
     </ListView>
 
 </RelativeLayout>

@@ -17,12 +17,19 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		PullEssenseDetail {
 	// private static final String TAG = "EssenseActivity";
 	// private static final String SHARETAG = "EssenseShareFragment";
+	private boolean detail_is_first = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_essense);
-		init();
+		String essId = savedInstanceState.getString("essenseId");
+		if (essId != null && !essId.trim().equals("")) {
+			detail_is_first = true;
+			detail(essId);
+		} else {
+			init();
+		}
 	}
 
 	// EssenseJump
@@ -60,7 +67,8 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		FragmentTransaction transaction = manager.beginTransaction();
 		EssenseDetailFragment detailFragment = new EssenseDetailFragment(ed);
 		transaction.replace(R.id.FrameLayout1, detailFragment);
-		transaction.addToBackStack(null);
+		if (!detail_is_first)
+			transaction.addToBackStack(null);
 		transaction.commit();
 	}
 

@@ -12,9 +12,9 @@ public class EssenseDetail extends Essense {
 	public EssenseDetail(String title, String author, String time, String id,
 			int needShare_, int hasDownload_, int isDownloaded_, int resType_,
 			String url_, String resid_, String resSize_, String browseTimes_,
-			String downloadTimes_) {
+			String downloadTimes_, int isCollected_) {
 		super(title, author, time, id, needShare_, hasDownload_, isDownloaded_,
-				resType_, url_, resid_);
+				resType_, url_, resid_, isCollected_);
 		this.resSize_ = resSize_;
 		this.browseTimes_ = browseTimes_;
 		this.downloadTimes_ = downloadTimes_;

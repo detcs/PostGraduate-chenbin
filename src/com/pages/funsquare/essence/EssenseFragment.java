@@ -16,7 +16,7 @@ import com.view.util.AnimationUtil;
 import com.view.util.EssenseAdapter;
 import com.view.util.EssenseAdapter.ListDownEssense;
 import com.view.util.EssenseAdapter.ViewHolder;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -34,6 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		EmailHintDialogCallBack, ListDownEssense, DownloadSource,
@@ -94,6 +95,7 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		setListener();
 	}
 
+	@SuppressLint("InflateParams")
 	private void findViews(View view) {
 		for (int i = 0; i < 4; i++) {
 			tabs[i] = (TextView) view.findViewById(tabsId[i]);
@@ -188,26 +190,17 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		// TODO Auto-generated method stub
 		// 如果没有资源文件，则不会执行到这里
 		this.ed = ed;
+		if (!GloableData.hasSetEmail()) {
+			// 检验邮箱是否已经设置
+			new EmailHintDialog(getActivity(), this).show();
+			return;
+		}
 		if (EssenseDetail.NEEDSHARE == ed.getNeedShare_()) {
 			new ShareHintDialog(getActivity(), this).show();
 			return;
 		}
-		if (!GloableData.hasSetEmail()) {
-			// 检验邮箱是否已经设置
-			new EmailHintDialog(getActivity(), this).show();
-		} else {
-			NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
-					+ ed.getNeedShare_(), this);
-		}
-	}
-
-	// ShareHintDialog.ShareHintCallBack
-	@Override
-	public void ensureShare() {
-		// TODO Auto-generated method stub
-		if (null == frame.findViewWithTag(TAG)) {
-			new EssenseShareBump(frame, getActivity(), TAG, this).show();
-		}
+		NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
+				+ ed.getNeedShare_(), this);
 	}
 
 	// EmailHintDialog.EmailHintDialogCallBack
@@ -220,43 +213,61 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		}
 	}
 
+	// ShareHintDialog.ShareHintCallBack
+	@Override
+	public void ensureShare() {
+		// TODO Auto-generated method stub
+		if (null == frame.findViewWithTag(TAG)) {
+			new EssenseShareBump(frame, getActivity(), TAG, this).show();
+		}
+	}
+
 	// NetCall.DownloadSource
+	@SuppressLint("ShowToast")
 	@Override
 	public void downloadSuccess() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getActivity(), "已发送至您的邮箱", 500);
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void downloadFail() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getActivity(), "下载失败", 500);
 	}
 
 	// EssenseShareBump.ShareBumpCallback
+	@SuppressLint("ShowToast")
 	@Override
 	public void shareSuccess() {
 		// TODO Auto-generated method stub
-
+		// 分享
+		Toast.makeText(getActivity(), "分享成功", 500);
+		down(ed);
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void shareFail() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getActivity(), "分享失败，请重新分享", 500);
 	}
 
 	// EssenseEmailSetBump.ESBumpCallback
-	@Override
-	public void setFail() {
-		// TODO Auto-generated method stub
+	// @SuppressLint("ShowToast")
+	// @Override
+	// public void setFail() {
+	// // TODO Auto-generated method stub
+	// Toast.makeText(getActivity(), "邮箱设置失败", 500);
+	// }
 
-	}
-
+	@SuppressLint("ShowToast")
 	@Override
 	public void setSuccess() {
 		// TODO Auto-generated method stub
-
+		// Toast.makeText(getActivity(), "邮箱设置成功", 500);
+		down(ed);
 	}
 
 	// **************gesture listener**************
