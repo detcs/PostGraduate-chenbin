@@ -45,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="@string/person_pw_old_hint" >
+        android:hint="@string/person_pw_old_hint"
+        android:inputType="textPassword" >
 
         <requestFocus />
     </EditText>
@@ -55,13 +56,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="@string/person_pw_new_hint" />
+        android:hint="@string/person_pw_new_hint"
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="@string/person_pw_new_rehint" />
+        android:hint="@string/person_pw_new_rehint"
+        android:inputType="textPassword" />
 
 </LinearLayout>

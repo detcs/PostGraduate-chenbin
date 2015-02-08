@@ -23,7 +23,7 @@ public class EssenseActivity extends Activity implements EssenseJump,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_essense);
-		String essId = savedInstanceState.getString("essenseId");
+		String essId = getIntent().getStringExtra("essenseId");
 		if (essId != null && !essId.trim().equals("")) {
 			detail_is_first = true;
 			detail(essId);

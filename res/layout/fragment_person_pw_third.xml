@@ -61,7 +61,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -80,11 +79,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="请设置研大大密码"
             android:inputType="textPassword" >
 
             <requestFocus />
         </EditText>
-
     </LinearLayout>
 
     <LinearLayout
@@ -103,8 +102,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="请再次输入"
             android:inputType="textPassword" />
-
     </LinearLayout>
 
 </LinearLayout>

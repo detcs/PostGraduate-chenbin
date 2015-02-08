@@ -251,5 +251,9 @@
     <string name="essense_detail_upsource">上传者</string>
     <string name="default_publish">发布</string>
     <string name="default_comment">评论</string>
+    <string name="title_activity_print">PrintActivity</string>
+    <string name="print">打印</string>
+    <string name="print_top_hint1">我们会将您拍的笔记按照科目</string>
+    <string name="print_top_hint2">发送至您的邮箱方便整理打印</string>
 
 </resources>

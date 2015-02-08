@@ -33,6 +33,7 @@ public class PersonPwFragment extends Fragment implements PwChangeCallback {
 	private void init(View view) {
 		findViews(view);
 		setListener();
+		initSet();
 	}
 
 	private void findViews(View view) {
@@ -68,6 +69,10 @@ public class PersonPwFragment extends Fragment implements PwChangeCallback {
 		});
 	}
 
+	private void initSet() {
+		SysCall.bumpSoftInput(textView1, getActivity());
+	}
+
 	// NetCall.PwChangeCallback
 	@SuppressLint("ShowToast")
 	@Override
@@ -76,6 +81,7 @@ public class PersonPwFragment extends Fragment implements PwChangeCallback {
 		Toast.makeText(getActivity(), "修改成功", 500);
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void changeFail(int error) {
 		// TODO Auto-generated method stub

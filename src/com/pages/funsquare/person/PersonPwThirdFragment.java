@@ -34,6 +34,7 @@ public class PersonPwThirdFragment extends Fragment implements PwChangeCallback 
 	private void init(View view) {
 		findViews(view);
 		setListener(view);
+		initSet();
 	}
 
 	private void findViews(View view) {
@@ -68,6 +69,10 @@ public class PersonPwThirdFragment extends Fragment implements PwChangeCallback 
 				}
 			}
 		});
+	}
+
+	private void initSet() {
+		SysCall.bumpSoftInput(editText1, getActivity());
 	}
 
 	// NetCall.PwChangeCallback
