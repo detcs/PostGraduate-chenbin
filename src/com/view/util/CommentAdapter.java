@@ -78,7 +78,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 
 	// *************Call back*************
 	public interface PostDetailCallback {
-		public void reply(String userId, int position);
+		public void reply(Comment comment, int position);
 
 		public void moreChoice();
 
@@ -168,6 +168,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.square_comment_item, parent, false);
 			holder = new ViewHolder();
+			holder.comment = vg;
 			holder.replyBu = (Button) convertView.findViewById(R.id.replyBu);
 			holder.headView = (ImageView) convertView
 					.findViewById(R.id.headView);
@@ -186,7 +187,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				reply.reply(vg.getUserId(), position);
+				reply.reply(vg, position);
 			}
 		});
 		Picasso.with(context)
@@ -201,6 +202,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	}
 
 	public static class ViewHolder {
+		public Comment comment;
 		Button replyBu;
 		ImageView headView;
 		TextView nickName;

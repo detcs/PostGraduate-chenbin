@@ -71,6 +71,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" >
         </activity>
+        <activity
+            android:name="com.pages.funsquare.print.PrintActivity"
+            android:label="@string/title_activity_print" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

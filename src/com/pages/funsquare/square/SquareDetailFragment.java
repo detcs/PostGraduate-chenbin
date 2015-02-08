@@ -1,6 +1,7 @@
 package com.pages.funsquare.square;
 
 import com.app.ydd.R;
+import com.data.model.Comment;
 import com.data.model.Post;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
@@ -144,11 +145,11 @@ public class SquareDetailFragment extends Fragment implements
 
 	// CommentAdapter.PostDetailCallback
 	@Override
-	public void reply(String userId, int position) {
+	public void reply(Comment comment, int position) {
 		// TODO Auto-generated method stub
-		this.userId = userId;
+		this.userId = comment.getUserId();
 		if (position != 0) {
-			replyHead = "回复" + position + "楼:";
+			replyHead = "回复" + comment.getAuthor();
 			editText.setText(replyHead);
 			SysCall.bumpSoftInput(editText, getActivity());
 		}
