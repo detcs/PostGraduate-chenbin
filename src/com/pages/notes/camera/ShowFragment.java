@@ -371,7 +371,7 @@ public class ShowFragment extends Fragment {
 		CourseRecordInfo cri = new CourseRecordInfo(photoName, photobase64,
 				remark, date, time, getResources().getString(
 						R.string.state_unknow), getResources().getString(
-						R.string.upload_no), flag, 0);
+						R.string.upload_no), flag, 0,0);
 		DatabaseHelper.insertCourseRecord(getActivity(), db, tableName, cri);
 		DatabaseHelper.queryShowRecords(db, tableName);
 		db.close();

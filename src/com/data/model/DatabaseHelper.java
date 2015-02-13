@@ -42,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_photo_base64)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_remark)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_flag)+" INTEGER,"
+    			+context.getResources().getString(R.string.dbcol_if_recommender)+" INTEGER,"
     			+context.getResources().getString(R.string.dbcol_photo_delete)+" INTEGER,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_master_state)+" TEXT not null,"
@@ -112,19 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { date };//修改条件的参数
     	db.update(context.getResources().getString(R.string.db_footprint_table),cv,whereClause,whereArgs);//执行修改
     }
-//    public static void insertCourseRecord(Context context,SQLiteDatabase db,String tableName,String photoname,String photobase64,String remark,String date,String time,String masterState,int flag)
-//    {
-//    	ContentValues cv=new ContentValues();
-//    	cv.put(context.getResources().getString(R.string.dbcol_photo_name), photoname);
-//    	cv.put(context.getResources().getString(R.string.dbcol_photo_base64), photobase64);
-//    	cv.put(context.getResources().getString(R.string.dbcol_remark), remark);
-//    	cv.put(context.getResources().getString(R.string.dbcol_date), date);
-//    	cv.put(context.getResources().getString(R.string.dbcol_time), time);
-//    	cv.put(context.getResources().getString(R.string.dbcol_master_state), masterState);
-//    	cv.put(context.getResources().getString(R.string.dbcol_flag), flag);
-//    	long rowid=db.insert(tableName, null, cv);
-//    	Log.e(DataConstants.TAG,"rowid:"+rowid);
-//    }
+
     public static void insertCourseRecord(Context context,SQLiteDatabase db,String tableName,CourseRecordInfo cri)
     {
     	ContentValues cv=new ContentValues();
@@ -137,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_flag), cri.getFlag());
     	cv.put(context.getResources().getString(R.string.dbcol_ifupload), cri.getIfUpload());
     	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
+    	cv.put(context.getResources().getString(R.string.dbcol_if_recommender), cri.getIfRecommender());
     	long rowid=db.insert(tableName, null, cv);
     	Log.e(DataConstants.TAG,"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
     }
@@ -148,15 +138,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String[] whereArgs = { date };//修改条件的参数
     	db.update(tableName,cv,whereClause,whereArgs);//执行修改
     }
-//    public static void updateCourseMasterState(Context context,SQLiteDatabase db,String tableName,String updateValue,String photoName)
-//    {
-//    	ContentValues cv=new ContentValues();
-//       	cv.put(context.getResources().getString(R.string.dbcol_master_state), updateValue);
-//    	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
-//    	String[] whereArgs = { photoName };//修改条件的参数
-//    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
-//    }
-    // masterState or remark update
+    public static int queryUnbackUpSubjectCounts(Context context,SQLiteDatabase db,String tableName)
+    {
+    	int count=0;
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_ifupload)+"= 0",null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) {
+	    	 count=result.getInt(0); 
+	    	result.moveToNext();
+	    }
+	    return count;
+    }
+    public static CourseRecordInfo queryUnbackUpSubject(Context context,SQLiteDatabase db,String tableName)
+    {
+    	CourseRecordInfo cri=null;
+    	Cursor result=db.rawQuery("SELECT * FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_ifupload)+"= 0 order by _id desc",null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) { 
+	         
+	        String photoName=result.getString(1); 
+	        String photobase64=result.getString(2);
+	        String remark=result.getString(3);
+	        String date=result.getString(4);
+	        String time=result.getString(5);
+	        String masterState=result.getString(6);
+	        String  ifUpload=result.getString(7);
+	        int  flag=result.getInt(8);
+	        int  ifDeleted=result.getInt(9);
+	        int  ifRecommender=result.getInt(10);
+	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender);
+	       break; 
+	      } 
+	      result.close();
+    	return cri;
+    }
     public static CourseRecordInfo queryCourseRecordByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName)
     {
     	CourseRecordInfo cri=null;
@@ -172,10 +187,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String time=result.getString(5); 
 	        String masterState=result.getString(6); 
 	        String ifUplaod=result.getString(7); 
-	        int flag=result.getInt(7);
-	        int ifDeleted=result.getInt(8);
-	        
-	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUplaod, flag, ifDeleted);
+	        int flag=result.getInt(8);
+	        int ifDeleted=result.getInt(9);
+	        int ifRec=result.getInt(10);
+	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUplaod, flag, ifDeleted,ifRec);
 	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+id+",");
 	        result.moveToNext(); 
 	      } 
@@ -240,6 +255,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      result.close();
 	      return count;
     }
+    public static int queryCourseRecordsCountOnDate(Context context,SQLiteDatabase db,String tableName,String date)
+    {
+    	
+    	boolean tableExist=isTableExists(db,tableName);
+    	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
+    	if(tableExist==false)
+    		return 0;
+    	
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"'",null); 
+	    result.moveToFirst(); 
+	    int count=0;
+	    while (!result.isAfterLast()) { 
+	         
+	        count=result.getInt(0); 
+	       // String name=result.getString(1); 
+	       // Log.e(DataConstants.TAG,"db:query count:"+tableName+":"+count);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	      return count;
+    }
+    public static int queryAllCourseRecordsCountOnDate(Context context,SQLiteDatabase db,String date)
+    {
+    	
+    	int count=0;
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_english_table),date);
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_politics_table),date);
+    	count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_profess1_table),date);
+    	if(UserConfigs.getCourseMathName()!=null)
+    		count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_math_table),date);
+    	if(UserConfigs.getCourseProfessTwoName()!=null)
+    		count+=queryCourseRecordsCountOnDate(context,db, context.getResources().getString(R.string.db_profess2_table),date);
+	      return count;
+    }
     public static void dropTable(SQLiteDatabase db,String tableName){
         try
         {
@@ -295,7 +344,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	      result.close();
 	      return names;
     }
-    
+    // SearchRecordsTable
+    public static void createSearchRecordsTable( Context context,SQLiteDatabase db)
+    {
+    	String sql = "create table if not exists "+context.getResources().getString(R.string.db_search_records_table)
+    			+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+    			+context.getResources().getString(R.string.dbcol_search_word)+" TEXT not null , "
+    			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
+        Log.e(DataConstants.TAG, "sql:"+sql);
+    	db.execSQL(sql);
+    }
+    public static void insertSearchRecord(Context context,SQLiteDatabase db,String word,String date)
+    {
+    	ContentValues cv=new ContentValues();
+    	cv.put(context.getResources().getString(R.string.dbcol_search_word),word);
+    	cv.put(context.getResources().getString(R.string.dbcol_date),date);
+    	db.insert(context.getResources().getString(R.string.db_search_records_table), null, cv);
+    }
+    public static List<String> querySearchRecord(Context context,SQLiteDatabase db)
+    {
+    	List<String> names=new ArrayList<String>();
+    	Cursor result=db.rawQuery("SELECT "+context.getResources().getString(R.string.dbcol_search_word)+" FROM "+context.getResources().getString(R.string.db_search_records_table),null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) { 
+	         
+	        String name=result.getString(0); 
+	        names.add(name); 
+	        Log.e(DataConstants.TAG,"db:query SearchRecord:"+name);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	      return names;
+    }
+    public static void deleteAllSearchRecord(Context context,SQLiteDatabase db)
+    {
+    	//String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
+    	//String[] whereArgs = { photoName };//修改条件的参数
+    	db.delete(context.getResources().getString(R.string.db_search_records_table), null, null);
+    }
     public static boolean isTableExists(SQLiteDatabase mDatabase,String tableName) {  
 //         {  
 //            if(mDatabase == null || !mDatabase.isOpen()) {  
@@ -318,36 +404,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }  
         return false;  
     }  
-    public static boolean tableIsExist(SQLiteDatabase db,String tableName)
-    {
-        boolean result = false;
-        if(tableName == null)
-        {
-                return false;
-        }
-        //SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try 
-        {
-                //db = this.getReadableDatabase();
-                String sql = "select count(*) as c from "+DB_NAME+" where type ='table' and name ='"+tableName.trim()+"' ";
-                Log.e(DataConstants.TAG,"exist "+sql);
-                cursor = db.rawQuery(sql, null);
-                if(cursor.moveToNext())
-                {
-                        int count = cursor.getInt(0);
-                        if(count>0)
-                        {
-                                result = true;
-                        }
-                }
-                
-        } 
-        catch (Exception e) 
-        {
-                // TODO: handle exception
-        }               
-        Log.e(DataConstants.TAG,"exist "+result);
-        return result;
-    }
+   
 }

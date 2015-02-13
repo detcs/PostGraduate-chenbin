@@ -11,9 +11,11 @@ public class CourseRecordInfo {
 	private String ifUpload;
 	private int flag;
 	private int ifDeleted;
+	private int ifRecommender;
+	
 	public CourseRecordInfo(String photoName, String photobase64,
 			String remark, String date, String time, String masterState,
-			String ifUplaod, int flag,int ifDeleted) {
+			String ifUpload, int flag, int ifDeleted, int ifRecommender) {
 		super();
 		this.photoName = photoName;
 		this.photobase64 = photobase64;
@@ -21,10 +23,20 @@ public class CourseRecordInfo {
 		this.date = date;
 		this.time = time;
 		this.masterState = masterState;
-		this.ifUpload = ifUplaod;
+		this.ifUpload = ifUpload;
 		this.flag = flag;
+		this.ifDeleted = ifDeleted;
+		this.ifRecommender = ifRecommender;
 	}
 	
+	public int getIfRecommender() {
+		return ifRecommender;
+	}
+
+	public void setIfRecommender(int ifRecommender) {
+		this.ifRecommender = ifRecommender;
+	}
+
 	public int getIfDeleted() {
 		return ifDeleted;
 	}

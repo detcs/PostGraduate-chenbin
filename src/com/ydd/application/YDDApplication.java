@@ -1,6 +1,8 @@
 package com.ydd.application;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
@@ -53,6 +55,14 @@ public class YDDApplication extends Application {
 
 	private void initUserConfig() {
 		UserConfigs uc = new UserConfigs(getApplicationContext());
+		if(UserConfigs.getStartDay()==null)
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calendar = Calendar.getInstance();
+			//calendar.roll(Calendar.DAY_OF_YEAR,1);
+			String date = sdf.format(calendar.getTime());
+			UserConfigs.storeStartDay(date);
+		}
 	}
 
 	private void initDataBase() {
@@ -60,8 +70,8 @@ public class YDDApplication extends Application {
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		// if(!DataConstants.dbHelper.tableIsExist(db,
 		// getResources().getString(R.string.db_footprint_table)))
-		DataConstants.dbHelper
-				.createFootprintTable(getApplicationContext(), db);
+		DataConstants.dbHelper.createFootprintTable(getApplicationContext(), db);
+		DataConstants.dbHelper.createSearchRecordsTable(getApplicationContext(), db);
 		db.close();
 	}
 	private void initDBandDirMap()
@@ -78,7 +88,8 @@ public class YDDApplication extends Application {
 		wm.getDefaultDisplay().getMetrics(dm);
 		DataConstants.screenWidth = dm.widthPixels;
 		DataConstants.screenHeight = dm.heightPixels;
-		Log.e(DataConstants.TAG, "(w,h)" + dm.widthPixels + ","
-				+ dm.heightPixels);
+		Log.e(DataConstants.TAG, "(w,h)" + dm.widthPixels + ","+ dm.heightPixels);
+		DataConstants.displayMetricsDensity=dm.density;
+		DataConstants.displayMetricsScaledDensity=dm.scaledDensity;
 	}
 }

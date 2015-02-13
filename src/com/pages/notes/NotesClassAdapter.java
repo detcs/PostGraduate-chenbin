@@ -6,6 +6,7 @@ import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
 import com.pages.viewpager.MainActivity;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
@@ -77,6 +78,27 @@ public class NotesClassAdapter extends BaseAdapter{
 		int count=DataConstants.dbHelper.queryCourseRecordsCount(db,courseTableNames.get(position));
 		db.close();
 	    holder.courseInfo.setText(count+context.getResources().getString(R.string.piece));
+	    if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_english_table)))
+	    {
+	    	Picasso.with(context).load(R.drawable.course_english).into(holder.img);
+	    }
+	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_politics_table)))
+	    {
+	    	Picasso.with(context).load(R.drawable.course_politic).into(holder.img);
+	    }
+	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_math_table)))
+	    {
+	    	Picasso.with(context).load(R.drawable.course_math).into(holder.img);
+	    }
+	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_profess1_table)))
+	    {
+	    	Picasso.with(context).load(R.drawable.course_profess1).into(holder.img);
+	    }
+	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_profess2_table)))
+	    {
+	    	Picasso.with(context).load(R.drawable.course_profess2).into(holder.img);
+	    }
+	    	
 	    // Bind the data efficiently with the holder. 
 //	    holder.button.setText(names.get(position)); 
 //	    final int pos=position;

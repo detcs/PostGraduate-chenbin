@@ -13,6 +13,9 @@ public class DataConstants {
 	public static DatabaseHelper dbHelper ;
 	public static int screenWidth;
 	public static int screenHeight;
+	public static float dpiRate=0.4f;
+	public static float displayMetricsDensity;
+	public static float displayMetricsScaledDensity;
 	public static int RESULTCODE_COURSE_SETTING=1;
 	public static int REQUEST_CODE_CAMERA=1;
 	public static int REQUEST_CODE_EXERCISE=2;

@@ -3,6 +3,7 @@ package com.pages.today;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -20,11 +21,13 @@ import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.viewpager.MainActivity;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,12 +53,21 @@ public class TodayFragment extends Fragment {
 	}
 	public void initTodayView(View v) {
 
+		TextView useDays=(TextView) v.findViewById(R.id.use_days);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
-		// calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
+		calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
 		String date = sdf.format(calendar.getTime());
 		// Log.e(DataConstants.TAG,"date:"+date);
-
+		int gapDays=getDateGapDays(UserConfigs.getStartDay(), date);
+		if(gapDays<10)
+			useDays.setText("0"+gapDays+"");
+		else
+			useDays.setText(gapDays+"");
+		float useDaysSize=DisplayUtil.spTopx(180*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);
+		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"font/AvenirNextLTPro-UltLt.otf");
+		useDays.setTypeface(typeFace);
+		useDays.setTextSize(useDaysSize);
 		// requestFirstPageJasonInfo(getFirstPageURL(date),date);
 
 		mp = MediaPlayer.create(getActivity(), R.raw.song);
@@ -174,6 +186,20 @@ public class TodayFragment extends Fragment {
 			e.printStackTrace();
 		}
 		return fpInfo;
+	}
+	public int getDateGapDays (String beginDate, String endDate)
+	{       
+			int gapDays=0;
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+	        try { 
+	                Date date = sdf.parse(endDate);// 通过日期格式的parse()方法将字符串转换成日期              
+	                Date dateBegin = sdf.parse(beginDate);
+	                long betweenTime = date.getTime() - dateBegin.getTime(); 
+	                gapDays = (int)(betweenTime  / 1000 / 60 / 60 / 24); 
+	             } catch(Exception e)
+	             {
+	              }
+	        return (int)gapDays; 
 	}
 
 

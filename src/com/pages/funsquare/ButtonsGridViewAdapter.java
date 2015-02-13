@@ -23,6 +23,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ButtonsGridViewAdapter extends BaseAdapter{
 
@@ -61,24 +63,55 @@ public class ButtonsGridViewAdapter extends BaseAdapter{
 	    // When convertView is not null, we can reuse it directly, there is no need 
 	    // to reinflate it. We only inflate a new View when the convertView supplied 
 	    // by ListView is null. 
-	    if (convertView == null) { 
-	        convertView = mInflater.inflate(R.layout.item_button_func, null); 
-	        //Log.v("tag", "positon " + position + " convertView is null, " + "new: " + convertView); 
-	        // Creates a ViewHolder and store references to the two children views 
-	        // we want to bind data to. 
-	        holder = new ViewHolder(); 
-	        holder.button = (Button) convertView.findViewById(R.id.btn); 
-	        convertView.setTag(holder); 
-	    } else { 
-	        // Get the ViewHolder back to get fast access to the TextView 
-	        // and the ImageView. 
-	        holder = (ViewHolder) convertView.getTag(); 
-	    } 
-	    // Bind the data efficiently with the holder. 
-	    holder.button.setText(names.get(position));
+		  if (convertView == null) { 
+		        convertView = mInflater.inflate(R.layout.item_button_func, null); 
+		        //Log.v("tag", "positon " + position + " convertView is null, " + "new: " + convertView); 
+		        // Creates a ViewHolder and store references to the two children views 
+		        // we want to bind data to. 
+		        holder = new ViewHolder(); 
+		        //holder.button = (Button) convertView.findViewById(R.id.btn); 
+		        holder.img=(ImageView)convertView.findViewById(R.id.function_icon);
+		        holder.tv=(TextView)convertView.findViewById(R.id.function_name);
+		        convertView.setTag(holder); 
+		    } else { 
+		        // Get the ViewHolder back to get fast access to the TextView 
+		        // and the ImageView. 
+		        holder = (ViewHolder) convertView.getTag(); 
+		    } 
+		    // Bind the data efficiently with the holder. 
+		    holder.tv.setText(names.get(position));
+		    if(names.get(position).equals(context.getResources().getString(R.string.essence)))
+		    {
+		    	 holder.img.setImageResource(R.drawable.function_essence);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.square)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_square);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.backup)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_backup);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.personal_center)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_person_center);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.vip)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_vip);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.print)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_print);
+		    }
+		    else if(names.get(position).equals(context.getResources().getString(R.string.contact_us)))
+		    {
+		    	holder.img.setImageResource(R.drawable.function_contact);
+		    }
+		    
 	    if(names.get(position).equals(context.getResources().getString(R.string.essence)))
 	    {
-	    	holder.button.setOnClickListener(new OnClickListener() {
+	    	holder.img.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
@@ -91,7 +124,7 @@ public class ButtonsGridViewAdapter extends BaseAdapter{
 	    }
 	    else if(names.get(position).equals(context.getResources().getString(R.string.square)))
 	    {
-	    	holder.button.setOnClickListener(new OnClickListener() {
+	    	holder.img.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
@@ -104,7 +137,7 @@ public class ButtonsGridViewAdapter extends BaseAdapter{
 	    }
 	    else if(names.get(position).equals(context.getResources().getString(R.string.backup)))
 	    {
-	    	holder.button.setOnClickListener(new OnClickListener() {
+	    	holder.img.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
@@ -120,7 +153,8 @@ public class ButtonsGridViewAdapter extends BaseAdapter{
 	}
 	static class ViewHolder { 
 
-	    Button button; 
+		ImageView img;
+		TextView tv;
 
 	} 
 }

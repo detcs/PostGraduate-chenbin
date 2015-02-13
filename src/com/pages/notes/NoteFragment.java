@@ -3,19 +3,24 @@ package com.pages.notes;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
 import com.pages.funsquare.ButtonsGridViewAdapter;
 import com.pages.notes.camera.CameraActivity;
 import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.viewpager.MainActivity;
+import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,8 +34,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -38,16 +45,27 @@ public class NoteFragment  extends Fragment{
 	GridView funcGridView;
 	ListView courseNamelist;
 	NotesClassAdapter noteClassAdapter;
+	List<String> courseTableNames;
+	List<String> names;
+	View rootView;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+		rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+		
 		initNoteView(rootView);
 		return rootView;
 	}
-	
 	public void initNoteView(View v) {
 		// final boolean
 		// isFirstUse=UserConfigs.getIsFirstTakePhoto()==null?true:false;
+		//RelativeLayout headLayout=(RelativeLayout) v.findViewById(R.id.head_layout);
+		ImageView bg=(ImageView) v.findViewById(R.id.note_bg_img);
+		Picasso.with(getActivity()).load(R.drawable.note_bg).into(bg);
+		ImageView headImg=(ImageView) v.findViewById(R.id.head_img);
+		Picasso.with(getActivity()).load(R.drawable.note_default_male).into(headImg);
+		
+		initCountInfo(v);
+		
 		final LinearLayout editDiaryLayout=(LinearLayout)v.findViewById(R.id.diary_hideBar);
 		final EditText editDiary = (EditText) v.findViewById(R.id.diary_remarksView);
 		TextView cancelEdit=(TextView)v.findViewById(R.id.diary_quitView);
@@ -94,7 +112,7 @@ public class NoteFragment  extends Fragment{
 				db.close();
 			}
 		});
-		TextView todayRec = (TextView) v.findViewById(R.id.today_rec);
+		ImageView todayRec = (ImageView) v.findViewById(R.id.today_rec);
 		todayRec.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -172,7 +190,7 @@ public class NoteFragment  extends Fragment{
 				
 			}
 		});
-		TextView myFootPrint = (TextView) v.findViewById(R.id.my_footprint);
+		ImageView myFootPrint = (ImageView) v.findViewById(R.id.my_footprint);
 		myFootPrint.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -192,15 +210,73 @@ public class NoteFragment  extends Fragment{
 				startActivity(intent);
 			}
 		});
-		TextView count_note=(TextView)v.findViewById(R.id.count_note);
+		//TextView count_note=(TextView)v.findViewById(R.id.count_note);
+		
+	}
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initCountInfo(rootView);
+		updateNoteClassList();
+	}
+
+	private void initCountInfo(View v)
+	{
+		float countSize=DisplayUtil.spTopx(60*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);
+		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"font/fangzhenglanting.ttf");
+		TextView countClockTv=(TextView) v.findViewById(R.id.count_clock);
+		int countClock=UserConfigs.getClockDays();
+		countClockTv.setText(""+countClock);
+		countClockTv.setTypeface(typeFace);
+		countClockTv.setTextSize(countSize);
+		
+		TextView countNoteTv=(TextView) v.findViewById(R.id.count_note);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+		int countNote=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
+		//countSize=DisplayUtil.spTopx(24*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);
+		countNoteTv.setTypeface(typeFace);
+		countNoteTv.setTextSize(countSize);
+		countNoteTv.setText(countNote+"");
+		
+		
+		TextView countTodayAdd=(TextView)v.findViewById(R.id.today_add);
 		int count=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
+		sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = sdf.format(new Date());
+		int todayAdd=DataConstants.dbHelper.queryAllCourseRecordsCountOnDate(getActivity(), db, date);
 		db.close();
-		count_note.setText(count+"");
+		countTodayAdd.setTypeface(typeFace);
+		countTodayAdd.setTextSize(countSize);
+		countTodayAdd.setText(todayAdd+"");
+		
 	}
 	public void updateNoteClassList()
 	{
+		getTableAndCourseNames();
 		noteClassAdapter.notifyDataSetChanged();
+	}
+	private void getTableAndCourseNames()
+	{
+		courseTableNames=new ArrayList<String>();
+		names = new ArrayList<String>();
+		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
+		courseTableNames.add(getResources().getString(R.string.db_english_table));
+		names.add(getResources().getString(R.string.politics));
+		courseTableNames.add(getResources().getString(R.string.db_politics_table));
+		if(UserConfigs.getCourseMathName()!=null)
+		{
+			names.add(getResources().getString(R.string.math)+UserConfigs.getCourseMathName());
+			courseTableNames.add(getResources().getString(R.string.db_math_table));
+		}
+		names.add(UserConfigs.getCourseProfessOneName());
+		courseTableNames.add(getResources().getString(R.string.db_profess1_table));
+		if(UserConfigs.getCourseProfessTwoName()!=null)
+		{
+			names.add(UserConfigs.getCourseProfessTwoName());
+			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
+		}
 	}
 	
 

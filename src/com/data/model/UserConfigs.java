@@ -165,5 +165,27 @@ public class UserConfigs
 		Log.e(DataConstants.TAG,"names.size() "+names.size());
 		return names;
 	}
+	public static void storeClockDay()
+	{
+		editor= sp.edit();//获取编辑器
+		int days=getClockDays();
+		days++;
+		editor.putInt(context.getResources().getString(R.string.clock_days),days);
+		editor.commit();//提交修改
+	}
+	public static int getClockDays()
+	{		
+		return sp.getInt(context.getResources().getString(R.string.clock_days),0);
+	}
+	public static void storeStartDay(String date)
+	{
+		editor= sp.edit();//获取编辑器
+		editor.putString(context.getResources().getString(R.string.start_day),date);
+		editor.commit();//提交修改
+	}
+	public static String getStartDay()
+	{
+		return sp.getString(context.getResources().getString(R.string.start_day),null);
+	}
 
 }

@@ -4,96 +4,129 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff" >
-    <!--headimg rec footprint -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="3"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:orientation="vertical"
-    		android:layout_centerInParent="true"
-            >
-            <ImageView
-                android:id="@+id/head_img"
-                android:layout_width="wrap_content"
-    			android:layout_height="wrap_content"
-    			android:src="@drawable/default_head"
-                />
-            <TextView
-                android:id="@+id/nickname"
-                android:layout_width="wrap_content"
-    			android:layout_height="wrap_content"
-    			android:text="nickname"
-                />
-        </LinearLayout>
-      </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-    		android:orientation="horizontal"
-            >
-            <TextView
-                android:id="@+id/today_rec"
-                android:layout_width="wrap_content"
-    			android:layout_height="wrap_content"
-    			android:text="@string/today_rec"
-    			android:layout_weight="1"
-    			android:layout_gravity="center"
-    			android:gravity="center"
-                />
-            <TextView
-                android:id="@+id/my_footprint"
-                android:layout_width="wrap_content"
-    			android:layout_height="wrap_content"
-    			android:text="my_footprint"
-    			android:layout_weight="1"
-    			android:layout_gravity="center"
-    			android:gravity="center"
-                />
-        </LinearLayout>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:background="#ffffff" >
+	  <FrameLayout 
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	      
+	      >
+	      <ImageView 
+	          android:id="@+id/note_bg_img"
+	          android:layout_width="match_parent"
+	       	  android:layout_height="match_parent"
+	       	  android:adjustViewBounds="true"
+	       	  android:scaleType="fitXY"
+	          />
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	    	android:orientation="vertical"
+	        >
+		    <!--headimg rec footprint -->
+		    <RelativeLayout
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:id="@+id/head_layout"
+		        android:adjustViewBounds="true"
+		        android:layout_marginTop="30dp"
+		        >
+		        <LinearLayout
+		            android:layout_width="wrap_content"
+		    		android:layout_height="wrap_content"
+		    		android:orientation="vertical"
+		    		android:layout_centerInParent="true"
+		            >
+		            <ImageView
+		                android:id="@+id/head_img"
+		                android:layout_width="wrap_content"
+		    			android:layout_height="wrap_content"
+		    			android:maxWidth="90dp"
+		    			android:maxHeight="90dp"
+		    			android:adjustViewBounds="true"
+		    			
+		                />
+		            <TextView
+		                android:id="@+id/nickname"
+		                android:layout_width="wrap_content"
+		    			android:layout_height="wrap_content"
+		    			android:text="nickname"
+		    			android:layout_gravity="center_horizontal"
+		    			android:layout_marginTop="5dp"
+		                />
+       		      </LinearLayout>
+      		</RelativeLayout>
+      		<!-- today rec and footprint -->
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"
+	    		android:orientation="horizontal"
+	    		android:layout_marginTop="16dp"
+	            >
+	            <ImageView
+	                android:id="@+id/today_rec"
+	                android:layout_width="wrap_content"
+	    			android:layout_height="wrap_content"
+	    			android:layout_weight="1"
+	    			android:maxWidth="100dp"
+	    			android:maxHeight="24dp"
+	    			android:gravity="center"
+	    			android:adjustViewBounds="true"
+	    			android:src="@drawable/note_today_rec"
+	                />
+	            <ImageView
+	                android:id="@+id/my_footprint"
+	                android:layout_width="wrap_content"
+	    			android:layout_height="wrap_content"
+	    			android:layout_weight="1"
+	    			android:maxWidth="100dp"
+	    			android:maxHeight="24dp"
+	    			android:gravity="center"
+	    			android:adjustViewBounds="true"
+	    			android:src="@drawable/note_footprint"
+	                />
+	        </LinearLayout>
     
-    <!-- diary  -->
-    <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        
-        >
-        <TextView
-             android:id="@+id/diary"
-             android:layout_width="wrap_content"
-    		 android:layout_height="wrap_content"
-    		 android:gravity="center"
-    		 android:text="diary"
-    		 android:layout_weight="2"
-            />
-         <ImageView
-             android:id="@+id/edit_diary"
-             android:layout_width="wrap_content"
-    		 android:layout_height="wrap_content"
-    		 android:gravity="center"
-    		 android:layout_weight="1"
-            />
-        </LinearLayout>
+		    <!-- diary  -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		        android:orientation="horizontal"   
+		        android:layout_marginTop="20dp"
+		        >
+		        <TextView
+		             android:id="@+id/diary"
+		             android:layout_width="wrap_content"
+		    		 android:layout_height="wrap_content"
+		    		 android:gravity="center"
+		    		 android:text="diary"
+		    		 android:textColor="#ffffff"
+		    		 android:layout_weight="2"
+		            />
+		         <ImageView
+		             android:id="@+id/edit_diary"
+		             android:layout_width="wrap_content"
+		    		 android:layout_height="wrap_content"
+		    		 android:gravity="center"
+		    		 android:layout_weight="1"
+		            />
+		        </LinearLayout>
+		     </LinearLayout>
+		  </FrameLayout>
      <!-- count data -->
       <LinearLayout
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="2"
+       
         >
          <LinearLayout
 	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
+	    	android:layout_height="match_parent"
 	        android:orientation="vertical"
 	        android:layout_weight="1"
 	        >
@@ -102,12 +135,16 @@
                 android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
+	    		android:layout_weight="2"
+	    		android:textColor="#555555"
                 />
               <TextView
                 android:text="@string/count_clock"
                 android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
+	    		android:layout_weight="1"
+	    		android:textColor="#555555"
                 />
         </LinearLayout>
          <LinearLayout
@@ -122,12 +159,14 @@
                 android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
+	    		android:textColor="#555555"
                 />
              <TextView
                 android:text="@string/count_note"
                 android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
+	    		android:textColor="#555555"
                 />
         </LinearLayout>
          <LinearLayout
@@ -143,14 +182,15 @@
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
 	    		android:gravity="center_horizontal"
-	    		android:textColor="#ff0000"
 	    		 android:text="55"
+	    		 android:textColor="#555555"
                 />
               <TextView
                 android:text="@string/today_add"
                 android:layout_width="wrap_content"
 	    		android:layout_height="wrap_content"
 	    		android:layout_gravity="center_horizontal"
+	    		android:textColor="#555555"
                 />
         </LinearLayout>
         </LinearLayout>
@@ -158,38 +198,39 @@
        <FrameLayout 
             android:layout_width="match_parent"
     		android:layout_height="wrap_content"
+    	
            >
-       <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="5"
-        >
-        <com.pages.notes.NoScrollListView
-            android:id="@+id/course_list"
-            android:layout_width="match_parent"
-    		android:layout_height="wrap_content"
-            >
-            </com.pages.notes.NoScrollListView>
-        </LinearLayout>
-        <!-- takephoto -->
-        <LinearLayout
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_gravity="bottom"
-        >
-         <Button
-            android:id="@+id/take_photo"
-            android:layout_width="wrap_content"
-    		android:layout_height="match_parent"
-    		android:layout_gravity="center_horizontal"
-    		android:background="@drawable/takephoto"
-    		android:alpha="0.5"
-            />
-        </LinearLayout>
-    </FrameLayout>
+		       <LinearLayout
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			        android:orientation="horizontal"
+			        
+			        >
+			        <com.pages.notes.NoScrollListView
+			            android:id="@+id/course_list"
+			            android:layout_width="match_parent"
+			    		android:layout_height="wrap_content"
+			            >
+		            </com.pages.notes.NoScrollListView>
+        		</LinearLayout>
+		        <!-- takephoto -->
+		        <LinearLayout
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			        android:orientation="vertical"
+			        android:layout_weight="1"
+			        android:layout_gravity="bottom"
+			        >
+		         <Button
+		            android:id="@+id/take_photo"
+		            android:layout_width="wrap_content"
+		    		android:layout_height="match_parent"
+		    		android:layout_gravity="center_horizontal"
+		    		android:background="@drawable/takephoto"
+		    		android:alpha="0.5"
+		            />
+		        </LinearLayout>
+   		 </FrameLayout>
 </LinearLayout>
 <!-- edit diary -->
  	<LinearLayout
