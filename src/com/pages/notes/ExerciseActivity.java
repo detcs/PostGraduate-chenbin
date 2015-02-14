@@ -7,15 +7,14 @@ import com.data.model.DataConstants;
 import com.pages.notes.timeline.ReviewChooseFragment;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 
-public class ExerciseActivity extends FragmentActivity{
+public class ExerciseActivity extends Activity{
 
 	Fragment fragment;
 	FrameLayout frame;
@@ -34,7 +33,7 @@ public class ExerciseActivity extends FragmentActivity{
 //			Bundle bundle = new Bundle();  
 //	        bundle.putString("type", getResources().getString(R.string.today_rec));  
 //	        fragment.setArguments(bundle);
-			fm=getSupportFragmentManager();
+			fm=getFragmentManager();
 			FragmentTransaction trans = fm.beginTransaction();  
 			trans.replace(R.id.exercise_frame, fragment);
 			trans.commit();
@@ -46,7 +45,7 @@ public class ExerciseActivity extends FragmentActivity{
 			Bundle bundle = new Bundle();  
 	        bundle.putString("type", getResources().getString(R.string.today_rec));  
 	        fragment.setArguments(bundle);
-			fm=getSupportFragmentManager();
+			fm=getFragmentManager();
 			FragmentTransaction trans = fm.beginTransaction();  
 			trans.replace(R.id.exercise_frame, fragment);
 			trans.commit();
@@ -56,27 +55,29 @@ public class ExerciseActivity extends FragmentActivity{
 		{
 			frame=(FrameLayout)findViewById(R.id.exercise_frame);
 			fragment=new ReviewChooseFragment();
+			
 			String tableName=getIntent().getStringExtra("course_table_name");
 			Bundle bundle = new Bundle();  
 	        bundle.putString("type", "");  
 	        bundle.putString("course_table_name", tableName);  
 	        fragment.setArguments(bundle);
-			fm=getSupportFragmentManager();
+			fm=getFragmentManager();
 			FragmentTransaction trans = fm.beginTransaction();  
-			trans.replace(R.id.exercise_frame, fragment);
+			trans.replace(R.id.exercise_frame, fragment,getResources().getString(R.string.reviewchoose_fra_tag));
+			//trans.addToBackStack(null);
 			trans.commit();
 		}
 		
 		//frame.
 	}
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		
-		setResult(DataConstants.RESULTCODE_COURSE_SETTING);
-		finish();
-		super.onBackPressed();
-	}
+//	@Override
+//	public void onBackPressed() {
+//		// TODO Auto-generated method stub
+//		
+////		setResult(DataConstants.RESULTCODE_COURSE_SETTING);
+////		finish();
+////		super.onBackPressed();
+//	}
 	
 	
 	

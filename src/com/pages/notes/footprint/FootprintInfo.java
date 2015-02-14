@@ -5,6 +5,7 @@ public class FootprintInfo {
 	String coverPicName;
 	//String coverSongPath;
 	String coverSongName;
+	String coverSingerName;
 	String footprintPicName;
 	String diary;
 	String date;
@@ -13,12 +14,18 @@ public class FootprintInfo {
 	String daysLeft;
 	String ifUpload;
 
+	
+
+
+
 	public FootprintInfo(String coverPicName, String coverSongName,
-			String footprintPicName, String diary, String date,
-			String encourage, String days, String daysLeft, String ifUpload) {
+			String coverSingerName, String footprintPicName, String diary,
+			String date, String encourage, String days, String daysLeft,
+			String ifUpload) {
 		super();
 		this.coverPicName = coverPicName;
 		this.coverSongName = coverSongName;
+		this.coverSingerName = coverSingerName;
 		this.footprintPicName = footprintPicName;
 		this.diary = diary;
 		this.date = date;
@@ -26,6 +33,18 @@ public class FootprintInfo {
 		this.days = days;
 		this.daysLeft = daysLeft;
 		this.ifUpload = ifUpload;
+	}
+
+
+
+	public String getCoverSingerName() {
+		return coverSingerName;
+	}
+
+
+
+	public void setCoverSingerName(String coverSingerName) {
+		this.coverSingerName = coverSingerName;
 	}
 
 

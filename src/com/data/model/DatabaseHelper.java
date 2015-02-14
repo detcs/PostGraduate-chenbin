@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_cover_pic)+" TEXT not null , "
     			+context.getResources().getString(R.string.dbcol_cover_song)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_footprint_pic)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_cover_singer)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_diary)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_encourage)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_days)+" TEXT not null,"
@@ -77,11 +78,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String coverPicPath=result.getString(1); 
 	        String coverSongName=result.getString(2);
 	        String footprintPic=result.getString(3);
-	        String diary=result.getString(4);
-	        String encourage=result.getString(5);
-	        String days=result.getString(6);
-	        String daysleft=result.getString(7);
-	        fpInfo=new FootprintInfo(coverPicPath,coverSongName,footprintPic,diary,encourage,days,daysleft,date,context.getResources().getString(R.string.upload_no)); 
+	        String coverSinger=result.getString(4);
+	        String diary=result.getString(5);
+	        String encourage=result.getString(6);
+	        String days=result.getString(7);
+	        String daysleft=result.getString(8);
+	        fpInfo=new FootprintInfo(coverPicPath,coverSongName,footprintPic,coverSinger,diary,encourage,days,daysleft,date,context.getResources().getString(R.string.upload_no)); 
 	       // Log.e(DataConstants.TAG,"db:query "+id+","+name);
 	        result.moveToNext(); 
 	      } 
@@ -95,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_cover_pic), fpInfo.getCoverPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_footprint_pic), fpInfo.getFootprintPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_cover_song), fpInfo.getCoverSongName());
+    	cv.put(context.getResources().getString(R.string.dbcol_cover_singer), fpInfo.getCoverSongName());
     	cv.put(context.getResources().getString(R.string.dbcol_encourage), fpInfo.getEncourage());
     	cv.put(context.getResources().getString(R.string.dbcol_date), fpInfo.getDate());
     	cv.put(context.getResources().getString(R.string.dbcol_diary), fpInfo.getDiary());

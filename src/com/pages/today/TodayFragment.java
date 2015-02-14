@@ -25,6 +25,7 @@ import com.data.util.DisplayUtil;
 import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.viewpager.MainActivity;
+import com.squareup.picasso.Picasso;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -45,6 +46,7 @@ public class TodayFragment extends Fragment {
 	boolean visible = true;
 	MediaPlayer mp;
 	View rootView;
+	ImageView todayBgImg;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_today, container, false);
@@ -53,6 +55,8 @@ public class TodayFragment extends Fragment {
 	}
 	public void initTodayView(View v) {
 
+		todayBgImg=(ImageView) v.findViewById(R.id.today_bg_img);
+		Picasso.with(getActivity()).load(R.drawable.today_background).resize(DataConstants.screenWidth/4, DataConstants.screenHeight/4).into(todayBgImg);
 		TextView useDays=(TextView) v.findViewById(R.id.use_days);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
@@ -173,7 +177,7 @@ public class TodayFragment extends Fragment {
 				songDownloadTask = new DownloadTask(getActivity(),
 				FileDataHandler.COVER_SONG_DIR_PATH, getResources().getString(R.string.dbcol_cover_song), songId,date);
 				songDownloadTask.execute();
-				fpInfo = new FootprintInfo("", songName, "", "", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
+				fpInfo = new FootprintInfo("", songName, "", "singer","", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
 				TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);
 				TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
 				encourageTv.setText(encourage);

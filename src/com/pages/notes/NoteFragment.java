@@ -14,6 +14,7 @@ import com.data.util.SysCall;
 import com.pages.funsquare.ButtonsGridViewAdapter;
 import com.pages.notes.camera.CameraActivity;
 import com.pages.notes.footprint.FootPrintActivity;
+import com.pages.notes.footprint.FootprintInfo;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 
@@ -51,7 +52,7 @@ public class NoteFragment  extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_notes, container, false);
-		
+		initFootprint();
 		initNoteView(rootView);
 		return rootView;
 	}
@@ -60,9 +61,9 @@ public class NoteFragment  extends Fragment{
 		// isFirstUse=UserConfigs.getIsFirstTakePhoto()==null?true:false;
 		//RelativeLayout headLayout=(RelativeLayout) v.findViewById(R.id.head_layout);
 		ImageView bg=(ImageView) v.findViewById(R.id.note_bg_img);
-		Picasso.with(getActivity()).load(R.drawable.note_bg).into(bg);
+		Picasso.with(getActivity()).load(R.drawable.note_bg).resize(100, 100).into(bg);
 		ImageView headImg=(ImageView) v.findViewById(R.id.head_img);
-		Picasso.with(getActivity()).load(R.drawable.note_default_male).into(headImg);
+		Picasso.with(getActivity()).load(R.drawable.note_default_male).resize(100, 100).into(headImg);
 		
 		initCountInfo(v);
 		
@@ -70,15 +71,15 @@ public class NoteFragment  extends Fragment{
 		final EditText editDiary = (EditText) v.findViewById(R.id.diary_remarksView);
 		TextView cancelEdit=(TextView)v.findViewById(R.id.diary_quitView);
 		TextView saveEdit=(TextView)v.findViewById(R.id.diary_saveView);
-		TextView diary = (TextView) v.findViewById(R.id.diary);
-		diary.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				editDiaryLayout.setVisibility(View.VISIBLE);
-				SysCall.bumpSoftInput(editDiary, getActivity());
-			}
-		});
+		final TextView diary = (TextView) v.findViewById(R.id.diary);
+		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		String date = sdf.format(calendar.getTime());
+		FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
+		db.close();
+		if(fpInfo!=null)
+			diary.setText(fpInfo.getDiary());
 		cancelEdit.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -110,6 +111,7 @@ public class NoteFragment  extends Fragment{
 				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 				DataConstants.dbHelper.updateFootprintRecord(getActivity(), db, getResources().getString(R.string.dbcol_diary), editDiary.getText().toString(), date);
 				db.close();
+				diary.setText(editDiary.getText().toString());
 			}
 		});
 		ImageView todayRec = (ImageView) v.findViewById(R.id.today_rec);
@@ -133,8 +135,18 @@ public class NoteFragment  extends Fragment{
 				
 			}
 		});
+		ImageView editImg=(ImageView) v.findViewById(R.id.edit_diary);
+		Picasso.with(getActivity()).load(R.drawable.diary_edit).resize(30, 30).into(editImg);
+		editImg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				editDiaryLayout.setVisibility(View.VISIBLE);
+				SysCall.bumpSoftInput(editDiary, getActivity());
+			}
+		});
 		Button takePhoto = (Button) v.findViewById(R.id.take_photo);
-
 		takePhoto.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -220,7 +232,20 @@ public class NoteFragment  extends Fragment{
 		initCountInfo(rootView);
 		updateNoteClassList();
 	}
-
+	private void initFootprint()
+	{
+//		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		Calendar calendar = Calendar.getInstance();
+//		String date = sdf.format(calendar.getTime());
+//		FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
+//		if(fpInfo==null)
+//		{
+//			fpInfo=new FootprintInfo("", "", "singer","", "diary", date, "encourage", days, daysLeft,getResources().getString(R.string.upload_no));
+//			DataConstants.dbHelper.insertFootprintInfoRecord(getActivity(), db, fpInfo);
+//		}
+//		db.close();
+	}
 	private void initCountInfo(View v)
 	{
 		float countSize=DisplayUtil.spTopx(60*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);

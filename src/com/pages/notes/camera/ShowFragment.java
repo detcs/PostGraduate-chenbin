@@ -308,10 +308,10 @@ public class ShowFragment extends Fragment {
 
 		} else {
 			String storePath = FileDataHandler.APP_DIR_PATH + "/";
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd|HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
 			String time = sdf.format(new Date());
 			// test date
-			sdf = new SimpleDateFormat("yyyy_MM_dd");
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(new Date());
 			// test date
 			String photoName = UserConfigs.getAccount() + "|" + time + ".jpg";

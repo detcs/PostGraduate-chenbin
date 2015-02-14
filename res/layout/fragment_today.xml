@@ -1,109 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/today_background">
-    
-	 <LinearLayout 
-	      android:id="@+id/days_layout"
-	      android:layout_width="wrap_content"
-    	  android:layout_height="wrap_content"
-    	  android:orientation="horizontal"
-    	  android:layout_marginTop="200dp"
-    	  android:layout_marginLeft="20dp"
-	     >
-	      <TextView
-	        android:id="@+id/use_days"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="10"
-	    	android:textSize="50dp"
-	        />
-	       <LinearLayout 
+	android:layout_height="match_parent"
+    >
+    <ImageView 
+        android:id="@+id/today_bg_img"
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+        />
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" 
+	   >
+	    
+		 <LinearLayout 
+		      android:id="@+id/days_layout"
 		      android:layout_width="wrap_content"
 	    	  android:layout_height="wrap_content"
-	    	  android:orientation="vertical"
-	    	  android:layout_marginLeft="15dp"
+	    	  android:orientation="horizontal"
+	    	  android:layout_marginTop="200dp"
+	    	  android:layout_marginLeft="20dp"
 		     >
-		     <TextView
-		        android:id="@+id/days_left"
+		      <TextView
+		        android:id="@+id/use_days"
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
-		    	android:text="DAYS LEFT"
+		    	android:text="10"
+		    	android:textSize="50dp"
+		        />
+		       <LinearLayout 
+			      android:layout_width="wrap_content"
+		    	  android:layout_height="wrap_content"
+		    	  android:orientation="vertical"
+		    	  android:layout_marginLeft="15dp"
+			     >
+			     <TextView
+			        android:id="@+id/days_left"
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	android:text="DAYS LEFT"
+			        />
+			     <TextView
+			        android:id="@+id/encourage"
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	android:text="encourage"
+			        />
+			     </LinearLayout>
+		 </LinearLayout>
+		 
+		 <LinearLayout 
+		     android:id="@+id/experience_layout"
+		     android:layout_width="match_parent"
+	    	 android:layout_height="wrap_content"
+	    	 android:orientation="horizontal"
+	    	 android:layout_below="@id/days_layout"
+	    	 android:layout_marginLeft="20dp"
+	    	 android:paddingTop="100dp"
+		     >
+			  <TextView
+		        android:id="@+id/experience"
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:gravity="center_vertical"
+		    	android:text="厦大考题"
+		        />
+			  <ImageView 
+			      android:src="@drawable/text_gudie"
+			      android:layout_width="wrap_content"
+		    	  android:layout_height="wrap_content"
+		    	  android:adjustViewBounds="true"
+		    	  android:maxWidth="8dp"
+		    	  android:maxHeight="12dp"
+		    	  android:layout_marginLeft="16dp"
+		    	  android:layout_marginTop="8dp"
+			      />
+		  </LinearLayout>
+		<LinearLayout
+		    android:id="@+id/music_layout"
+		    android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_below="@id/experience_layout"
+	    	android:layout_marginTop="14dp"
+	    	android:orientation="horizontal"
+	    	android:background="#000000"
+	    	android:alpha="0.5"
+		    >
+		    <ImageView
+		        android:id="@+id/music_play"
+		        android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_marginLeft="12dp"
+	    		android:layout_marginTop="12dp"
+		        />
+		    <LinearLayout 
+		         android:layout_width="wrap_content"
+	    		 android:layout_height="wrap_content"
+	    		 android:layout_marginLeft="19dp"
+	    		 android:orientation="vertical"
+		        >
+		     <TextView
+		        android:id="@+id/music_name"
+		        android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:layout_marginTop="8dp"
 		        />
 		     <TextView
-		        android:id="@+id/encourage"
+		        android:id="@+id/singer_name"
 		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:text="encourage"
+	    		android:layout_height="wrap_content"
+	    		android:text="singer"
+	    		android:layout_marginTop="8dp"
 		        />
 		     </LinearLayout>
-	 </LinearLayout>
-	 
-	 <LinearLayout 
-	     android:id="@+id/experience_layout"
-	     android:layout_width="match_parent"
-    	 android:layout_height="wrap_content"
-    	 android:orientation="horizontal"
-    	 android:layout_below="@id/days_layout"
-    	 android:layout_marginLeft="20dp"
-    	 android:paddingTop="100dp"
-	     >
-		  <TextView
-	        android:id="@+id/experience"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:gravity="center_vertical"
-	    	android:text="厦大考题"
-	        />
-		  <ImageView 
-		      android:src="@drawable/text_gudie"
-		      android:layout_width="wrap_content"
-	    	  android:layout_height="wrap_content"
-	    	  android:adjustViewBounds="true"
-	    	  android:maxWidth="8dp"
-	    	  android:maxHeight="12dp"
-	    	  android:layout_marginLeft="16dp"
-	    	  android:layout_marginTop="8dp"
-		      />
-	  </LinearLayout>
-	<LinearLayout
-	    android:id="@+id/music_layout"
-	    android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:layout_below="@id/experience_layout"
-    	android:layout_marginTop="14dp"
-    	android:orientation="horizontal"
-    	android:background="#000000"
-    	android:alpha="0.5"
-	    >
-	    <ImageView
-	        android:id="@+id/music_play"
-	        android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_marginLeft="12dp"
-    		android:layout_marginTop="12dp"
-	        />
-	    <LinearLayout 
-	         android:layout_width="wrap_content"
-    		 android:layout_height="wrap_content"
-    		 android:layout_marginLeft="19dp"
-    		 android:orientation="vertical"
-	        >
-	     <TextView
-	        android:id="@+id/music_name"
-	        android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_marginTop="8dp"
-	        />
-	     <TextView
-	        android:id="@+id/singer_name"
-	        android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="singer"
-    		android:layout_marginTop="8dp"
-	        />
-	     </LinearLayout>
-	 </LinearLayout>
-</RelativeLayout>
+		 </LinearLayout>
+	</RelativeLayout>
+</FrameLayout>

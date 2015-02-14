@@ -5,14 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.FlagToString;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -22,6 +24,7 @@ import com.data.model.DataConstants;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
 import com.pages.notes.SingleNoteFragment;
+import com.pages.notes.footprint.PhotoBrowseActivity;
 import com.squareup.picasso.Picasso;
 
 public class PhotoShowGridAdapter extends BaseAdapter
@@ -31,14 +34,14 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	Context context;
 	LayoutInflater mInflater;
 	boolean chooseState=false;
-	//List<String> choosedPhotoPaths;
-	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState) {
+	String tableName;
+	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState,String tableName) {
 		super();
 		this.imgPaths = imgPaths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.chooseState=chooseState;
-		//choosedPhotoPaths=new ArrayList<String>();
+		this.tableName=tableName;
 	}
 
 	@Override
@@ -62,7 +65,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		//Log.e(DataConstants.TAG,"photoshow getview"+chooseState);
+		Log.e(DataConstants.TAG,"photoshow getview "+position+" "+chooseState);
 		GridViewHolder holder; 
 	    if (convertView == null) { 
 	        convertView = mInflater.inflate(R.layout.item_timeline_grid_item, null); 
@@ -91,14 +94,14 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    {   
 	    	if(holder.chooseFlag.getVisibility()==View.VISIBLE)
 			holder.chooseFlag.setVisibility(View.INVISIBLE);
-	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(""));
+	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(imgPaths.get(position)));
 	    }
 	    return convertView; 
 	}
 	public void updateChooseState(boolean chooseState)
 	{
 		this.chooseState=chooseState;
-		//Log.e(DataConstants.TAG,"photoshow updatechoose "+chooseState);
+		Log.e(DataConstants.TAG,"photoshow updatechoose "+chooseState);
 		//ReviewChooseFragment.choosedPhotoPaths=new ArrayList<String>();
 		notifyDataSetChanged();
 		
@@ -139,28 +142,39 @@ public class PhotoShowGridAdapter extends BaseAdapter
 				holder.chooseFlag.setVisibility(View.VISIBLE);
 				ReviewChooseFragment.choosedPhotoPaths.add(path);
 				Log.e(DataConstants.TAG, "choose add "+ReviewChooseFragment.choosedPhotoPaths.size());
+				
 			}
 			else
 			{
 				holder.chooseFlag.setVisibility(View.INVISIBLE);
 				ReviewChooseFragment.choosedPhotoPaths.remove(path);
 				Log.e(DataConstants.TAG, "choose remove "+ReviewChooseFragment.choosedPhotoPaths.size());
+				
 			}
 		}
 		
 	}
 	public void jumpToReview(String path)
 	{
+		/*
 		Fragment fragment=new SingleNoteFragment();
 		Bundle bundle = new Bundle();  
         bundle.putString("type", "");
         bundle.putString("single_path", path);
+        bundle.putString("single_tablename",tableName);
+       // Log.e(DataConstants.TAG,"send singlepath:"+path);
        // bundle.putString("course_table_name", tableName);
         fragment.setArguments(bundle);
-		FragmentManager fm=((ExerciseActivity)context).getSupportFragmentManager();
+		FragmentManager fm=((ExerciseActivity)context).getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
+		trans.addToBackStack(null);
 		trans.commit();
+		*/
+		Intent intent=new Intent();
+		intent.setClass(context, PhotoBrowseActivity.class);
+		context.startActivity(intent);
+	
 	}
 }
 

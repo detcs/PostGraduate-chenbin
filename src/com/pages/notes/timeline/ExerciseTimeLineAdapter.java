@@ -65,6 +65,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+		Log.e(DataConstants.TAG,"timeline getview "+position+" "+chooseState);
 		ViewHolder holder;  
 	    if (convertView == null) { 
 	        convertView = mInflater.inflate(R.layout.item_exercise_timeline, null); 
@@ -78,8 +79,6 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	       
 	        holder = (ViewHolder) convertView.getTag(); 
 	    }
-	    //String tableName=context.getResources().getString(R.string.db_english_table);
-		//choosePaths(DataConstants.SD_PATH+"/"+DataConstants.PHOTO_DIR_PATH+"/"+tableName);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, tableName, dates.get(position));
 		List<String> photoPaths=new ArrayList<String>();
@@ -87,7 +86,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState);
+		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState,tableName);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    holder.day.setText(dates.get(position));
 	    return convertView; 
@@ -102,8 +101,9 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	{
 		this.chooseState=chooseState;
 		//Log.e(DataConstants.TAG,"timeline updatechoose");
-		photoShowAdapter.updateChooseState(chooseState);
-		//notifyDataSetChanged();
+		notifyDataSetChanged();
+		//photoShowAdapter.updateChooseState(chooseState);
+		//
 	}
 	
 

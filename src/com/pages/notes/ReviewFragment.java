@@ -13,11 +13,11 @@ import com.data.util.SysCall;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +54,7 @@ public class ReviewFragment extends Fragment{
 		}
 		else
 		{
+			initTitleView();
 			String date=bundle.getString("date");
 			tableName=getArguments().getString("course_table_name");
 			db = DataConstants.dbHelper.getReadableDatabase();
@@ -151,7 +152,7 @@ public class ReviewFragment extends Fragment{
 //		Bundle bundle = new Bundle();  
 //        bundle.putString("type", "");  
 //        fragment.setArguments(bundle);
-		FragmentManager fm=getActivity().getSupportFragmentManager();
+		FragmentManager fm=getActivity().getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
 		trans.commit();
@@ -200,23 +201,18 @@ public class ReviewFragment extends Fragment{
 		super.onPause();
 		db.close();
 	}
-//	private void choosePaths(String fileDir)
-//	{
-//		Log.i("flip","dir "+fileDir);
-//		File dir=new File(fileDir);
-//		if(dir.exists())
-//		{
-//		//	Log.i("flip","dir exist");
-//		}
-//		File[] tempList = dir.listFiles();
-//		//Log.i("flip","len "+tempList.length);
-//		for (int i = 0; i < tempList.length; i++) 
-//		{
-//			   if (tempList[i].isFile()) 
-//			   {
-//				   reviewImgPaths.add(tempList[i].getPath());
-//			//   Log.i("flip","path"+tempList[i].getPath());
-//			   }
-//		}
-//	}
+	private void initTitleView()
+	{
+		Button right=(Button)getActivity().findViewById(R.id.right_btn);
+		right.setVisibility(View.INVISIBLE);
+		ImageView left=(ImageView) getActivity().findViewById(R.id.exercise_left_btn);
+		left.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				SysCall.clickBack();
+			}
+		});
+	}
 }

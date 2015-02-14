@@ -38,7 +38,7 @@
     <string name="db_footprint_table">footprintTable</string>
     <string name="dbcol_cover_pic">dbCoverPic</string>
     <string name="dbcol_cover_song">dbCoverSong</string>
-    <!-- <string name="dbcol_cover_song_name">dbCoverSongName</string> -->
+    <string name="dbcol_cover_singer">dbCoverSinger</string>
     <string name="dbcol_footprint_pic">dbFootprintPic</string>
     <string name="dbcol_diary">dbDiary</string>
     <string name="dbcol_encourage">dbEncourage</string>
@@ -94,7 +94,10 @@
     <string name="math1">数学1</string>
     <string name="math2">数学2</string>
     <string name="math3">数学3</string>
-    <string name="professional_course">专业课</string>
+     <string name="no_course">无</string>
+    <string name="professional_course">专业课(首字不能相同)</string>
+    <string name="professional_one">专业一</string>
+    <string name="professional_two">专业二</string>
     <string name="input_professional_course">请输入专业课名称</string>
     <string name="back">返回</string>
     <string name="choose">选择</string>
@@ -110,17 +113,23 @@
     <string name="state_unmaster">unmaster</string>
     <string name="state_unknow">unknow</string>
     <string name="remark">备注</string>
-    <string name="clock">打卡</string>
-    <string name="day">天</string>
-    <string name="task_complete">你已完成今天的所有任务</string>
     <string name="date">2015.1.25</string>
     <string name="problems">重难点</string>
-    <string name="myfootprint">我的足迹</string>
     <string name="count_clock">累计打卡</string>
     <string name="count_note">累计笔记</string>
     <string name="today_add">今日新增</string>
     <string name="piece">篇</string>
     <string name="look_all">查看全部</string>
+    <string name="append_note">新增笔记</string>
+    <!-- clock complete -->
+    <string name="clock">打卡</string>
+    <string name="day">天</string>
+    <string name="task_complete">你已完成这门课程的复习</string>
+    <string name="wonderful">非常棒</string>
+    <string name="insist_learn">你已经坚持学习了</string>
+    <!-- footprint -->
+    <string name="myfootprint">我的足迹</string>
+    <string name="reviewchoose_fra_tag">reviewchooseFraTag</string>
     <!-- functions square -->
     <string name="essence">精华</string>
     <string name="square">广场</string>

@@ -20,69 +20,23 @@
    		 android:layout_height="wrap_content"
    		 android:orientation="horizontal"
          >
-         <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
-	             android:id="@+id/english1"
+	    
+	         <TextView
+	            android:id="@+id/english1"
 	            android:text="@string/english1"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
-	   		 	android:layout_weight="1"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/english1_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
-         <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
-	             android:id="@+id/english2"
+	      
+	         <TextView
+	            android:id="@+id/english2"
 	            android:text="@string/english2"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
-	   		 	android:layout_weight="1"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/english2_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
-        <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
-	             android:id="@+id/english3"
-	            android:text="@string/english3"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
-	   		 	android:layout_weight="1"
-	             />
-	          <ImageView
-		            android:id="@+id/english3_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
+	        
        </LinearLayout>
  		
  		 <TextView
@@ -90,143 +44,137 @@
 	        android:layout_width="match_parent"
 	   		android:layout_height="wrap_content"
 	        />
-     <LinearLayout
-         android:layout_width="match_parent"
-   		 android:layout_height="wrap_content"
-   		 android:orientation="horizontal"
-         >
-         <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
+ 		  <View 
+           android:layout_width="match_parent"
+           android:layout_height="1dp" 
+           android:background="#e5e5e5" 
+ 			/>
+ 		   <LinearLayout
+		         android:layout_width="match_parent"
+		   		 android:layout_height="wrap_content"
+		   		 android:orientation="horizontal"
+		         >
+	       
+	         <TextView
 	             android:id="@+id/math1"
 	            android:text="@string/math1"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
 	   		 	android:layout_weight="1"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/math1_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
-        <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
+	        
+	         <TextView
 	             android:id="@+id/math2"
 	            android:text="@string/math2"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
 	   		 	android:layout_weight="1"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/math2_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
-         <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
+	         
+	         <TextView
 	             android:id="@+id/math3"
 	            android:text="@string/math3"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
 	   		 	android:layout_weight="1"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/math3_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
+	        
+       		</LinearLayout>
+     		
+	         <TextView
+	            android:id="@+id/no_math"
+	            android:text="@string/no_course"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
+	   		 	android:layout_gravity="center"
+	   		 	android:gravity="center"
 	             />
-         </RelativeLayout>
-       </LinearLayout>
+	        
+       	
+      
+     
        <TextView
         	android:text="@string/politics"
         	android:layout_width="match_parent"
    		 	android:layout_height="wrap_content"
         	/>
- 		 <RelativeLayout 
-             android:layout_width="wrap_content"
-   		 	 android:layout_height="wrap_content"
-   		 	 android:layout_weight="1"
-             >
-	         <Button
-	             android:id="@+id/politics"
+       
+        <View 
+           android:layout_width="match_parent"
+           android:layout_height="1dp" 
+           android:background="#e5e5e5" 
+ 		/>
+ 		 
+	         <TextView
+	            android:id="@+id/politics"
 	            android:text="@string/politics"
-	            android:layout_width="wrap_content"
-	   		 	android:layout_height="wrap_content"
+	            android:layout_width="80dp"
+	   		 	android:layout_height="48dp"
+	   		 	android:layout_weight="1"
+	   		 	android:gravity="center"
 	             />
-	          <ImageView
-		            android:id="@+id/politics_choose"
-		            android:src="@drawable/choose"
-		            android:layout_width="wrap_content"
-		   		 	android:layout_height="wrap_content"
-		   		 	android:layout_alignParentRight="true"
-		   		 	android:visibility="invisible"
-	             />
-         </RelativeLayout>
-         <!-- 
-        <LinearLayout
-         android:layout_width="match_parent"
-   		 android:layout_height="wrap_content"
-   		 android:orientation="horizontal"
-         >
+	      
+       
+         
          <TextView
 	        android:text="@string/professional_course"
 	        android:layout_width="wrap_content"
 	   		android:layout_height="wrap_content"
 	   		android:layout_weight="1"
 	        />
-         <EditText 
-            android:hint=""
-	        android:layout_width="wrap_content"
-	   		android:layout_height="wrap_content"
-	   		android:layout_weight="3"
-             />
+          <View 
+	           android:layout_width="match_parent"
+	           android:layout_height="1dp" 
+	           android:background="#e5e5e5" 
+	 			/>
+          <LinearLayout 
+              android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	           android:orientation="horizontal" 
+              >
+	        <TextView 
+	            android:id="@+id/profess_one"
+	            android:text="@string/professional_one"
+		        android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content"
+		   		android:layout_weight="1"
+	             />
+	         <EditText 
+	            android:id="@+id/input_profess_course1"
+	            android:hint="@string/input_professional_course"
+		        android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content"
+		   		android:layout_weight="5"
+	             />
          </LinearLayout>
-          -->
-         <LinearLayout
-         android:layout_width="match_parent"
-   		 android:layout_height="wrap_content"
-   		 android:orientation="horizontal"
-         >
-         <TextView
-	        android:text="@string/professional_course"
-	        android:layout_width="wrap_content"
-	   		android:layout_height="wrap_content"
-	   		android:layout_weight="1"
-	        />
-         <EditText 
-             android:id="@+id/input_profess_course"
-            android:text="@string/input_professional_course"
-	        android:layout_width="wrap_content"
-	   		android:layout_height="wrap_content"
-	   		android:layout_weight="3"
-             />
+        
+         <LinearLayout 
+              android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	           android:orientation="horizontal" 
+              >
+	        <TextView 
+	            android:id="@+id/profess_two"
+	            android:text="@string/professional_two"
+		        android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content"
+		   		android:layout_weight="1"
+	             />
+	         <EditText 
+	            android:id="@+id/input_profess_course2"
+	            android:hint="@string/input_professional_course"
+		        android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content"
+		   		android:layout_weight="5"
+	             />
          </LinearLayout>
           <Button
               android:id="@+id/complete_choose"
             android:text="@string/complete"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
    		 	android:layout_height="wrap_content"
    		 	android:layout_gravity="center_horizontal"
              />

@@ -10,9 +10,10 @@ import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,52 +21,62 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class CourseSettingFragment extends Fragment {
-	Button english1;
-	Button english2;
-	Button english3;
-	ImageView imgEng1;
-	ImageView imgEng2;
-	ImageView imgEng3;
-
-	Button math1;
-	Button math2;
-	Button math3;
-	ImageView imgMath1;
-	ImageView imgMath2;
-	ImageView imgMath3;
-	Button politics;
-	ImageView imgPolitic;
+	TextView english1;
+	TextView english2;
+	ImageView english1Bg;
+	ImageView english2Bg;
+	TextView math1;
+	TextView math2;
+	TextView math3;
+	TextView mathNo;
+	ImageView math1Bg;
+	ImageView math2Bg;
+	ImageView math3Bg;
+	ImageView math4Bg;
+	ImageView mathNoBg;
+	TextView politics;
+	LinearLayout politicBg;
 	
 	EditText professEdit1;
+	EditText professEdit2;
 	Button complete;
 	CourseSettingInfo info;
-//	int[] englishButtonIds={R.id.english1,R.id.english2,R.id.english3};
-//	int[] englishChooseImgIds={R.id.english1_choose,R.id.english2_choose,R.id.english3_choose};
-	
+	int defaultTextColor=Color.parseColor("#333333");
+	int choosedTextColor=Color.parseColor("#ffffff");
+	enum Courses{English,Math,Politics};
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
 		
 		View rootView = inflater.inflate(R.layout.fragment_course_set, container, false);
 		info=new CourseSettingInfo();
-		english1=(Button)rootView.findViewById(R.id.english1);
-		english2=(Button)rootView.findViewById(R.id.english2);
-		english3=(Button)rootView.findViewById(R.id.english3);
-		imgEng1=(ImageView)rootView.findViewById(R.id.english1_choose);
-		imgEng2=(ImageView)rootView.findViewById(R.id.english2_choose);
-		imgEng3=(ImageView)rootView.findViewById(R.id.english3_choose);
+		//LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(100,40);
+		english1=(TextView)rootView.findViewById(R.id.english1);
+	//	english1Bg=(ImageView) rootView.findViewById(R.id.english1_bg);
+		//english1.setLayoutParams(param);
+		english2=(TextView)rootView.findViewById(R.id.english2);
+	//	english2Bg=(ImageView) rootView.findViewById(R.id.english2_bg);
+		//english1.setTextColor(choosedTextColor);
+		//english1.setBackgroundResource(R.drawable.choose_english);
+		setButtonChooseState(english1Bg,english1, true,Courses.English);
+		info.setEnglish("1");
+		//english2.setTextColor(defaultTextColor);
 		english1.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Log.e(DataConstants.TAG,"click "+" "+R.id.english1);
-				imgEng1.setVisibility(View.VISIBLE);
-				imgEng2.setVisibility(View.INVISIBLE);
-				imgEng3.setVisibility(View.INVISIBLE);
+				setButtonChooseState(english1Bg,english1, true,Courses.English);
+				setButtonChooseState(english2Bg,english2, false,Courses.English);
+				//english1.setTextColor()
 				info.setEnglish("1");
 			}
 		});
@@ -74,39 +85,33 @@ public class CourseSettingFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				imgEng1.setVisibility(View.INVISIBLE);
-				imgEng2.setVisibility(View.VISIBLE);
-				imgEng3.setVisibility(View.INVISIBLE);
+				setButtonChooseState(english1Bg,english1, false,Courses.English);
+				setButtonChooseState(english2Bg,english2, true,Courses.English);
 				info.setEnglish("2");
 			}
 		});
-		english3.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				imgEng1.setVisibility(View.INVISIBLE);
-				imgEng2.setVisibility(View.INVISIBLE);
-				imgEng3.setVisibility(View.VISIBLE);
-				info.setEnglish("3");
-			}
-		});
 		
-		math1=(Button)rootView.findViewById(R.id.math1);
-		math2=(Button)rootView.findViewById(R.id.math2);
-		math3=(Button)rootView.findViewById(R.id.math3);
-		imgMath1=(ImageView)rootView.findViewById(R.id.math1_choose);
-		imgMath2=(ImageView)rootView.findViewById(R.id.math2_choose);
-		imgMath3=(ImageView)rootView.findViewById(R.id.math3_choose);
+		
+		math1=(TextView)rootView.findViewById(R.id.math1);
+		math2=(TextView)rootView.findViewById(R.id.math2);
+		math3=(TextView)rootView.findViewById(R.id.math3);
+		mathNo=(TextView)rootView.findViewById(R.id.no_math);
+//		math1Bg=(ImageView) rootView.findViewById(R.id.math1_bg);
+//		math2Bg=(ImageView) rootView.findViewById(R.id.math2_bg);
+//		math3Bg=(ImageView) rootView.findViewById(R.id.math3_bg);
+//		mathNoBg=(ImageView) rootView.findViewById(R.id.math_no_bg);
+		setButtonChooseState(math1Bg,math1, true,Courses.Math);
+		info.setMath("1");
 		math1.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Log.e(DataConstants.TAG,"click "+" "+R.id.math1);
-				imgMath1.setVisibility(View.VISIBLE);
-				imgMath2.setVisibility(View.INVISIBLE);
-				imgMath3.setVisibility(View.INVISIBLE);
+				setButtonChooseState(math1Bg,math1, true,Courses.Math);
+				setButtonChooseState(math2Bg,math2, false,Courses.Math);
+				setButtonChooseState(math3Bg,math3, false,Courses.Math);
+				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
 				info.setMath("1");
 			}
 		});
@@ -115,9 +120,10 @@ public class CourseSettingFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				imgMath1.setVisibility(View.INVISIBLE);
-				imgMath2.setVisibility(View.VISIBLE);
-				imgMath3.setVisibility(View.INVISIBLE);
+				setButtonChooseState(math1Bg,math1, false,Courses.Math);
+				setButtonChooseState(math2Bg,math2, true,Courses.Math);
+				setButtonChooseState(math3Bg,math3, false,Courses.Math);
+				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
 				info.setMath("2");
 			}
 		});
@@ -126,30 +132,42 @@ public class CourseSettingFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				imgMath1.setVisibility(View.INVISIBLE);
-				imgMath2.setVisibility(View.INVISIBLE);
-				imgMath3.setVisibility(View.VISIBLE);
+				setButtonChooseState(math1Bg,math1, false,Courses.Math);
+				setButtonChooseState(math2Bg,math2,  false,Courses.Math);
+				setButtonChooseState(math3Bg,math3,true,Courses.Math);
+				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
 				info.setMath("3");
 			}
 		});
-		
-		politics=(Button)rootView.findViewById(R.id.politics);
-		imgPolitic=(ImageView)rootView.findViewById(R.id.politics_choose);
-		politics.setOnClickListener(new OnClickListener() {
+		mathNo.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Log.e(DataConstants.TAG,"click "+" "+R.id.english1);
-				if(imgPolitic.getVisibility()==View.INVISIBLE)
-					imgPolitic.setVisibility(View.VISIBLE);
-				else
-					imgPolitic.setVisibility(View.INVISIBLE);
-				info.setPolitics("politics");
+				setButtonChooseState(math1Bg,math1, false,Courses.Math);
+				setButtonChooseState(math2Bg,math2,  false,Courses.Math);
+				setButtonChooseState(math3Bg,math3,false,Courses.Math);
+				setButtonChooseState(mathNoBg,mathNo, true,Courses.Math);
+				info.setMath(null);
 			}
 		});
+		politics=(TextView)rootView.findViewById(R.id.politics);
+	//	politicBg=(LinearLayout)rootView.findViewById(R.id.politics_bg);
+		setButtonChooseState(politicBg,politics, true,Courses.Politics);
+		info.setPolitics("politics");
+//		politics.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				Log.e(DataConstants.TAG,"click "+" "+R.id.english1);
+//				
+//				info.setPolitics("politics");
+//			}
+//		});
 		
-		professEdit1=(EditText)rootView.findViewById(R.id.input_profess_course);
+		professEdit1=(EditText)rootView.findViewById(R.id.input_profess_course1);
+		professEdit2=(EditText)rootView.findViewById(R.id.input_profess_course2);
 		complete=(Button)rootView.findViewById(R.id.complete_choose);
 		complete.setOnClickListener(new OnClickListener() {
 			
@@ -165,6 +183,28 @@ public class CourseSettingFragment extends Fragment {
 			}
 		});
 		return rootView;
+	}
+	private void setButtonChooseState(View v,TextView tv,boolean choose,Courses course)
+	{
+		if(choose)
+		{
+			
+			if(course==Courses.English)
+				tv.setBackground(getResources().getDrawable(R.drawable.choose_english));
+			else if(course==Courses.Math)
+				tv.setBackground(getResources().getDrawable(R.drawable.choose_math));
+			else if(course==Courses.Politics)
+				tv.setBackground(getResources().getDrawable(R.drawable.choose_politic));
+			tv.setTextColor(choosedTextColor);
+			
+		}
+		else
+		{
+			
+			tv.setBackground(getResources().getDrawable(R.drawable.choose_no));
+			tv.setTextColor(defaultTextColor);
+			//tv.setText("default");
+		}
 	}
 	private void makeCourseFileDir(CourseSettingInfo info)
 	{

@@ -5,7 +5,7 @@
     android:orientation="vertical" >
     <ImageView 
         android:src="@drawable/year"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
     	android:layout_height="wrap_content"
         />
 	<LinearLayout 
@@ -26,8 +26,15 @@
 	        />
 	  </LinearLayout>
 	  <TextView
-	        android:text="@string/problems"
+	        android:id="@+id/append_note"
+	        android:text="@string/append_note"
 	        android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="center_horizontal"
 	        />
+	  <ListView
+	      android:id="@+id/footprint_list"
+	       android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	      />
 </LinearLayout>

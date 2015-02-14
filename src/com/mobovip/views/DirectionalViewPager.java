@@ -1109,8 +1109,7 @@ public class DirectionalViewPager extends ViewPager {
 		}
 	}
 
-	private class DataSetObserver implements
-			VerticalViewPagerCompat.DataSetObserver {
+	private class DataSetObserver implements VerticalViewPagerCompat.DataSetObserver {
 		@Override
 		public void onDataSetChanged() {
 			dataSetChanged();

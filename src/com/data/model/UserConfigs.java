@@ -2,6 +2,7 @@ package com.data.model;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.app.ydd.R;
@@ -164,6 +165,19 @@ public class UserConfigs
 			names.add(getCourseProfessTwoName());
 		Log.e(DataConstants.TAG,"names.size() "+names.size());
 		return names;
+	}
+	public static HashMap<String,String> getCourseNameAndTableMap()
+	{	
+		HashMap<String,String> map=new HashMap<String,String>();
+		map.put(context.getResources().getString(R.string.english)+getCourseEnglishName(),context.getResources().getString(R.string.db_english_table));
+		map.put(context.getResources().getString(R.string.politics),context.getResources().getString(R.string.db_politics_table));
+		if(getCourseMathName()!=null)
+			map.put(context.getResources().getString(R.string.math)+getCourseMathName(),context.getResources().getString(R.string.db_math_table));
+		map.put(getCourseProfessOneName(),context.getResources().getString(R.string.db_profess1_table));
+		if(getCourseProfessTwoName()!=null)
+			map.put(getCourseProfessTwoName(),context.getResources().getString(R.string.db_profess2_table));
+		//Log.e(DataConstants.TAG,"names.size() "+names.size());
+		return map;
 	}
 	public static void storeClockDay()
 	{
