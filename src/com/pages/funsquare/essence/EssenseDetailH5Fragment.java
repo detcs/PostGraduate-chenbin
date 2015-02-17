@@ -41,8 +41,8 @@ public class EssenseDetailH5Fragment extends Fragment implements
 		}
 		frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
 		if (null == rootView) {
-			rootView = inflater.inflate(R.layout.fragment_essense, container,
-					false);
+			rootView = inflater.inflate(R.layout.fragment_essense_detail_h5,
+					container, false);
 			frame.addView(rootView);
 			init(rootView);
 		}

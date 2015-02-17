@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="#ffffff" >
     <ImageView
         android:id="@+id/course_name_img"
         android:layout_width="wrap_content"
@@ -13,7 +14,7 @@
     	android:padding="2dp"
         />
 	<LinearLayout
-	    android:layout_width="wrap_content"
+	    android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:orientation="vertical"
     	android:gravity="center_vertical"
@@ -31,4 +32,20 @@
 	    	android:layout_height="wrap_content"
 	        />
 	    </LinearLayout>
+	     <RelativeLayout
+	        android:id="@+id/item_right"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:background="@color/right_delete" >
+
+        <TextView
+            android:id="@+id/item_right_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/ic_launcher"
+            android:gravity="center"
+            android:text="@string/edit_course"
+            android:textColor="@color/blur_bg" />
+    </RelativeLayout>
 </LinearLayout>

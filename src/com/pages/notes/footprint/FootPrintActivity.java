@@ -44,8 +44,9 @@ public class FootPrintActivity extends FragmentActivity{
 		Calendar calendar = Calendar.getInstance();
 		String date = sdf.format(calendar.getTime());
 		dates.add(date);
+		Log.e(DataConstants.TAG, "startday "+UserConfigs.getStartDay());
 		int gapDays=getDateGapDays(UserConfigs.getStartDay(), date);
-		for(int i=1;i<gapDays;i++)
+		for(int i=0;i<gapDays;i++)
 		{
 			calendar.roll(Calendar.DAY_OF_YEAR,-1);
 			String tempDate=sdf.format(calendar.getTime());
@@ -76,8 +77,8 @@ public class FootPrintActivity extends FragmentActivity{
 		}
 		viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fraList));
 		viewPager.setOnPageChangeListener(mPageChangeListener);
-		viewPager.setCurrentItem(3);
-		mTabWidget.setCurrentTab(3);
+		viewPager.setCurrentItem(0);
+		mTabWidget.setCurrentTab(0);
 	}
 	class TabClickListener implements OnClickListener
 	{

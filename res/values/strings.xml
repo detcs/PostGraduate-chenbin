@@ -107,8 +107,8 @@
     <string name="ebbinghaus_review">艾宾浩斯曲线复习</string>
     <string name="get">get</string>
     <string name="collect">收藏</string>
-    <string name="master">掌握</string>
-    <string name="unmaster">未掌握</string>
+    <string name="master">已掌握</string>
+    <string name="unmaster">不太熟</string>
     <string name="state_master">master</string>
     <string name="state_unmaster">unmaster</string>
     <string name="state_unknow">unknow</string>
@@ -121,6 +121,11 @@
     <string name="piece">篇</string>
     <string name="look_all">查看全部</string>
     <string name="append_note">新增笔记</string>
+    <string name="edit_course">编辑课程</string>
+    <!-- one date photos of all course-->
+    <string name="jump_tag_footprint">jumpTagFootprint</string>
+    <!-- three days of one course -->
+    <string name="jump_tag_review">jumpTagReview</string>
     <!-- clock complete -->
     <string name="clock">打卡</string>
     <string name="day">天</string>

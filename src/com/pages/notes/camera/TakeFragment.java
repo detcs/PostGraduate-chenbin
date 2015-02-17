@@ -14,7 +14,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,7 +21,6 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageView;
 
 public class TakeFragment extends Fragment implements MyCallBack {
@@ -45,15 +42,12 @@ public class TakeFragment extends Fragment implements MyCallBack {
 	private SensorManager sensorMgr;
 	private float x, y, z;
 	private Matrix matrix;
-	private Bitmap bitmap;
-	private Bitmap showBitmap;
 	private int preState;
-	private int bitmapWidth;
-	private int bitmapHeight;
 
 	private ImageView closeView;
 	private ImageView pickView;
-	private Button takeBu;
+	private ImageView takeBu;
+	private ImageView[] views;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -115,18 +109,15 @@ public class TakeFragment extends Fragment implements MyCallBack {
 
 	// ************init************
 	private void init(View view) {
-		initImage();
 		initSensor();
 		findViews(view);
 		setListener();
+		initImage();
 	}
 
 	private void initImage() {
 		matrix = new Matrix();
-		bitmap = (Bitmap) ((BitmapDrawable) getActivity().getResources()
-				.getDrawable(R.drawable.play)).getBitmap();
-		bitmapWidth = bitmap.getWidth();
-		bitmapHeight = bitmap.getHeight();
+		views = new ImageView[] { closeView, takeBu, pickView };
 		preState = 0;
 	}
 
@@ -157,7 +148,7 @@ public class TakeFragment extends Fragment implements MyCallBack {
 	private void findViews(View view) {
 		closeView = (ImageView) view.findViewById(R.id.closeView);
 		pickView = (ImageView) view.findViewById(R.id.pickView);
-		takeBu = (Button) view.findViewById(R.id.takeBu);
+		takeBu = (ImageView) view.findViewById(R.id.takeBu);
 		surfaceView = (MySurfaceView) view.findViewById(R.id.mySurfaceView);
 	}
 
@@ -210,17 +201,24 @@ public class TakeFragment extends Fragment implements MyCallBack {
 		if (state == preState) {
 			return;
 		} else {
-			Animation a = AnimationUtil.rotateAnimation(getActivity(),
-					(state - preState) * DEGREE);
+			// Animation a = AnimationUtil.rotateAnimation(getActivity(),
+			// (state - preState) * DEGREE);
 			// a.setFillAfter(true);
-			pickView.startAnimation(a);
+			// pickView.startAnimation(a);
 			matrix.reset();
 			matrix.setRotate((state - preState) * DEGREE); // 设置旋转
 			// 注意要正方形的，否则宽度大于原本的就会有问题
-			showBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth,
-					bitmapHeight, matrix, true);
-			pickView.setImageBitmap(showBitmap);
-			bitmap = showBitmap;
+			Bitmap contantBm;
+			Bitmap showBm;
+			for (int i = 0; i < 3; i++) {
+				views[i].setDrawingCacheEnabled(true);
+				contantBm = views[i].getDrawingCache();
+				showBm = Bitmap.createBitmap(contantBm, 0, 0,
+						contantBm.getHeight(), contantBm.getWidth(), matrix,
+						true);
+				views[i].setImageBitmap(showBm);
+				views[i].setDrawingCacheEnabled(false);
+			}
 			preState = state;
 		}
 	}

@@ -5,6 +5,7 @@ import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.data.util.NetCall.InfoChangeCallback;
 import com.view.util.AnimationUtil;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class EssenseEmailSetBump implements InfoChangeCallback {
+	private static final String TAG = "EssenseEmailSetBump";
 	private Activity activity;
 	private View view;
 	private FrameLayout frame;
@@ -40,7 +42,7 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 		frame.addView(view);
 		view.startAnimation(AnimationUtil.showAnimation());
 		init();
-		SysCall.bumpSoftInput(editView_e, activity);
+		// SysCall.bumpSoftInput(editView_e, activity);
 	}
 
 	private void init() {
@@ -58,16 +60,17 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 			}
 		});
 		saveView_e.setOnClickListener(new OnClickListener() {
-
+			@SuppressLint("ShowToast")
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// reset the email
-				SysCall.hideSoftInput(view, activity);
-				view.startAnimation(AnimationUtil.hideAnimation());
-				frame.removeView(view);
 				String email = editView_e.getText().toString();
-				NetCall.changeInfo("", "", email, EssenseEmailSetBump.this);
+				if (SysCall.isEmail(email)) {
+					NetCall.changeInfo("", "", email, EssenseEmailSetBump.this);
+				} else {
+					Toast.makeText(activity, "邮箱格式错误", 500).show();
+				}
 			}
 		});
 	}
@@ -78,21 +81,23 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 		public void setSuccess();
 	}
 
+	// NetCall.InfoChangeCallback
 	@SuppressLint("ShowToast")
 	@Override
 	public void changeSuccess() {
 		// TODO Auto-generated method stub
 		SysCall.error("email address local change");
-		Toast.makeText(activity, "邮箱设置成功", 500);
+		Toast.makeText(activity, "邮箱设置成功", 500).show();
 		SysCall.hideSoftInput(view, activity);
 		view.startAnimation(AnimationUtil.hideAnimation());
 		frame.removeView(view);
 		callback.setSuccess();
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void changeFail() {
 		// TODO Auto-generated method stub
-		Toast.makeText(activity, "邮箱设置失败", 500);
+		Toast.makeText(activity, "邮箱设置失败", 500).show();
 	}
 }

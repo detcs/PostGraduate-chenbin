@@ -5,6 +5,7 @@ import com.app.ydd.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
@@ -14,6 +15,7 @@ public class IsNewDialog {
 
 	public IsNewDialog(Activity activity) {
 		dialog = new Dialog(activity);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.is_new_dialog);
 		button1 = (Button) dialog.findViewById(R.id.button1);
 		button1.setOnClickListener(new OnClickListener() {

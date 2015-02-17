@@ -15,7 +15,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/camera_bottom_bar_height"
-            android:layout_alignParentBottom="true" >
+            android:layout_alignParentBottom="true"
+            android:background="@color/camera_float_bar" >
 
             <LinearLayout
                 android:id="@+id/LinearLayout1"
@@ -23,35 +24,36 @@
                 android:layout_height="match_parent"
                 android:gravity="center" >
 
-                <Button
+                <ImageView
                     android:id="@+id/takeBu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="take"
-                    android:textSize="@dimen/clickable_words_size" />
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/small" />
             </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/RelativeLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/camera_float_bar"
                 android:gravity="center_vertical" >
 
                 <ImageView
                     android:id="@+id/pickView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:background="@color/camera_float_bar"
-                    android:src="@drawable/play" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/small" />
 
                 <ImageView
                     android:id="@+id/closeView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:background="@color/camera_float_bar"
-                    android:src="@drawable/pause" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/small" />
             </RelativeLayout>
         </FrameLayout>
     </RelativeLayout>

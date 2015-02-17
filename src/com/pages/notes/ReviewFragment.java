@@ -1,14 +1,18 @@
 package com.pages.notes;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import com.app.ydd.R;
+import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.DataConstants.PageName;
 import com.data.model.FileDataHandler;
+import com.data.model.ImportanceFlagOnClickListener;
 import com.data.util.SysCall;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
@@ -31,19 +35,23 @@ import android.widget.TextView;
 
 public class ReviewFragment extends Fragment{
 
-	Button leftBtn;
-	Button rightBtn;
+	View rootView;
+	TextView leftBtn;
+	TextView rightBtn;
 	ImageView reviewImg;
 	List<String> reviewImgPaths;
 	List<String> photoNames;
+	
 	SQLiteDatabase db;
 	String tableName;
 	int index=0;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_review, container, false);
-		leftBtn=(Button)rootView.findViewById(R.id.master);
-		rightBtn=(Button)rootView.findViewById(R.id.unmaster);
+		rootView = inflater.inflate(R.layout.fragment_review, container, false);
+		leftBtn=(TextView)rootView.findViewById(R.id.master);
+		rightBtn=(TextView)rootView.findViewById(R.id.unmaster);
+		leftBtn.setBackgroundResource(R.drawable.master);
+		rightBtn.setBackgroundResource(R.drawable.nomaster);
 		reviewImg=(ImageView)rootView.findViewById(R.id.review_img);
 		Bundle bundle=getArguments();
 		String type=bundle.getString("type");
@@ -58,91 +66,42 @@ public class ReviewFragment extends Fragment{
 			String date=bundle.getString("date");
 			tableName=getArguments().getString("course_table_name");
 			db = DataConstants.dbHelper.getReadableDatabase();
-			photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(getActivity(), db, tableName, date);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calendar = Calendar.getInstance();
+			try {
+				calendar.setTime(sdf.parse(date));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//把当前时间赋给日历
+			String tempDate = sdf.format(calendar.getTime());
+			ArrayList<String> targetDates=new ArrayList<String>();
+			targetDates.add(tempDate);
+			for(int i=0;i<2;i++)
+			{
+				calendar.roll(Calendar.DAY_OF_YEAR,-1);
+				tempDate=sdf.format(calendar.getTime());
+				targetDates.add(tempDate);
+			}
+			photoNames=new ArrayList<String>();
+			for(String targetDate:targetDates)
+			{
+				List<String> dates=DataConstants.dbHelper.queryPhotoNamesAtDate(getActivity(), db, tableName, targetDate);
+				photoNames.addAll(dates);
+			}
 			List<String> photoPaths=new ArrayList<String>();
 			String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableName);
 			reviewImgPaths=new ArrayList<String>();
 			for(String name:photoNames)
 				reviewImgPaths.add(dirPath+"/"+name);
-			db.close();
+			
 			Picasso.with(getActivity()).load(new File(reviewImgPaths.get(0))).into(reviewImg);
 			leftBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_master)));
 			rightBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_unmaster)));
-			final TextView remarkContext=(TextView)rootView.findViewById(R.id.remark_content);
-			remarkContext.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa一一一一一一一一一一一一一一一一一一一一一一一一一一一一一");
-			remarkContext.setOnClickListener(new OnClickListener() {
-				Boolean flag = true;
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if(flag){
-				        flag = false;
-				        remarkContext.setEllipsize(null); // 展开
-				        remarkContext.setSingleLine(flag);
-				        }else{
-				        	Log.e(DataConstants.TAG,"remarkcontent "+flag);
-				          flag = true;
-				          remarkContext.setEllipsize(android.text.TextUtils.TruncateAt.END); // 收缩
-				          remarkContext.setLines(2);
-				    }
-				}
-			});
-			final LinearLayout editRemarkLayout=(LinearLayout)rootView.findViewById(R.id.remark_edit_hideBar);
-			final EditText editRemark = (EditText) rootView.findViewById(R.id.remark_edit);
-			TextView cancelEdit=(TextView)rootView.findViewById(R.id.remark_edit_quitView);
-			TextView saveEdit=(TextView)rootView.findViewById(R.id.remark_edit_saveView);
-			ImageView editRemarkImg=(ImageView)rootView.findViewById(R.id.edit_remark_img);
-			editRemarkImg.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					editRemarkLayout.setVisibility(View.VISIBLE);
-					SysCall.bumpSoftInput(editRemark, getActivity());
-				}
-			});
-			cancelEdit.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if(editRemarkLayout.getVisibility()==View.VISIBLE)
-					{
-						editRemarkLayout.setVisibility(View.INVISIBLE);
-						SysCall.hideSoftInput(editRemarkLayout, getActivity());
-						editRemark.clearFocus();
-						editRemark.setFocusable(false);
-						editRemark.setFocusableInTouchMode(false);
-					}
-				}
-			});
-			saveEdit.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					editRemarkLayout.setVisibility(View.INVISIBLE);
-					SysCall.hideSoftInput(editRemarkLayout, getActivity());
-					editRemark.clearFocus();
-					editRemark.setFocusable(false);
-					editRemark.setFocusableInTouchMode(false);
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					Calendar calendar = Calendar.getInstance();
-					String date = sdf.format(calendar.getTime());
-					SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-					DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoNames.get(index));
-					//db.close();
-				}
-			});
-			ImageView rotateImg=(ImageView)rootView.findViewById(R.id.rotate_img);
-			rotateImg.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).rotate(90).into(reviewImg);
-				}
-			});
+			
+			initNoteEditView();
+			
 		}
 		return rootView;
 	}
@@ -182,7 +141,10 @@ public class ReviewFragment extends Fragment{
 					jumpToCompleteFragment();
 				}
 				else
-				Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).into(reviewImg);
+				{
+					Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).into(reviewImg);
+					initNoteEditView();
+				}
 				
 			}
 
@@ -212,6 +174,110 @@ public class ReviewFragment extends Fragment{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				SysCall.clickBack();
+			}
+		});
+	}
+	private void initNoteEditView()
+	{
+		ImageView flagImg=(ImageView)rootView.findViewById(R.id.review_flag_img);
+		Picasso.with(getActivity()).load(R.drawable.review_importance).into(flagImg);
+		CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoNames.get(index));
+		
+		if(cri.getFlag()==1)
+			Picasso.with(getActivity()).load(R.drawable.review_importance_click).into(flagImg);
+		else
+			Picasso.with(getActivity()).load(R.drawable.review_importance).into(flagImg);
+		boolean currentFlag=cri.getFlag()==1?true:false;
+		flagImg.setOnClickListener(new ImportanceFlagOnClickListener(photoNames.get(index),tableName,getActivity(),flagImg,currentFlag,PageName.NoteReview));
+		
+		ImageView rotateImg=(ImageView)rootView.findViewById(R.id.review_rotate_img);
+		Picasso.with(getActivity()).load(R.drawable.review_rotate).into(rotateImg);
+		rotateImg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).rotate(90).into(reviewImg);
+			}
+		});
+		
+		ImageView remarkImg=(ImageView)rootView.findViewById(R.id.edit_remark_img);
+		Picasso.with(getActivity()).load(R.drawable.review_remark).into(remarkImg);
+		
+		initRemarkEditView();
+	}
+	private void initRemarkEditView()
+	{
+		final TextView remarkContext=(TextView)rootView.findViewById(R.id.remark_content);
+		remarkContext.setTypeface(DataConstants.typeFZLT);
+		CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoNames.get(index));
+		String text=cri.getRemark();
+		remarkContext.setText(text);
+		//remarkContext.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa一一一一一一一一一一一一一一一一一一一一一一一一一一一一一");
+		remarkContext.setOnClickListener(new OnClickListener() {
+			Boolean flag = true;
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if(flag){
+			        flag = false;
+			        remarkContext.setEllipsize(null); // 展开
+			        remarkContext.setSingleLine(flag);
+			        }else{
+			        	Log.e(DataConstants.TAG,"remarkcontent "+flag);
+			          flag = true;
+			          remarkContext.setEllipsize(android.text.TextUtils.TruncateAt.END); // 收缩
+			          remarkContext.setLines(2);
+			    }
+			}
+		});
+		final LinearLayout editRemarkLayout=(LinearLayout)rootView.findViewById(R.id.remark_edit_hideBar);
+		final EditText editRemark = (EditText) rootView.findViewById(R.id.remark_edit);
+		TextView cancelEdit=(TextView)rootView.findViewById(R.id.remark_edit_quitView);
+		TextView saveEdit=(TextView)rootView.findViewById(R.id.remark_edit_saveView);
+		
+		ImageView editRemarkImg=(ImageView)rootView.findViewById(R.id.edit_remark_img);
+		editRemarkImg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				editRemarkLayout.setVisibility(View.VISIBLE);
+				SysCall.bumpSoftInput(editRemark, getActivity());
+			}
+		});
+		cancelEdit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if(editRemarkLayout.getVisibility()==View.VISIBLE)
+				{
+					editRemarkLayout.setVisibility(View.INVISIBLE);
+					SysCall.hideSoftInput(editRemarkLayout, getActivity());
+					editRemark.clearFocus();
+					editRemark.setFocusable(false);
+					editRemark.setFocusableInTouchMode(false);
+				}
+			}
+		});
+		saveEdit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				editRemarkLayout.setVisibility(View.INVISIBLE);
+				SysCall.hideSoftInput(editRemarkLayout, getActivity());
+				editRemark.clearFocus();
+				editRemark.setFocusable(false);
+				editRemark.setFocusableInTouchMode(false);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Calendar calendar = Calendar.getInstance();
+				String date = sdf.format(calendar.getTime());
+				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoNames.get(index));
+				remarkContext.setText(editRemark.getText().toString());
+				//db.close();
 			}
 		});
 	}

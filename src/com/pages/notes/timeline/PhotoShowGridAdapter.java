@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract.Contacts.Data;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -65,7 +66,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Log.e(DataConstants.TAG,"photoshow getview "+position+" "+chooseState);
+		//Log.e(DataConstants.TAG,"photoshow getview "+position+" "+chooseState);
 		GridViewHolder holder; 
 	    if (convertView == null) { 
 	        convertView = mInflater.inflate(R.layout.item_timeline_grid_item, null); 
@@ -171,8 +172,17 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		trans.addToBackStack(null);
 		trans.commit();
 		*/
+
+		String[] info=path.split("/");
+		String date=info[info.length-1].split("\\|")[1];
+		Log.e(DataConstants.TAG, "jump "+info[info.length-1]+" "+date);
 		Intent intent=new Intent();
 		intent.setClass(context, PhotoBrowseActivity.class);
+		Bundle bundle=new Bundle();
+		bundle.putString("jump_tag", context.getResources().getString(R.string.jump_tag_footprint));
+		bundle.putString("date",date);
+		intent.putExtra("photo_show_bundle", bundle);
+		//intent.putStringArrayListExtra(, (ArrayList<String>)imgPaths);
 		context.startActivity(intent);
 	
 	}

@@ -75,7 +75,7 @@ public class SquarePublishFragment extends Fragment implements UploadData {
 				String title = titleText.getText().toString();
 				String content = editText1.getText().toString();
 				if (null == title || title.trim().equals("")) {
-					SysCall.hint(getActivity(), "無效標題");
+					SysCall.hint(getActivity(), "请输入标题");
 				} else {
 					NetCall.post(title, content, SquarePublishFragment.this);
 				}

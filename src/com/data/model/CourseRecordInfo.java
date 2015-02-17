@@ -29,6 +29,13 @@ public class CourseRecordInfo {
 		this.ifRecommender = ifRecommender;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.photoName+","+this.photobase64+","+this.remark+","+this.date+","+
+		this.time+","+this.masterState+","+this.ifUpload+","+this.flag+","+this.ifDeleted+","+ifRecommender;
+	}
+
 	public int getIfRecommender() {
 		return ifRecommender;
 	}

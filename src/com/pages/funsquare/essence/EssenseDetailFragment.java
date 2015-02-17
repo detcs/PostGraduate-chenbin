@@ -90,7 +90,7 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 	}
 
 	private void initViews() {
-		SysCall.error("init views");
+		// SysCall.error("init views");
 		if (GloableData.RESERVE_ENSURE == ed.getIsCollected_()) {
 			shareView.setImageBitmap(null);
 		}
@@ -228,14 +228,6 @@ public class EssenseDetailFragment extends Fragment implements DownloadSource,
 		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), "分享失败，请重新分享", 500);
 	}
-
-	// EssenseEmailSetBump.ESBumpCallback
-	// @SuppressLint("ShowToast")
-	// @Override
-	// public void setFail() {
-	// // TODO Auto-generated method stub
-	// Toast.makeText(getActivity(), "邮箱设置失败", 500);
-	// }
 
 	@SuppressLint("ShowToast")
 	@Override

@@ -109,10 +109,17 @@ public class SquareAdapter extends BaseAdapter implements AdapterFresh {
 		buffer = new DataBuffer<Post>(this, new PostUtil());
 	}
 
+	// AdapterFresh
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		buffer.destroy();
+	}
+
+	@Override
+	public void fresh() {
+		// TODO Auto-generated method stub
+		buffer.reset();
 	}
 
 }

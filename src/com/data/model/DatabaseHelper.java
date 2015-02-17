@@ -38,7 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    
     public static void createCourseTable( Context context,SQLiteDatabase db,String courseName)
     {
-    	String sql = "create table if not exists "+courseName+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"+context.getResources().getString(R.string.dbcol_photo_name)+" TEXT not null , "
+    	String sql = "create table if not exists "+courseName+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+    			+context.getResources().getString(R.string.dbcol_photo_name)+" TEXT not null , "
     			+context.getResources().getString(R.string.dbcol_photo_base64)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_remark)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_flag)+" INTEGER,"
@@ -131,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
     	cv.put(context.getResources().getString(R.string.dbcol_if_recommender), cri.getIfRecommender());
     	long rowid=db.insert(tableName, null, cv);
-    	Log.e(DataConstants.TAG,"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
+    	Log.e(DataConstants.TAG,cri.getDate()+" "+"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
     }
     public static void updateCourseRecord(Context context,SQLiteDatabase db,String tableName,String updateCol,String updateValue,String date)
     {
@@ -162,13 +163,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String photoName=result.getString(1); 
 	        String photobase64=result.getString(2);
 	        String remark=result.getString(3);
-	        String date=result.getString(4);
-	        String time=result.getString(5);
-	        String masterState=result.getString(6);
-	        String  ifUpload=result.getString(7);
-	        int  flag=result.getInt(8);
-	        int  ifDeleted=result.getInt(9);
-	        int  ifRecommender=result.getInt(10);
+	        int  flag=result.getInt(4);
+	        int  ifDeleted=result.getInt(6);
+	        int  ifRecommender=result.getInt(5);
+	        String date=result.getString(7);
+	        String time=result.getString(10);
+	        String masterState=result.getString(8);
+	        String  ifUpload=result.getString(9);
+	        
 	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender);
 	       break; 
 	      } 
@@ -185,16 +187,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String id=result.getString(0); 
 	        String photoname=result.getString(1); 
 	        String photobase64=result.getString(2); 
-	        String remark=result.getString(3); 
-	        String date=result.getString(4); 
-	        String time=result.getString(5); 
-	        String masterState=result.getString(6); 
-	        String ifUplaod=result.getString(7); 
-	        int flag=result.getInt(8);
-	        int ifDeleted=result.getInt(9);
-	        int ifRec=result.getInt(10);
-	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUplaod, flag, ifDeleted,ifRec);
-	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+id+",");
+	        String remark=result.getString(3);
+	        int  flag=result.getInt(4);
+	        int  ifDeleted=result.getInt(6);
+	        int  ifRecommender=result.getInt(5);
+	        String date=result.getString(7);
+	        String time=result.getString(10);
+	        String masterState=result.getString(8);
+	        String  ifUpload=result.getString(9);
+	        
+	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender);
+	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+cri);
 	        result.moveToNext(); 
 	      } 
 	      result.close();
@@ -326,7 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	         
 	        String date=result.getString(0); 
 	        dates.add(date); 
-	       // Log.e(DataConstants.TAG,"db:query "+id+","+name);
+	        Log.e(DataConstants.TAG,"db:queryDates "+tableName+","+date);
 	        result.moveToNext(); 
 	      } 
 	      result.close();

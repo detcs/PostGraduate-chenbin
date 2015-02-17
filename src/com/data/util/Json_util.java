@@ -13,6 +13,7 @@ import com.data.model.Essense;
 import com.data.model.EssenseDetail;
 import com.data.model.Inform;
 import com.data.model.Post;
+import com.data.model.Reserve;
 
 public class Json_util {
 

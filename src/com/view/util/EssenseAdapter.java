@@ -81,8 +81,8 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 		holder.author.setText(vg.getAuthor());
 		holder.title.setText(vg.getTitle());
 		holder.time.setText(vg.getTime());
-		
-		SysCall.error("wait for picture");
+
+		// SysCall.error("wait for picture");
 		// if (1 == vg.getHasDownload_()) {
 		// holder.downImage.setImageBitmap(null);
 		// holder.typeImage.setImageBitmap(null);
@@ -129,10 +129,17 @@ public class EssenseAdapter extends BaseAdapter implements AdapterFresh {
 		buffer = new DataBuffer<Essense>(this, new EssenseUtil(type));
 	}
 
+	// AdapterFresh
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		buffer.destroy();
+	}
+
+	@Override
+	public void fresh() {
+		// TODO Auto-generated method stub
+		buffer.reset();
 	}
 
 	public interface ListDownEssense {

@@ -1,8 +1,8 @@
 package com.view.util;
 
 import com.app.ydd.R;
+import com.data.model.Reserve;
 import com.data.util.DataBuffer;
-import com.data.util.Reserve;
 import com.data.util.ReserveUtil;
 
 import android.content.Context;
@@ -91,10 +91,17 @@ public class ReserveAdapter extends BaseAdapter implements AdapterFresh {
 		buffer = new DataBuffer<Reserve>(this, new ReserveUtil());
 	}
 
+	// AdapterFresh
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		buffer.destroy();
+	}
+
+	@Override
+	public void fresh() {
+		// TODO Auto-generated method stub
+		buffer.reset();
 	}
 
 }

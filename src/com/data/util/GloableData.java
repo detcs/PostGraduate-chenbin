@@ -10,6 +10,7 @@ public class GloableData {
 	public static final int TYPE_MATERIAL = 0, TYPE_INFORMATION = 1,
 			TYPE_EXERCISE = 2, TYPE_POST = 3, TYPE_COMMENT = 4,
 			TYPE_INFORM = 5, TYPE_NEW = 6, TYPE_SEARCH = 100;
+	public static final int NET_ERROR = 111;
 	public static final int ISNEW = 1;
 	public static final String URL = "http://114.215.196.179:8080/gs";
 	// public static final String URL = "http://192.168.0.115:8081/gs";
@@ -29,7 +30,8 @@ public class GloableData {
 	public static final String CONTACT_US_PATH = "/mobile?methodno=MFeedback";
 	public static final String RESERVE_PATH = "/mobile?methodno=MEssenceCollect";
 	public static final String INFOCHANGE_PATH = "/mobile?methodno=MUpdateUserInfo";
-
+	public static final String MSGCOUNT_PATH = "/mobile?methodno=MGetMsgCount";
+	public static final String REPORT_PATH = "/mobile?methodno=MPostReport";
 	public static int RESERVE_QUIT = 0, RESERVE_ENSURE = 1;
 
 	public static final String UPLOAD_SUCCESS_MSG = "发布成功";

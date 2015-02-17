@@ -1,6 +1,8 @@
 package com.pages.funsquare.square;
 
 import com.app.ydd.R;
+import com.data.util.NetCall;
+import com.data.util.NetCall.MsgCountCallback;
 import com.data.util.SysCall;
 import com.view.util.SquareAdapter;
 import com.view.util.SquareAdapter.ViewHolder;
@@ -19,7 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class SquareFragment extends Fragment {
+public class SquareFragment extends Fragment implements MsgCountCallback {
 	private View rootView;
 
 	private ImageView backBu;
@@ -54,11 +56,11 @@ public class SquareFragment extends Fragment {
 		return rootView;
 	}
 
-	@Override
-	public void onStop() {
-		postAdapter.destroy();
-		super.onStop();
-	}
+	// @Override
+	// public void onStop() {
+	// postAdapter.destroy();
+	// super.onStop();
+	// }
 
 	// ******************init******************
 
@@ -66,6 +68,7 @@ public class SquareFragment extends Fragment {
 		findViews(view);
 		initListView();
 		setListener();
+		initInform();
 	}
 
 	private void findViews(View view) {
@@ -118,5 +121,16 @@ public class SquareFragment extends Fragment {
 				pubOrDetail.detail(holder.vg);
 			}
 		});
+	}
+
+	private void initInform() {
+		NetCall.getMsgCount(this);
+	}
+
+	// NetCall.MsgCountCallback
+	@Override
+	public void getSuccess(int essence_, int square_) {
+		// TODO Auto-generated method stub
+		// informBu.setImageResource(resId);
 	}
 }

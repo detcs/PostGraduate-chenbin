@@ -39,6 +39,10 @@
             android:name="com.pages.notes.ExerciseActivity"
             android:label="@string/app_name" >
         </activity>
+         <activity
+            android:name="com.pages.notes.CourseNameEditActivity"
+            android:label="@string/app_name" >
+        </activity>
         <activity
             android:name="com.pages.notes.footprint.FootPrintActivity"
             android:label="@string/app_name" >

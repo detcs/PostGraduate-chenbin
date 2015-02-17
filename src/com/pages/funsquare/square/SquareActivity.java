@@ -3,13 +3,16 @@ package com.pages.funsquare.square;
 import com.app.ydd.R;
 import com.data.model.Post;
 import com.data.util.NetCall;
+import com.data.util.SysCall;
 import com.data.util.NetCall.PullViewGenerator;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class SquareActivity extends Activity implements SquareJump,
 		PullViewGenerator {
@@ -59,16 +62,20 @@ public class SquareActivity extends Activity implements SquareJump,
 		transaction.commit();
 	}
 
-	// PullViewGenerator
+	// NetCall.PullViewGenerator
+	@SuppressLint("ShowToast")
 	@Override
 	public void pullVGFail() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(this, "帖子不存在或已被删除", 500).show();
 	}
 
 	@Override
 	public void pullVGSuccess(Post vg) {
 		// TODO Auto-generated method stub
+		if(null==vg){
+			SysCall.error("");
+		}
 		detail(vg);
 	}
 

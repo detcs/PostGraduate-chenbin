@@ -14,6 +14,7 @@ import com.data.util.GloableData;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -31,6 +32,7 @@ public class YDDApplication extends Application {
 		initDataBase();
 		initDBandDirMap();
 		initScreenParam();
+		initTypeface();
 		GloableData.initRequestQueue(getApplicationContext());
 	}
 
@@ -91,5 +93,10 @@ public class YDDApplication extends Application {
 		Log.e(DataConstants.TAG, "(w,h)" + dm.widthPixels + ","+ dm.heightPixels);
 		DataConstants.displayMetricsDensity=dm.density;
 		DataConstants.displayMetricsScaledDensity=dm.scaledDensity;
+	}
+	private void initTypeface()
+	{
+		DataConstants.typeFZLT=Typeface.createFromAsset(getAssets(), "font/fangzhenglanting.ttf");
+		DataConstants.typeAvenir=Typeface.createFromAsset(getAssets(), "font/AvenirNextLTPro-UltLt.otf");
 	}
 }

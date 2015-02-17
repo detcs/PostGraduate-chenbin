@@ -1,6 +1,8 @@
 package com.data.util;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +13,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class SysCall {
+	public static boolean isEmail(String email) {
+		Pattern pattern = Pattern
+				.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+
 	public static void hideSoftInput(View rootView, Activity avtivity) {
 		InputMethodManager imm = (InputMethodManager) avtivity
 				.getSystemService(Context.INPUT_METHOD_SERVICE);

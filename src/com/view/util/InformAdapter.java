@@ -81,6 +81,13 @@ public class InformAdapter extends BaseAdapter implements AdapterFresh {
 		buffer = new DataBuffer<Inform>(this, new InformUtil());
 	}
 
+	// AdapterFresh
+	@Override
+	public void fresh() {
+		// TODO Auto-generated method stub
+		buffer.reset();
+	}
+
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub

@@ -6,6 +6,7 @@ import com.data.util.SysCall;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 
 public class CheckNewDialog {
@@ -14,6 +15,7 @@ public class CheckNewDialog {
 
 	public CheckNewDialog(Activity activity) {
 		dialog = new Dialog(activity);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.check_new_dialog);
 		quitView = dialog.findViewById(R.id.quitView);
 		saveView = dialog.findViewById(R.id.saveView);

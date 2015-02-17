@@ -21,14 +21,13 @@ import android.widget.TextView;
 public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	private Context context;
 	private DataBuffer<Comment> buffer;
-	private String postId;// id of post
+	// private String postId;// id of post
 	private PostDetailCallback reply;
 	private Post vg;
 
-	public CommentAdapter(Context context, String postId,
-			PostDetailCallback reply, Post vg) {
+	public CommentAdapter(Context context, PostDetailCallback reply, Post vg) {
 		this.context = context;
-		this.postId = postId;
+		// this.postId = postId;
 		this.reply = reply;
 		this.vg = vg;
 		init();
@@ -66,7 +65,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 
 	// **************init**************
 	private void init() {
-		buffer = new DataBuffer<Comment>(this, new CommentUtil(postId));
+		buffer = new DataBuffer<Comment>(this, new CommentUtil(vg.getId()));
 	}
 
 	// AdapterFresh
@@ -74,6 +73,12 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 	public void destroy() {
 		// TODO Auto-generated method stub
 		buffer.destroy();
+	}
+
+	@Override
+	public void fresh() {
+		// TODO Auto-generated method stub
+		buffer.reset();
 	}
 
 	// *************Call back*************
@@ -100,6 +105,8 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 		findPostViews(view);
 		initPostViews();
 		setPostListener();
+		view.setClickable(false);
+		view.setEnabled(false);
 		return view;
 	}
 
@@ -131,15 +138,7 @@ public class CommentAdapter extends BaseAdapter implements AdapterFresh {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
-			}
-		});
-		moreView_p.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
+				reply.share();
 			}
 		});
 		moreView_p.setOnClickListener(new OnClickListener() {

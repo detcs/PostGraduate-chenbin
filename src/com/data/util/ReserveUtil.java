@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.data.model.Reserve;
+
 public class ReserveUtil implements NetUtil<Reserve> {
 
 	@Override

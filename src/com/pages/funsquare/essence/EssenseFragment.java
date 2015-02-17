@@ -40,6 +40,10 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		EmailHintDialogCallBack, ListDownEssense, DownloadSource,
 		ShareBumpCallback, ESBumpCallback, OnGestureListener {
 	// private static final String TAG = "EssenseFragment";
+	private static final int CHOOSEN_SIZE = 30;
+	private static final int UNCHOOSEN_SIZE = 20;
+	private static final int CHOOSEN_COLOR = 0xff2319dc;
+	private static final int UNCHOOSEN_COLOR = 0xff000000;
 	private static final String TAG = "bump";
 	private View base;
 	private FrameLayout frame;
@@ -110,6 +114,12 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 	}
 
 	private void initContent() {
+		for (int i = 0; i < 4; i++) {
+			tabs[i].setTextSize(UNCHOOSEN_SIZE);
+			tabs[i].setTextColor(UNCHOOSEN_COLOR);
+		}
+		tabs[0].setTextSize(CHOOSEN_SIZE);
+		tabs[0].setTextColor(CHOOSEN_COLOR);
 		content.addView(lists[0]);
 	}
 
@@ -178,6 +188,11 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 			content.addView(lists[result]);
 			lists[result].startAnimation(AnimationUtil.getShowAnim(preTab,
 					newTab));
+			// head bar: text size changed
+			tabs[preTab].setTextSize(UNCHOOSEN_SIZE);
+			tabs[preTab].setTextColor(UNCHOOSEN_COLOR);
+			tabs[result].setTextSize(CHOOSEN_SIZE);
+			tabs[result].setTextColor(CHOOSEN_COLOR);
 			preTab = result;
 		}
 	}
@@ -254,14 +269,6 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		Toast.makeText(getActivity(), "分享失败，请重新分享", 500);
 	}
 
-	// EssenseEmailSetBump.ESBumpCallback
-	// @SuppressLint("ShowToast")
-	// @Override
-	// public void setFail() {
-	// // TODO Auto-generated method stub
-	// Toast.makeText(getActivity(), "邮箱设置失败", 500);
-	// }
-
 	@SuppressLint("ShowToast")
 	@Override
 	public void setSuccess() {
@@ -312,7 +319,7 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 
 	}
 
-	private static final int verticalMinDistance = 500;
+	private static final int verticalMinDistance = 300;
 	private static final int minVelocity = 0;
 
 	@Override

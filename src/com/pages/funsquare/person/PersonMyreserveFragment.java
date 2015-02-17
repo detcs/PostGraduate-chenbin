@@ -1,7 +1,7 @@
 package com.pages.funsquare.person;
 
 import com.app.ydd.R;
-import com.data.util.Reserve;
+import com.data.model.Reserve;
 import com.data.util.SysCall;
 import com.pages.funsquare.essence.EssenseActivity;
 import com.view.util.ReserveAdapter;

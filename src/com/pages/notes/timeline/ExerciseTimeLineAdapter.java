@@ -44,6 +44,11 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		this.tableName=tableName;
 	}
 
+ 	public void setDates(List<String> dates)
+ 	{
+ 		this.dates=dates;
+ 	}
+ 	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -65,7 +70,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Log.e(DataConstants.TAG,"timeline getview "+position+" "+chooseState);
+		//Log.e(DataConstants.TAG,"timeline getview "+position+" "+chooseState);
 		ViewHolder holder;  
 	    if (convertView == null) { 
 	        convertView = mInflater.inflate(R.layout.item_exercise_timeline, null); 

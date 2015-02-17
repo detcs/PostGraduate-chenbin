@@ -8,6 +8,7 @@ import com.data.util.NetCall;
 import com.data.util.NetCall.PullEssenseDetail;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -65,7 +66,12 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		// TODO Auto-generated method stub
 		FragmentManager manager = getFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		EssenseDetailFragment detailFragment = new EssenseDetailFragment(ed);
+		Fragment detailFragment;
+		if (null == ed.getUrl_() || ed.getUrl_().equals("")) {
+			detailFragment = new EssenseDetailFragment(ed);
+		} else {
+			detailFragment = new EssenseDetailH5Fragment(ed);
+		}
 		transaction.replace(R.id.FrameLayout1, detailFragment);
 		if (!detail_is_first)
 			transaction.addToBackStack(null);

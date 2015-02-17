@@ -115,6 +115,16 @@ public class FileDataHandler {
 		fileOutputStream.close();
 
 	}
+	public static String photoPathToBlurPath(String srcPath)
+	{
+		String blurPath="";
+		String []info=srcPath.split("\\/");
+		String photoName=info[info.length-1];
+		for(int i=0;i<info.length-1;i++)
+			blurPath+=info[i]+"/";
+		blurPath+=DataConstants.blured+photoName;
+		return blurPath;
+	}
 	class SaveTask extends AsyncTask<String, Integer, String>
 	{
 		String fileName;

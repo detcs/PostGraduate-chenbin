@@ -16,7 +16,8 @@
 		    <ImageView
 		            android:id="@+id/review_img"
 			        android:layout_width="match_parent"
-			    	android:layout_height="wrap_content"
+			    	android:layout_height="500dp"
+			    	android:scaleType="fitXY"
 		        />
 		    <FrameLayout
 	            android:layout_gravity="bottom"
@@ -30,14 +31,13 @@
 			        android:layout_width="wrap_content"
 			    	android:layout_height="wrap_content"
 			    	android:lines="2"
-			    	android:maxEms="10"
 			    	android:ellipsize="end"
 		           />
 	        	<TextView
 		            android:layout_gravity="bottom|right"
-		            android:text="@string/look_all"
-			        android:layout_width="wrap_content"
-			    	android:layout_height="wrap_content"
+		            android:background="@drawable/look_all"
+			        android:layout_width="50dp"
+			    	android:layout_height="20dp"
 		           />
 	       </FrameLayout>
 	    </FrameLayout>
@@ -47,6 +47,7 @@
 	    	android:layout_weight="1"
 	    	android:paddingTop="5dp"
 	    	android:paddingBottom="5dp"
+	    	android:background="#ffffff"
 	    	>
 	    <LinearLayout
 	       	android:orientation="horizontal"
@@ -55,23 +56,24 @@
 	    	android:layout_alignParentRight="true"
 		       >
 		       <ImageView
-		           	android:id="@+id/set_flag_img"
-		            android:src="@drawable/setflag"
-		            android:layout_width="wrap_content"
-		    		android:layout_height="wrap_content"
+		           	android:id="@+id/review_flag_img"
+		            
+		            android:layout_width="30dp"
+		    		android:layout_height="50dp"
 		    		
 		           />
 		       <ImageView
-		           	android:id="@+id/rotate_img"
-		            android:src="@drawable/rotate"
-		            android:layout_width="wrap_content"
-		    		android:layout_height="wrap_content"
+		           	android:id="@+id/review_rotate_img"
+		           
+		            android:layout_width="30dp"
+		    		android:layout_height="50dp"
+		    		android:layout_marginLeft="10dp"
 		           />
 		       <ImageView
 		           	android:id="@+id/edit_remark_img"
-		            android:src="@drawable/edit_remark"
-		            android:layout_width="wrap_content"
-		    		android:layout_height="wrap_content"
+		            android:layout_width="30dp"
+		    		android:layout_height="50dp"
+		    		android:layout_marginLeft="10dp"
 		           />
 		       </LinearLayout> 
 	       </RelativeLayout>
@@ -84,18 +86,18 @@
 	    	android:layout_weight="1"
 	    	
 	       >
-	       <Button
+	       <TextView
 	           	android:id="@+id/master"
 	            android:text="@string/master"
 	            android:layout_width="match_parent"
-	    		android:layout_height="wrap_content"
+	    		android:layout_height="48dp"
 	    		android:layout_weight="1"
 	           />
-	       <Button
+	       <TextView
 	           	android:id="@+id/unmaster"
 	            android:text="@string/unmaster"
 	            android:layout_width="match_parent"
-	    		android:layout_height="wrap_content"
+	    		android:layout_height="48dp"
 	    		android:layout_weight="1"
 	           />
 	       </LinearLayout>  

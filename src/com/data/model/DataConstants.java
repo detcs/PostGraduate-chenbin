@@ -2,6 +2,8 @@ package com.data.model;
 
 import java.util.HashMap;
 
+import android.graphics.Typeface;
+
 public class DataConstants {
 
 	public final static String TAG="flip";
@@ -19,6 +21,10 @@ public class DataConstants {
 	public static int RESULTCODE_COURSE_SETTING=1;
 	public static int REQUEST_CODE_CAMERA=1;
 	public static int REQUEST_CODE_EXERCISE=2;
+	public static final String blured="blured";
+	public static Typeface typeFZLT; 
+	public static Typeface typeAvenir; 
+	public static enum PageName{NoteSpec,NoteReview};
 	//sina weibo
 	public final static String WEIBO_APP_KEY="77238273";
 	public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";//"http://s1.smartjiangsu.com/index.html";// 应用的回调页 

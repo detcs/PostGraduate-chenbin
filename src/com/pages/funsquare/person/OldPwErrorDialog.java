@@ -5,6 +5,7 @@ import com.app.ydd.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 
 public class OldPwErrorDialog {
@@ -13,6 +14,7 @@ public class OldPwErrorDialog {
 
 	public OldPwErrorDialog(Activity activity) {
 		dialog = new Dialog(activity);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.old_pw_error_dialog);
 		ensureView = dialog.findViewById(R.id.button1);
 		ensureView.setOnClickListener(new OnClickListener() {

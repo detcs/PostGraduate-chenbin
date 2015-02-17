@@ -5,6 +5,7 @@ import com.data.model.Comment;
 import com.data.model.Post;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
+import com.data.util.NetCall.MsgCountCallback;
 import com.data.util.NetCall.UploadData;
 import com.pages.funsquare.square.SquarePostShareBump.PostShareCallBack;
 import com.view.util.AdapterFresh;
@@ -14,7 +15,6 @@ import com.view.util.CommentAdapter.PostDetailCallback;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 @SuppressLint("ValidFragment")
 public class SquareDetailFragment extends Fragment implements
-		PostDetailCallback, UploadData, PostShareCallBack {
+		PostDetailCallback, UploadData, PostShareCallBack, MsgCountCallback {
 	private static final String TAG = "SquareDetailFragment";
 	private View base;
 	private FrameLayout frame;
@@ -50,9 +50,9 @@ public class SquareDetailFragment extends Fragment implements
 	private String userId;
 	private String replyHead;
 
-	public SquareDetailFragment() {
-		// TODO Auto-generated constructor stub
-	}
+	// public SquareDetailFragment() {
+	// // TODO Auto-generated constructor stub
+	// }
 
 	public SquareDetailFragment(Post vg) {
 		// TODO Auto-generated constructor stub
@@ -81,17 +81,12 @@ public class SquareDetailFragment extends Fragment implements
 		return base;
 	}
 
-	@Override
-	public void onStop() {
-		commentAdapter.destroy();
-		super.onStop();
-	}
-
 	// ***************init***************
 	private void init(View view) {
 		findViews(view);
 		initListView();
 		setListener();
+		initInform();
 	}
 
 	private void findViews(View view) {
@@ -103,7 +98,7 @@ public class SquareDetailFragment extends Fragment implements
 	}
 
 	private void initListView() {
-		commentAdapter = new CommentAdapter(getActivity(), vg.getId(), this, vg);
+		commentAdapter = new CommentAdapter(getActivity(), this, vg);
 		listView1.setAdapter(commentAdapter);
 	}
 
@@ -130,9 +125,9 @@ public class SquareDetailFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String content = editText.getText().toString();
+				String content = editText.getText().toString().trim();
 				if (null == content) {
-					Log.i(TAG, content + "");
+					Toast.makeText(getActivity(), "请输入评论内容", 500).show();
 				}
 				if (!content.startsWith(replyHead + "")) {
 					userId = "";
@@ -141,6 +136,10 @@ public class SquareDetailFragment extends Fragment implements
 						SquareDetailFragment.this);
 			}
 		});
+	}
+
+	private void initInform() {
+		NetCall.getMsgCount(this);
 	}
 
 	// CommentAdapter.PostDetailCallback
@@ -160,7 +159,8 @@ public class SquareDetailFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		rootView.clearFocus();
 		if (null == frame.findViewWithTag(TAG)) {
-			new SquarePostShareBump(frame, getActivity(), TAG, this).show();
+			new SquarePostReportBump(frame, getActivity(), TAG, vg.getId())
+					.show();
 		}
 	}
 
@@ -168,15 +168,19 @@ public class SquareDetailFragment extends Fragment implements
 	public void share() {
 		// TODO Auto-generated method stub
 		rootView.clearFocus();
+		if (null == frame.findViewWithTag(TAG)) {
+			new SquarePostShareBump(frame, getActivity(), TAG, this).show();
+		}
 	}
 
+	// NetCall.UploadData
 	// 这两个方法仅仅是为了通知用户的，真正的通知本地数据刷新不在这里做
 	@Override
 	public void updateSuccess() {
 		// TODO Auto-generated method stub
-		SysCall.hint(getActivity(), "评论成功");
-		((AdapterFresh) commentAdapter).destroy();
+		((AdapterFresh) commentAdapter).fresh();
 		editText.setText("");
+		SysCall.hideSoftInput(rootView, getActivity());
 	}
 
 	@Override
@@ -189,13 +193,20 @@ public class SquareDetailFragment extends Fragment implements
 	@Override
 	public void shareSuccess() {
 		// TODO Auto-generated method stub
-
+		Toast.makeText(getActivity(), "分享成功", 500).show();
 	}
 
 	@Override
 	public void shareFail() {
 		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "分享失败", 500).show();
+	}
 
+	// NetCall.MsgCountCallback
+	@Override
+	public void getSuccess(int essence_, int square_) {
+		// TODO Auto-generated method stub
+		// informBu.setImageResource(resId);
 	}
 
 }

@@ -5,7 +5,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class ComputeURL {
-	// private static final String TAG = "ComputeURL";
+	private static final String TAG = "ComputeURL";
+
+	// 广场举报帖子
+	public static String getReportURL(String pid) {
+		String re = GloableData.URL + GloableData.REPORT_PATH
+				+ GloableData.getParam() + "&pid=" + str(pid);
+		return re;
+	}
+
+	public static String getMsgCountURL() {
+		String re = GloableData.URL + GloableData.MSGCOUNT_PATH
+				+ GloableData.getParam();
+		return re;
+	}
+
 	public static String getInfoChangeURL(String nickname, String headimg,
 			String email) {
 		String re = GloableData.URL + GloableData.INFOCHANGE_PATH
@@ -130,11 +144,13 @@ public class ComputeURL {
 		return reStr;
 	}
 
+	// ***************str utils***************
+
 	private static String str(String in) {
 		if (null == in.trim()) {
 			return "";
 		} else {
-			return in;
+			return in.replace("\n", "");
 		}
 	}
 

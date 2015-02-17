@@ -1,5 +1,6 @@
 package com.data.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -80,13 +81,14 @@ public class DataBuffer<D> {
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
-						List<D> list = null;
+						List<D> list = new ArrayList<D>();
 						try {
 							list = nu.parseToVG(response);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							// 如果获取数据失败，直接返回。
-							return;
+							Log.i(TAG, "登陆验证失败");
+							Log.i(TAG, nu.getURL(page, ITEMPERSCREEN));
 						}
 						freshDataSet(index, list);
 						// notify the adapter

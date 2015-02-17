@@ -8,24 +8,34 @@ import com.data.model.UserConfigs;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class NotesClassAdapter extends BaseAdapter{
 	List<String> names;
 	List<String> courseTableNames;
 	Context context;
 	LayoutInflater mInflater;
+	//private TextView editItem; //用于执行删除的button
 	public NotesClassAdapter(List<String> names, List<String> courseTableNames,Context context) {
 		super();
 		this.names = names;
@@ -64,14 +74,26 @@ public class NotesClassAdapter extends BaseAdapter{
 	        holder.img=(ImageView)convertView.findViewById(R.id.course_name_img);
 	        holder.courseName=(TextView)convertView.findViewById(R.id.course_name);
 	        holder.courseInfo=(TextView)convertView.findViewById(R.id.course_note_info);
-	        
+	        holder.editNameLayout=(RelativeLayout)convertView.findViewById(R.id.item_right);
 	        convertView.setTag(holder); 
 	    } else { 
 	       // Get the ViewHolder back to get fast access to the TextView 
 	        // and the ImageView. 
 	        holder = (ViewHolder) convertView.getTag(); 
 	    } 
-	    holder.courseName.setText(names.get(position));
+	    final String name=names.get(position);
+	    holder.courseName.setText(name);
+	    LinearLayout.LayoutParams lp2 = new LayoutParams(100, LayoutParams.MATCH_PARENT);
+        holder.editNameLayout.setLayoutParams(lp2);
+        holder.editNameLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Log.e(DataConstants.TAG,"click edit");
+				jumpToCourseNameEditActivity(name);
+			}
+		});
 	    SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		// if(!DataConstants.dbHelper.tableIsExist(db,
 		// getResources().getString(R.string.db_footprint_table)))
@@ -98,7 +120,15 @@ public class NotesClassAdapter extends BaseAdapter{
 	    {
 	    	Picasso.with(context).load(R.drawable.course_profess2).into(holder.img);
 	    }
-	    	
+	    convertView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				// TODO Auto-generated method stub
+				Log.e(DataConstants.TAG, "list flip on touch");
+				return false;
+			}
+		});
 	    // Bind the data efficiently with the holder. 
 //	    holder.button.setText(names.get(position)); 
 //	    final int pos=position;
@@ -135,8 +165,26 @@ public class NotesClassAdapter extends BaseAdapter{
 	    ImageView img;
 	    TextView courseName;
 	    TextView courseInfo;
+	    TextView editItem;
 	    
+	    RelativeLayout editNameLayout;
 
 	} 
+	private void jumpToCourseNameEditActivity(String course)
+	{
+//		Fragment fragment=new CourseNameEditFragment();
+//		Bundle bundle = new Bundle();  
+//        bundle.putString("course_edit_name", course);  
+//        fragment.setArguments(bundle);
+//		FragmentManager fm=((MainActivity)context).getFragmentManager();
+//		FragmentTransaction trans = fm.beginTransaction();  
+//		trans.replace(R.id.main_frame, fragment);
+//		trans.addToBackStack(null);
+//		trans.commit();
+		Intent intent =new Intent();
+		intent.setClass(context, CourseNameEditActivity.class);
+		intent.putExtra("course_edit_name", course);
+		context.startActivity(intent);
+	}
 
 }

@@ -208,12 +208,12 @@
 			        android:orientation="horizontal"
 			        
 			        >
-			        <com.pages.notes.NoScrollListView
+			        <com.view.util.SwipeListView
 			            android:id="@+id/course_list"
 			            android:layout_width="match_parent"
 			    		android:layout_height="wrap_content"
-			            >
-		            </com.pages.notes.NoScrollListView>
+			            />
+		           
         		</LinearLayout>
 		        <!-- takephoto -->
 		        <LinearLayout

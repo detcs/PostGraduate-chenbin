@@ -1,6 +1,7 @@
 package com.data.util;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 
 public class DisplayUtil {

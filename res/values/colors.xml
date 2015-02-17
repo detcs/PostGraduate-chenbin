@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+   
     <color name="background">#FFFFFF</color>
     <color name="camera_float_bar">#80f1f1f1</color>
     <color name="camera_top_bar_word">#3385ff</color>
@@ -12,5 +13,11 @@
     <color name="essense_back_words_color">#3385ff</color>
     <color name="essense_tabhost_background">#ffffff</color>
     <color name="essense_tabhost_word">#000000</color>
+    <color name="camera_choosen_word">#00000000</color>
+    <color name="blue">#2319dc</color>
+     <color name="blur_bg">#FFFAF0</color>
+    <color name="black">#000000</color>
+    <color name="grey">#808080</color>
+    <color name="right_delete">#696969</color>
     
 </resources>

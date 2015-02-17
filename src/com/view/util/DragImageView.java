@@ -1,5 +1,8 @@
 package com.view.util;
 
+import com.app.ydd.R;
+import com.data.model.DataConstants;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -8,18 +11,15 @@ import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /****
- * ������Ҫ���׼�������ִ�е����̣� ����ImageView�Ǽ̳���View������.
- * onLayout��������һ���ص�����.�÷���������View�е�layout������ִ�У���ִ��layout����ǰ�������ִ��setFrame����.
- * layout������
- * setFrame�������ж����ǵ�View�Ƿ���仯�������仯����ô�����µ�l��t��r��b���ݸ�View��Ȼ��ˢ�½��ж�̬����UI.
- * ���ҷ���ture.û�б仯����false.
- * 
- * invalidate����������ˢ�µ�ǰ�ؼ�,
  * 
  * setFrame->layout->onlayout
  * 
@@ -28,11 +28,11 @@ import android.widget.ImageView;
  */
 
 /*
- * ������Ҫ�ķ��棺
  * 
- * screen_H, screen_W:�ɼ�Ŀ��
  * 
- * View.getTop;View.getLeft....;View.getHeight;View.getWidth���ؼ���ʵ�ġ������ ���ؼ���λ�á����
+ * screen_H, screen_W:
+ * 
+ * View.getTop;View.getLeft....;View.getHeight;View.getWidth
  */
 public class DragImageView extends ImageView {
 	private static final String TAG = "DragImageView";
@@ -79,6 +79,7 @@ public class DragImageView extends ImageView {
 
 	private MyAsyncTask myAsyncTask;// �첽����
 
+	View parentlayout; 
 	/** ���췽�� **/
 	public DragImageView(Context context) {
 		super(context);
@@ -86,6 +87,7 @@ public class DragImageView extends ImageView {
 
 	public void setmActivity(Activity mActivity) {
 		this.mActivity = mActivity;
+		//parentlayout= LayoutInflater.from(mActivity).inflate(R.layout.content_layout, null);
 	}
 
 	/** �ɼ���Ļ��� **/
@@ -154,6 +156,8 @@ public class DragImageView extends ImageView {
 				doubleClick();
 				break;
 			}
+			//else
+				
 			lastClick = System.currentTimeMillis();
 			onTouchDown(event);
 			break;
@@ -171,6 +175,7 @@ public class DragImageView extends ImageView {
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.i(TAG, "ACTION_UP");
+			clickImage();
 			onTouchUp(event);
 			mode = MODE.NONE;
 			break;
@@ -347,7 +352,20 @@ public class DragImageView extends ImageView {
 	public void setBumpHeight(int i) {
 		this.bumpHeight = i;
 	}
-
+	private void clickImage()
+	{
+		//Log.e(DataConstants.TAG, "click img");
+		LinearLayout top=(LinearLayout) parentlayout.findViewById(R.id.browse_top);
+		RelativeLayout bottom=(RelativeLayout) parentlayout.findViewById(R.id.browse_bottom);
+		if(top.getVisibility()==View.INVISIBLE)
+			top.setVisibility(View.VISIBLE);
+		else if(top.getVisibility()==View.VISIBLE)
+			top.setVisibility(View.INVISIBLE);
+		if(bottom.getVisibility()==View.INVISIBLE)
+			bottom.setVisibility(View.VISIBLE);
+		else if(bottom.getVisibility()==View.VISIBLE)
+			bottom.setVisibility(View.INVISIBLE);
+	}
 	private void doubleClick() {
 		if (this.getWidth() == bitmap_W) {
 			// �Ŵ�����
@@ -560,6 +578,11 @@ public class DragImageView extends ImageView {
 
 		}
 
+	}
+
+	public void setLayout(View content) {
+		// TODO Auto-generated method stub
+		parentlayout=content;
 	}
 
 }

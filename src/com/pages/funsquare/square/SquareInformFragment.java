@@ -35,17 +35,6 @@ public class SquareInformFragment extends Fragment {
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onStop() {
-		adapter.destroy();
-		super.onStop();
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
 		if (null == rootView) {
@@ -54,13 +43,6 @@ public class SquareInformFragment extends Fragment {
 		}
 		init(rootView);
 		return rootView;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.i(TAG, "resume");
-		((AdapterFresh) adapter).destroy();
 	}
 
 	// ****************init****************

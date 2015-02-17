@@ -2,6 +2,8 @@ package com.pages.notes.timeline;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -9,9 +11,12 @@ import com.app.ydd.R;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
+import com.data.model.UserConfigs;
 import com.pages.notes.ReviewFragment;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Fragment;
@@ -38,8 +43,12 @@ public class ReviewChooseFragment extends Fragment{
 	LinearLayout reviewChooseLayout;
 	LinearLayout transferDelLayout;
 	LinearLayout courseTransferChooseLayout;
-	Button courseTransferChooseCancelBtn;
-	Button courseTransferChooseConfirmBtn;
+	TextView courseTransferChooseCancelBtn;
+	TextView courseTransferChooseConfirmBtn;
+	int cancelConfirmColor=Color.parseColor("#429dd7");
+	int courseChoosedColor=Color.parseColor("#ffffff");
+	int courseNormalColor=Color.parseColor("#999999");
+	Typeface typefaceFZLT;
 	TextView transferPhoto;
 	TextView deletePhoto;
 	Button reviewReverse;
@@ -49,19 +58,20 @@ public class ReviewChooseFragment extends Fragment{
 	ExerciseTimeLineAdapter timeLineAdapter;
 	boolean chooseState=false;
 	static List<String> choosedPhotoPaths;
+	String targetTransferCourse;
 	@Override
 	public View onCreateView(final LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View  rootView = inflater.inflate(R.layout.fragment_reviewchoose, container, false);
 		exerciseTimeLine=(ListView)rootView.findViewById(R.id.exercise_timeline_list);
-		//paths=new ArrayList<String>();
-		
-		tableName=getArguments().getString("course_table_name");//getResources().getString(R.string.db_english_table);
-		//choosePaths(DataConstants.SD_PATH+"/"+DataConstants.PHOTO_DIR_PATH+"/"+tableName);
+		tableName=getArguments().getString("course_table_name");
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
 		final List<String> dates=new ArrayList<String>();
 		for(String date:dateSet)
 			dates.add(date);
+		//Log.e(DataConstants.TAG, dates.get(0)+"--"+dates.get(1));
+		Collections.reverse(dates);
+		//Log.e(DataConstants.TAG, dates.get(0)+"--"+dates.get(1));
 		db.close();
 		layout=(RelativeLayout)rootView.findViewById(R.id.reviewchoose_layout);
 		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);	
@@ -76,79 +86,23 @@ public class ReviewChooseFragment extends Fragment{
 				jumpToReview(dates.get(0));
 			}
 		});
-		courseTransferChooseLayout=(LinearLayout)rootView.findViewById(R.id.course_transfer_choose);
-		Button course1=(Button)rootView.findViewById(R.id.couser1);
-		course1.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Log.e(DataConstants.TAG,"onclickkkk");
-				courseTransferChooseLayout.startAnimation(hideAnimation());
-				courseTransferChooseLayout.setVisibility(View.INVISIBLE);
-			}
-		});
-		courseTransferChooseCancelBtn=(Button)rootView.findViewById(R.id.couser_transfer_choose_cancel);
-		courseTransferChooseCancelBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Log.e(DataConstants.TAG,"onclickkkk");
-				courseTransferChooseLayout.startAnimation(hideAnimation());
-				courseTransferChooseLayout.setVisibility(View.INVISIBLE);
-			}
-		});
-		courseTransferChooseConfirmBtn=(Button)rootView.findViewById(R.id.couser_transfer_choose_confirm);
-		transferDelLayout=(LinearLayout)rootView.findViewById(R.id.transfer_delete);
-		transferPhoto=(TextView)rootView.findViewById(R.id.transfer_photo);
-		deletePhoto=(TextView)rootView.findViewById(R.id.delete_photo);
-		transferPhoto.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-				String photoname=null;
-				CourseRecordInfo cri=null;
-				String targetTable;
-				courseTransferChooseLayout.startAnimation(showAnimation());
-				courseTransferChooseLayout.setVisibility(View.VISIBLE);
-				/*
-				for(String path:choosedPhotoPaths)
-				{
-					String[] info=path.split("/");
-					int len=info.length;
-					photoname=info[len-1];
-					cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
-					DataConstants.dbHelper.deleteCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
-					targetTable=getResources().getString(R.string.db_profess1_table);
-					DataConstants.dbHelper.insertCourseRecord(getActivity(), db, targetTable, cri);
-					FileDataHandler.transferFile(path,FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(targetTable)+"/"+photoname);
-				}
-				*/
-			}
-		});
-		deletePhoto.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-				String photoname=null;
-				for(String path:choosedPhotoPaths)
-				{
-					String[] info=path.split("/");
-					int len=info.length;
-					photoname=info[len-1];
-					//Log.e(DataConstants.TAG,"del "+photoname);
-					DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(getActivity(), db, tableName, photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
-				}
-				db.close();
-				timeLineAdapter.notifyDataSetChanged();
-			}
-		});
+		initTitleView();
+		initTransferDelView(rootView);
+		return rootView;
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initTitleView();
+	}
+
+	private void initTitleView()
+	{
+		typefaceFZLT= Typeface.createFromAsset (getActivity().getAssets(),"font/fangzhenglanting.ttf");
 		choose=(Button)getActivity().findViewById(R.id.right_btn);
+		//choose.setBackground(background)
 		choose.setText(getResources().getString(R.string.choose));
 		choose.setOnClickListener(new OnClickListener() {
 			
@@ -174,9 +128,147 @@ public class ReviewChooseFragment extends Fragment{
 				}
 			}
 		});
-		return rootView;
 	}
-	
+	private void setCourseTransferButtonListner(final TextView[] courseButtons)
+	{
+		OnClickListener listener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < 3; i++) {
+					// radios[i].setClickable(false);
+					// radios[i].setEnabled(false);
+					
+					if (courseButtons[i] == v) {
+						targetTransferCourse=courseButtons[i].getText().toString();
+						courseButtons[i].setTextColor(0);
+						courseButtons[i].setBackgroundResource(R.drawable.transferd_course);
+						courseButtons[i].setTextColor(courseChoosedColor);
+					}
+					else
+					{
+						courseButtons[i].setTextColor(courseNormalColor);
+						courseButtons[i].setBackgroundResource(R.drawable.untransfered_course);
+					}
+				}
+			}
+		};
+		for (int i = 0; i < 3; i++) {
+			courseButtons[i].setOnClickListener(listener);
+		}
+	}
+	private void initTransferDelView(View rootView)
+	{
+		courseTransferChooseLayout=(LinearLayout)rootView.findViewById(R.id.course_transfer_choose);
+		TextView[] courseButtons = new TextView[3];
+		courseButtons[0]=(TextView)rootView.findViewById(R.id.course1);
+		courseButtons[1]=(TextView)rootView.findViewById(R.id.course2);
+		courseButtons[2]=(TextView)rootView.findViewById(R.id.course3);
+		int index=0,targetIndex=0;
+		final HashMap<String, String> courseNameTableMap=UserConfigs.getCourseNameAndTableMap();
+		for(String name:courseNameTableMap.keySet())
+		{
+			if(courseNameTableMap.get(name).equals(tableName)==false)
+			{
+				courseButtons[index].setText(name);
+				index++;
+			}
+		}
+		for(int i=0;i<courseButtons.length;i++)
+		{
+			courseButtons[i].setTypeface(typefaceFZLT);
+			courseButtons[i].setTextColor(courseNormalColor);
+		}
+		setCourseTransferButtonListner(courseButtons);
+		
+		courseTransferChooseCancelBtn=(TextView)rootView.findViewById(R.id.couser_transfer_choose_cancel);
+		courseTransferChooseCancelBtn.setTextColor(cancelConfirmColor);
+		courseTransferChooseCancelBtn.setTypeface(typefaceFZLT);
+		courseTransferChooseCancelBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Log.e(DataConstants.TAG,"onclickkkk");
+				courseTransferChooseLayout.startAnimation(hideAnimation());
+				courseTransferChooseLayout.setVisibility(View.INVISIBLE);
+			}
+		});
+		courseTransferChooseConfirmBtn=(TextView)rootView.findViewById(R.id.couser_transfer_choose_confirm);
+		courseTransferChooseConfirmBtn.setTextColor(cancelConfirmColor);
+		courseTransferChooseConfirmBtn.setTypeface(typefaceFZLT);
+		courseTransferChooseConfirmBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+				String photoname=null;
+				CourseRecordInfo cri=null;
+				String targetTable=courseNameTableMap.get(targetTransferCourse);
+				for(String path:choosedPhotoPaths)
+				{
+					String[] info=path.split("/");
+					int len=info.length;
+					photoname=info[len-1];
+					cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
+					Log.e(DataConstants.TAG,cri.toString());
+					DataConstants.dbHelper.deleteCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
+					DataConstants.dbHelper.insertCourseRecord(getActivity(), db, targetTable, cri);
+					FileDataHandler.transferFile(path,FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(targetTable)+"/"+photoname);
+					
+				}
+				TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
+				final List<String> dates=new ArrayList<String>();
+				for(String date:dateSet)
+					dates.add(date);
+				db.close();
+				courseTransferChooseLayout.startAnimation(hideAnimation());
+				courseTransferChooseLayout.setVisibility(View.INVISIBLE);
+				chooseState=false;
+				timeLineAdapter.setDates(dates);
+				timeLineAdapter.updateChooseState(chooseState);
+				choose.setText(getResources().getString(R.string.choose));
+				transferDelLayout.setVisibility(View.INVISIBLE);
+				reviewChooseLayout.setVisibility(View.VISIBLE);
+				
+			}
+		});
+		
+		transferDelLayout=(LinearLayout)rootView.findViewById(R.id.transfer_delete);
+		transferPhoto=(TextView)rootView.findViewById(R.id.transfer_photo);
+		deletePhoto=(TextView)rootView.findViewById(R.id.delete_photo);
+		transferPhoto.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				
+				String targetTable;
+				courseTransferChooseLayout.startAnimation(showAnimation());
+				courseTransferChooseLayout.setVisibility(View.VISIBLE);
+			}
+		});
+		deletePhoto.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+				String photoname=null;
+				for(String path:choosedPhotoPaths)
+				{
+					String[] info=path.split("/");
+					int len=info.length;
+					photoname=info[len-1];
+					DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(getActivity(), db, tableName, photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
+				}
+				db.close();
+				timeLineAdapter.notifyDataSetChanged();
+			}
+		});
+	}
 	
 	public void jumpToReview(String date)
 	{
@@ -189,6 +281,7 @@ public class ReviewChooseFragment extends Fragment{
 		FragmentManager fm=getActivity().getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
+		trans.addToBackStack(null);
 		trans.commit();
 	}
 	private Animation showAnimation()
@@ -213,3 +306,4 @@ public class ReviewChooseFragment extends Fragment{
 	}
 
 }
+

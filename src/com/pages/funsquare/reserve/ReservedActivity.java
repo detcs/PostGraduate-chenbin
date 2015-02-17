@@ -5,18 +5,14 @@ import com.data.util.SysCall;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class ReservedActivity extends Activity {
-	private Button backBu;
-	private TextView setView;
+	private View backBu;
+	private View setView;
 
 	private Button button1;
 
@@ -35,8 +31,8 @@ public class ReservedActivity extends Activity {
 	}
 
 	private void findViews() {
-		backBu = (Button) findViewById(R.id.backBu);
-		setView = (TextView) findViewById(R.id.setView);
+		backBu = findViewById(R.id.backBu);
+		setView = findViewById(R.id.setView);
 		button1 = (Button) findViewById(R.id.button1);
 	}
 

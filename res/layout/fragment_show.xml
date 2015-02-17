@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#ffffff"
         android:scaleType="fitXY" />
 
@@ -70,71 +70,42 @@
 
             <ImageView
                 android:id="@+id/againView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pause" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/small" />
 
             <ImageView
                 android:id="@+id/editView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/pause" />
+                android:scaleType="fitXY"
+                android:src="@drawable/small" />
         </RelativeLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/chooseBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/camera_choose_bar_height"
             android:layout_above="@+id/bottombar"
-            android:background="@color/camera_float_bar"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/radioButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                android:background="@drawable/default_head"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                android:background="@drawable/default_head"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/radioButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                android:background="@drawable/default_head"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/radioButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/camera_choose_item_gap"
-                android:background="@drawable/default_head"
-                android:text="TextView" />
-        </LinearLayout>
+            android:background="@color/camera_float_bar" >
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@color/camera_float_bar"
             android:gravity="center" >
 
             <ImageView
                 android:id="@+id/saveBu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/choose" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/small" />
         </LinearLayout>
     </RelativeLayout>
 

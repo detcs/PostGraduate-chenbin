@@ -41,6 +41,7 @@ public class ReserveModeActivity extends Activity {
 	private void initViews() {
 		// check saved mode
 		SysCall.error("check saved mode");
+		// choose = 0;
 		imageViews[0].setVisibility(View.VISIBLE);
 		imageViews[1].setVisibility(View.INVISIBLE);
 	}
