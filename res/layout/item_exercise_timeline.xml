@@ -3,16 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-	<TextView
-	    android:id="@+id/exercise_timeline_date"
+	<LinearLayout 
 	    android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-	    />    
-	<com.pages.notes.timeline.NoScrollGridView 
-	    android:id="@+id/exercise_timeline_item_grid"
-	     android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:numColumns="4"
+	    android:layout_height="match_parent"
+	    android:orientation="horizontal" >
+	    <ImageView
+	        android:layout_width="6dp"
+	        android:layout_height="6dp"
+	        android:background="@drawable/circle"
+	        android:layout_marginLeft="12dp"
+	        android:layout_gravity="center_vertical"
 	        />
+		<TextView
+		    android:id="@+id/exercise_timeline_date"
+		    android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_marginLeft="12dp"
+	    	android:textColor="#333333"
+	    	android:textSize="13sp"
+		    />    
+	</LinearLayout>
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="horizontal" >
+		<LinearLayout
+		    android:layout_width="1dp"
+		    android:layout_height="match_parent"
+		    android:background="#c2c2c2"
+		    android:layout_marginLeft="14dp"
+		    />
+		<com.pages.notes.timeline.NoScrollGridView 
+		    android:id="@+id/exercise_timeline_item_grid"
+		    android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:numColumns="4"
+	    	android:horizontalSpacing="4dp"
+	    	android:verticalSpacing="6dp"
+	    	android:layout_marginLeft="12dp"
+	    	android:layout_marginBottom="12dp"
+	    	android:layout_marginTop="10dp"
+		        />
+		</LinearLayout>
 
 </LinearLayout>

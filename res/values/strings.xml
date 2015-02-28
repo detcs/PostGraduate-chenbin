@@ -15,6 +15,9 @@
     <string name="user_qq">qq</string>
     <string name="user_nickname">nickname</string>
     <string name="user_verify">verify</string>
+    <string name="user_sex">sex</string>
+    <string name="sex_male">male</string>
+    <string name="sex_female">female</string>
     <string name="user_id">userid</string>
     <string name="course_english_name">courseEnglishName</string>
     <string name="course_math_name">courseMathName</string>
@@ -70,8 +73,10 @@
     <string name="register_illustration">为了您的账号安全，您的手机将会受到验证短信</string>
     <string name="verify_num">验证码</string>
     <string name="obtain_verify_num">获取验证码</string>
+    <string name="resend_verify_num">秒后重发</string>
     <string name="next_step">下一步</string>
     <string name="set_password">设置密码</string>
+    <string name="reinput_password">重复密码</string>
     <string name="set_nickname">设置昵称</string>
     <string name="sex_select">选择性别</string>
     <string name="male">男</string>
@@ -94,6 +99,10 @@
     <string name="math1">数学1</string>
     <string name="math2">数学2</string>
     <string name="math3">数学3</string>
+    <string name="english_catalog">英语目录</string>
+    <string name="math_catalog">数学目录</string>
+    <string name="politic_catalog">政治目录</string>
+    <string name="profess_catalog">专业课目录</string>
      <string name="no_course">无</string>
     <string name="professional_course">专业课(首字不能相同)</string>
     <string name="professional_one">专业一</string>
@@ -103,7 +112,7 @@
     <string name="choose">选择</string>
     <string name="is_first_take_photo">isFirstTakePhoto</string>
     <string name="note_class">noteClass</string>
-    <string name="reverse_review">倒序复习</string>
+    <string name="reverse_review">按序复习</string>
     <string name="ebbinghaus_review">艾宾浩斯曲线复习</string>
     <string name="get">get</string>
     <string name="collect">收藏</string>
@@ -119,9 +128,15 @@
     <string name="count_note">累计笔记</string>
     <string name="today_add">今日新增</string>
     <string name="piece">篇</string>
+    <string name="piece_append">篇新增</string>
+    <string name="no">无</string>
     <string name="look_all">查看全部</string>
     <string name="append_note">新增笔记</string>
     <string name="edit_course">编辑课程</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="transfer_to">转移到</string>
+    
     <!-- one date photos of all course-->
     <string name="jump_tag_footprint">jumpTagFootprint</string>
     <!-- three days of one course -->
@@ -135,6 +150,12 @@
     <!-- footprint -->
     <string name="myfootprint">我的足迹</string>
     <string name="reviewchoose_fra_tag">reviewchooseFraTag</string>
+    <string name="footprint_my">My</string>
+    <string name="footprint_day">Day</string>
+    <string name="yesyterday">Yesterday</string>
+    <string name="clocked">打卡第</string>
+    <string name="reviewed">复习了</string>
+    <string name="appended">新增</string>
     <!-- functions square -->
     <string name="essence">精华</string>
     <string name="square">广场</string>

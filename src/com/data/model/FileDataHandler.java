@@ -3,12 +3,14 @@ package com.data.model;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.app.ydd.R;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -114,6 +116,32 @@ public class FileDataHandler {
 		fileOutputStream.flush();
 		fileOutputStream.close();
 
+	}
+	public static void saveBitmap(Bitmap bitmap,String path) throws IOException {
+		File f = new File(path);
+		if(f.exists())
+			f.delete();
+		f.createNewFile();
+		FileOutputStream fOut = null;
+		try {
+			fOut = new FileOutputStream(f);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+		try {
+			fOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.e(DataConstants.TAG,e+"");
+		}
+		try {
+			fOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.e(DataConstants.TAG,e+"");
+		}
+		Log.e(DataConstants.TAG,"save over");
 	}
 	public static String photoPathToBlurPath(String srcPath)
 	{

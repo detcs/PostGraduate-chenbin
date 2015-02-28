@@ -8,6 +8,7 @@ import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.model.DataConstants.PageName;
 import com.pages.notes.timeline.PhotoShowGridAdapter;
 
 import android.content.Context;
@@ -15,8 +16,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FootprintNoteListAdapter extends BaseAdapter{
@@ -33,25 +36,34 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.date = date;
 		courseNames=UserConfigs.getCourseNames();
+		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+				
 		HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
 		tableNames=new ArrayList<String>();
-		for(int i=0;i<courseNames.size();i++)
+		for(String course:courseNames)
 		{
-			tableNames.add(map.get(courseNames.get(i)));
+			String table=map.get(course);
+			List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, table, date);
+			if(photoNames.size()>0)
+				tableNames.add(table);
 		}
+//		for(int i=0;i<courseNames.size();i++)
+//		{
+//			tableNames.add(map.get(courseNames.get(i)));
+//		}
 		
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return courseNames.size();
+		return tableNames.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return courseNames.get(arg0);
+		return tableNames.get(arg0);
 	}
 
 	@Override
@@ -84,7 +96,13 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,false,tableNames.get(position));
+//		if(photoPaths.size()==0)
+//		{
+//			convertView.setVisibility(View.INVISIBLE);
+//			AbsListView.LayoutParams params=new  AbsListView.LayoutParams(0,0);
+//			convertView.setLayoutParams(params);
+//		}
+		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,false,tableNames.get(position),PageName.NoteFootprint);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    return convertView;
 	}

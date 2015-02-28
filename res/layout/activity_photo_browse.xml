@@ -3,11 +3,227 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+    <ImageView
+        android:id="@+id/blur_img"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:scaleType="fitXY"
+        />
+    <LinearLayout
+        android:id="@+id/browse_bg"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:background="#000000"
+    	android:alpha="0.2"
+    	android:orientation="vertical"
+        />
     <android.support.v4.view.ViewPager
         android:id="@+id/browse_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
     </android.support.v4.view.ViewPager>
-    
+    <RelativeLayout
+        android:id="@+id/browse_top"
+        android:layout_width="match_parent"
+    	android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/gradual_title_bg"
+        android:layout_gravity="top"
+        >
+        <TextView 
+            android:id="@+id/browse_back"
+            android:layout_width="10dp"
+    		android:layout_height="20dp"
+    		android:layout_alignParentLeft="true"
+    		android:background="@drawable/back_img"
+    		android:layout_marginTop="10dp"
+    		android:layout_marginLeft="12dp"
+            />
+        <TextView 
+            android:id="@+id/browse_delete"
+            android:layout_width="20dp"
+    		android:layout_height="20dp"
+    		android:layout_alignParentRight="true"
+    		android:background="@drawable/rubbish"
+    		android:layout_marginTop="10dp"
+    		android:layout_marginRight="12dp"
+            />
+        </RelativeLayout>
+        <!-- bottom -->
+        <FrameLayout
+            android:layout_width="match_parent"
+		   	android:layout_height="wrap_content"
+            >
+        	<ImageView
+        	    android:layout_width="match_parent"
+        	    android:layout_height="wrap_content"
+        	    android:maxHeight="60dp"
+        	    android:adjustViewBounds="true"
+        	    android:background="@drawable/gradual_text_bg"
+        	    />
+		    <LinearLayout 
+		        android:id="@+id/browse_bottom"
+		        android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:layout_gravity="bottom"
+		    	android:orientation="vertical"
+		    	android:layout_marginLeft="12dp"
+		        android:layout_marginRight="12dp"
+		        >
+		        <!-- android:background="@drawable/gradual_text_bg"
+		        <LinearLayout
+		            android:layout_width="match_parent"
+		    		android:layout_height="wrap_content"
+		    		android:orientation="vertical"
+		    		android:id="@+id/bottom_text_layout"
+		    		android:layout_marginLeft="12dp"
+		    		android:layout_marginRight="12dp"
+		    		android:layout_gravity="bottom"
+		            >
+		             -->
+		            <FrameLayout
+			            android:layout_width="match_parent"
+				    	android:layout_height="wrap_content" 
+				    	> 
+		            	<TextView
+				            android:id="@+id/text_remark_content"
+				            android:text="remark_context"
+					        android:layout_width="wrap_content"
+					    	android:layout_height="wrap_content"
+					    	android:lines="2"
+					    	android:ellipsize="end"
+					    	android:textSize="15sp"
+					    	android:textColor="#ffffff"
+					    	android:scrollbars="vertical"
+					    	android:layout_gravity="top"
+				           />
+			        	</FrameLayout>
+				        	<TextView
+				        	    android:id="@+id/extends_img"
+					            android:layout_gravity="right"
+					            android:background="@drawable/look_all"
+					            android:layout_marginRight="0dp"
+					            android:layout_marginBottom="0dp"
+						        android:layout_width="40dp"
+						    	android:layout_height="13dp"
+					           />
+		           
+			        <RelativeLayout
+			            android:layout_width="match_parent"
+			    		android:layout_height="wrap_content"
+			    		android:layout_gravity="bottom"
+			    		android:orientation="horizontal"
+			    		android:layout_marginBottom="15dp"
+			    		android:layout_marginTop="15dp"
+			            >
+			            <ImageView 
+			                android:id="@+id/important_img"
+			                android:layout_width="75dp"
+			    			android:layout_height="35dp"
+			    			android:scaleType="fitXY"
+			    			android:gravity="center"
+			    			android:layout_alignParentLeft="true"
+			    			android:layout_marginLeft="12dp"
+			                />
+			            <ImageView 
+			                android:id="@+id/rotate_img"
+			                android:layout_width="75dp"
+			    			android:layout_height="35dp"
+			    			android:scaleType="fitXY"
+			    			android:gravity="center"
+			    			android:layout_centerHorizontal="true"
+			                />
+			            <ImageView 
+			                android:id="@+id/remark_img"
+			                android:layout_width="75dp"
+			    			android:layout_height="35dp"
+			    			android:scaleType="fitXY"
+			    			android:layout_marginRight="12dp"
+			    			android:gravity="center"
+			    			android:layout_alignParentRight="true"
+			                />
+			            </RelativeLayout>
+		        <!--  </LinearLayout> -->
+		    </LinearLayout>
+		 </FrameLayout>
+      <!-- edit remark -->
+ 	<LinearLayout
+            android:id="@+id/browse_remark_edit_hideBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:visibility="invisible" >
+
+            <RelativeLayout
+                android:id="@+id/browse_remark_edit_hideChoose"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/camera_hide_edit_bar_height"
+                android:background="#ffffff"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/browse_remark_edit_quitView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/camera_edit_quit"
+                    android:textColor="@color/camera_top_bar_word"
+                    android:textSize="@dimen/clickable_words_size" />
+
+                <TextView
+                    android:id="@+id/browse_remark_edit_saveView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/camera_edit_save"
+                    android:textColor="@color/camera_top_bar_word"
+                    android:textSize="@dimen/clickable_words_size" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/browse_remark_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:ems="10"
+                android:gravity="top"
+                android:lines="4"
+                android:minHeight="@dimen/camera_edit_min_height"
+                android:textColor="#000000" />
+        </LinearLayout>
+        
+ 	<!-- delete -->
+	<LinearLayout
+	    android:id="@+id/browse_bottom_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:visibility="invisible"
+	    android:layout_gravity="bottom"
+	    android:orientation="vertical"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_marginBottom="10dp"
+	    >
+        <TextView
+            android:id="@+id/browse_delete_bg"
+            android:layout_width="match_parent"
+        	android:layout_height="40dp"
+        	android:textColor="#ec3113"
+        	android:textSize="20sp"
+        	android:gravity="center"
+        	android:text="@string/delete"
+        	android:background="@drawable/delete_long_btn"
+            />
+        <TextView
+            android:id="@+id/browse_delete_cancel_bg"
+            android:layout_width="match_parent"
+        	android:layout_height="40dp"
+        	android:textColor="#a4a4a4"
+        	android:textSize="20sp"
+        	android:gravity="center"
+        	android:layout_marginTop="8dp"
+        	android:text="@string/cancel"
+        	android:background="@drawable/delete_long_btn"
+            />
+        </LinearLayout>
 </FrameLayout>

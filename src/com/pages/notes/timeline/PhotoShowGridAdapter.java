@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts.Data;
 import android.app.Fragment;
@@ -21,7 +22,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.app.ydd.R;
+import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.DataConstants.PageName;
+import com.data.util.DisplayUtil;
+import com.data.util.PhotoNamePathUtil;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
 import com.pages.notes.SingleNoteFragment;
@@ -36,13 +41,15 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	LayoutInflater mInflater;
 	boolean chooseState=false;
 	String tableName;
-	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState,String tableName) {
+	PageName fromPage;
+	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState,String tableName,PageName fromPage) {
 		super();
 		this.imgPaths = imgPaths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.chooseState=chooseState;
 		this.tableName=tableName;
+		this.fromPage=fromPage;
 	}
 
 	@Override
@@ -73,7 +80,15 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	        holder = new GridViewHolder(); 
 	        holder.img = (ImageView) convertView.findViewById(R.id.exercise_timeline_img); 
 	        holder.chooseFlag=(ImageView) convertView.findViewById(R.id.choose_flag); 
-	        convertView.setTag(holder); 
+	        holder.importanceFlag=(ImageView) convertView.findViewById(R.id.importance_flag); 
+	        SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+	 	    CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, PhotoNamePathUtil.pathToPhotoName(imgPaths.get(position)));
+	        if(cri.getFlag()==1)
+	        	holder.flag=1;
+	        else
+	        	holder.flag=0;
+	        db.close();
+	 	    convertView.setTag(holder); 
 	    } else { 
 	        holder = (GridViewHolder) convertView.getTag(); 
 	    }
@@ -85,18 +100,39 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //	    	holder.chooseFlag.setVisibility(View.VISIBLE);
 //	    else
 //	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
-	    Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
-	    if(chooseState)
+	    //Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
+	   Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
+	   if(holder.flag==1)
+	    	{
+				holder.importanceFlag.setVisibility(View.VISIBLE);
+				Picasso.with(context).load(R.drawable.importance).into(holder.importanceFlag); 
+			}
+	  
+	   if(chooseState)
 	    {
+//		   if(holder.flag==1)
+//	    	{
+//				holder.chooseFlag.setVisibility(View.VISIBLE);
+//				Picasso.with(context).load(R.drawable.importance).into(holder.chooseFlag); 
+//			}
 	    	holder.img.setEnabled(true);
 	    	holder.img.setOnClickListener(new ChooseStateButtonClickListener(imgPaths.get(position), holder));
 	    }
 	    else
 	    {   
-	    	if(holder.chooseFlag.getVisibility()==View.VISIBLE)
-			holder.chooseFlag.setVisibility(View.INVISIBLE);
+//	    	if(holder.flag==1)
+//	    	{
+//				holder.chooseFlag.setVisibility(View.VISIBLE);
+//				Picasso.with(context).load(R.drawable.importance).into(holder.chooseFlag); 
+//			}
+//	    	else
+	    	{
+	    		if(holder.chooseFlag.getVisibility()==View.VISIBLE)
+	    			holder.chooseFlag.setVisibility(View.INVISIBLE);
+	    	}
 	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(imgPaths.get(position)));
 	    }
+		
 	    return convertView; 
 	}
 	public void updateChooseState(boolean chooseState)
@@ -147,8 +183,13 @@ public class PhotoShowGridAdapter extends BaseAdapter
 			}
 			else
 			{
-				holder.chooseFlag.setVisibility(View.INVISIBLE);
-				ReviewChooseFragment.choosedPhotoPaths.remove(path);
+				
+				{
+					holder.chooseFlag.setVisibility(View.INVISIBLE);
+					ReviewChooseFragment.choosedPhotoPaths.remove(path);
+				}
+					
+				
 				Log.e(DataConstants.TAG, "choose remove "+ReviewChooseFragment.choosedPhotoPaths.size());
 				
 			}
@@ -180,7 +221,9 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		intent.setClass(context, PhotoBrowseActivity.class);
 		Bundle bundle=new Bundle();
 		bundle.putString("jump_tag", context.getResources().getString(R.string.jump_tag_footprint));
+		bundle.putSerializable("from_page", fromPage);
 		bundle.putString("date",date);
+		bundle.putString("table_name",tableName);
 		intent.putExtra("photo_show_bundle", bundle);
 		//intent.putStringArrayListExtra(, (ArrayList<String>)imgPaths);
 		context.startActivity(intent);
@@ -191,5 +234,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 class GridViewHolder { 
 
     ImageView img; 
-    ImageView chooseFlag; 
+    ImageView chooseFlag;
+    ImageView importanceFlag;
+    int flag;
 } 

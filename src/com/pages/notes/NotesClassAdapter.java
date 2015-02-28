@@ -5,6 +5,8 @@ import java.util.List;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.model.DataConstants.CourseClassName;
+import com.data.util.DateUtil;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 
@@ -14,7 +16,11 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,6 +48,14 @@ public class NotesClassAdapter extends BaseAdapter{
 		this.courseTableNames=courseTableNames;
 		this.context = context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+	public void setNames(List<String> names)
+	{
+		this.names=names;
+	}
+	public void setCourseTableNames(List<String> courseNames)
+	{
+		this.courseTableNames=courseNames;
 	}
 	@Override
 	public int getCount() {
@@ -83,43 +97,49 @@ public class NotesClassAdapter extends BaseAdapter{
 	    } 
 	    final String name=names.get(position);
 	    holder.courseName.setText(name);
-	    LinearLayout.LayoutParams lp2 = new LayoutParams(100, LayoutParams.MATCH_PARENT);
-        holder.editNameLayout.setLayoutParams(lp2);
-        holder.editNameLayout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Log.e(DataConstants.TAG,"click edit");
-				jumpToCourseNameEditActivity(name);
-			}
-		});
+	    holder.courseName.setTypeface(DataConstants.typeFZLT);
+	   
 	    SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		// if(!DataConstants.dbHelper.tableIsExist(db,
 		// getResources().getString(R.string.db_footprint_table)))
 		int count=DataConstants.dbHelper.queryCourseRecordsCount(db,courseTableNames.get(position));
+		int countTodayAdd=DataConstants.dbHelper.queryCourseRecordsCountOnDate(context, db, courseTableNames.get(position), DateUtil.getTodayDateString());
 		db.close();
-	    holder.courseInfo.setText(count+context.getResources().getString(R.string.piece));
+		String countString=count+context.getResources().getString(R.string.piece)+"/";
+		SpannableString ss = new SpannableString(countString+countTodayAdd+context.getResources().getString(R.string.piece_append));
+		ss.setSpan(new ForegroundColorSpan(Color.RED), countString.length(),ss.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    holder.courseInfo.setText(ss);
+	   CourseClassName className = null;
 	    if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_english_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_english).into(holder.img);
+	    	className=CourseClassName.English;
+	    	
 	    }
 	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_politics_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_politic).into(holder.img);
+	    	className=CourseClassName.Politics;
 	    }
 	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_math_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_math).into(holder.img);
+	    	className=CourseClassName.Math;
 	    }
 	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_profess1_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_profess1).into(holder.img);
+	    	className=CourseClassName.ProfessOne;
 	    }
 	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_profess2_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_profess2).into(holder.img);
+	    	className=CourseClassName.ProfesTwo;
 	    }
+	    
+	    LinearLayout.LayoutParams lp2 = new LayoutParams(100, LayoutParams.MATCH_PARENT);
+        holder.editNameLayout.setLayoutParams(lp2);
+        holder.editNameLayout.setOnClickListener(new EditCourseClassNameListener(name, className));
 	    convertView.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -129,29 +149,7 @@ public class NotesClassAdapter extends BaseAdapter{
 				return false;
 			}
 		});
-	    // Bind the data efficiently with the holder. 
-//	    holder.button.setText(names.get(position)); 
-//	    final int pos=position;
-//	    holder.button.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				// TODO Auto-generated method stub
-//				Intent intent=new Intent();
-//				intent.setClass(context, ExerciseActivity.class);
-//				boolean isFirstUse=UserConfigs.getIsFirstTakePhoto()==null?true:false;
-//				if(isFirstUse)
-//				{
-//					intent.putExtra("tag", context.getResources().getString(R.string.first_use));
-//				}
-//				else
-//				{
-//					intent.putExtra("course_name",names.get(pos));
-//					intent.putExtra("tag", context.getResources().getString(R.string.note_class));
-//				}
-//				context.startActivity(intent);
-//			}
-//		});
+
 	    return convertView; 
 	}
 	public void refresh()
@@ -170,7 +168,7 @@ public class NotesClassAdapter extends BaseAdapter{
 	    RelativeLayout editNameLayout;
 
 	} 
-	private void jumpToCourseNameEditActivity(String course)
+	private void jumpToCourseNameEditActivity(String course,CourseClassName className)
 	{
 //		Fragment fragment=new CourseNameEditFragment();
 //		Bundle bundle = new Bundle();  
@@ -184,7 +182,32 @@ public class NotesClassAdapter extends BaseAdapter{
 		Intent intent =new Intent();
 		intent.setClass(context, CourseNameEditActivity.class);
 		intent.putExtra("course_edit_name", course);
+		intent.putExtra("course_class_name", className);
 		context.startActivity(intent);
+	}
+	class EditCourseClassNameListener implements OnClickListener
+	{
+
+		String courseName;
+		CourseClassName className;
+		
+		
+
+		public EditCourseClassNameListener(String courseName,
+				CourseClassName className) {
+			super();
+			this.courseName = courseName;
+			this.className = className;
+		}
+
+
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			jumpToCourseNameEditActivity(courseName,className);
+		}
+		
 	}
 
 }

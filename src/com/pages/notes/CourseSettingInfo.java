@@ -42,6 +42,23 @@ public class CourseSettingInfo {
 	public void setProfess2(String profess2) {
 		this.profess2 = profess2;
 	}
+	public void storeEnglish()
+	{
+		UserConfigs.storeCourseEnglishName(english);
+	}
+	public void storeMath()
+	{
+		UserConfigs.storeCourseMathName(math);
+	}
+
+	public void storeProfessOne()
+	{
+		UserConfigs.storeCourseProfessOneName(profess1);
+	}
+	public void storeProfessTwo()
+	{
+		UserConfigs.storeCourseProfessTwoName(profess2);
+	}
 	public void storeToConfig()
 	{
 		UserConfigs.storeCourseEnglishName(english);

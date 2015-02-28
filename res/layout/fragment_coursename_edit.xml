@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
@@ -7,6 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
+    	android:background="#000000"
+    	android:id="@+id/title_layout"
         >
         <ImageView
             android:id="@+id/course_edit_back"
@@ -17,17 +19,56 @@
     		android:layout_marginLeft="5dp"
             />
         <TextView 
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:text="@string/edit_course"
     		android:layout_centerInParent="true"
             />
         </RelativeLayout>
+        <LinearLayout 
+            android:id="@+id/course_class"
+            android:layout_width="match_parent"
+	    	android:layout_height="40dp"
+	    	android:layout_below="@id/title_layout"
+	    	android:layout_marginLeft="12dp"
+            >
+	     <TextView
+	        android:id="@+id/editing_course_name"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center_vertical"
+	    	android:textColor="#333333"
+	    	android:layout_marginTop="16dp"
+	         />
+     	</LinearLayout>
+     	<LinearLayout 
+     	    android:id="@+id/divide"
+     	    android:layout_below="@id/course_class"
+     	     android:layout_width="match_parent"
+	    	 android:layout_height="0.4dp"
+	    	 android:background="#c2c2c2"
+	    	 android:orientation="vertical"
+	    	 android:layout_marginTop="12dp"
+	    	 android:layout_marginLeft="12dp"
+     	    />
     <GridView
         android:id="@+id/grid_course_names"
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:numColumns="3"
+    	android:layout_below="@id/divide"
+    	android:layout_marginTop="12dp"
+        />
+    <TextView
+        android:id="@+id/save_edit"
+        android:layout_width="match_parent"
+    	android:layout_height="65dp"
+    	android:layout_gravity="bottom"
+    	android:textColor="#ffffff"
+    	android:text="@string/save"
+    	android:gravity="center"
+    	android:background="@drawable/save_btn"
+    	android:layout_alignParentBottom="true"
         />
 
-</LinearLayout>
+</RelativeLayout>

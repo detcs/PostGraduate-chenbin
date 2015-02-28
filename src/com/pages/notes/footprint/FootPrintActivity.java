@@ -10,9 +10,11 @@ import java.util.TreeSet;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DateUtil;
 
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,8 +23,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -33,6 +37,9 @@ public class FootPrintActivity extends FragmentActivity{
 	 ViewPager viewPager;
 	 List<String> dates;
 	 String tableName;
+	 List<TextView> tabTvList;
+	 HorizontalScrollView tabScrollView;
+	 int tabWidth=DataConstants.screenWidth/3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -43,12 +50,12 @@ public class FootPrintActivity extends FragmentActivity{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = sdf.format(calendar.getTime());
-		dates.add(date);
+		//dates.add(date);
 		Log.e(DataConstants.TAG, "startday "+UserConfigs.getStartDay());
 		int gapDays=getDateGapDays(UserConfigs.getStartDay(), date);
 		for(int i=0;i<gapDays;i++)
 		{
-			calendar.roll(Calendar.DAY_OF_YEAR,-1);
+			calendar.add(Calendar.DAY_OF_YEAR,-1);
 			String tempDate=sdf.format(calendar.getTime());
 			dates.add(tempDate);
 		}
@@ -57,17 +64,37 @@ public class FootPrintActivity extends FragmentActivity{
 			Log.e(DataConstants.TAG,d);
 		}
 		mTabWidget=(TabWidget)findViewById(R.id.tabWidget);
+		tabScrollView=(HorizontalScrollView) findViewById(R.id.tab_scrollview);
 		viewPager=(ViewPager)findViewById(R.id.footprint_viewpager);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		
 		List<Fragment> fraList=new ArrayList<Fragment>();
+		View tabView;
 		TextView tv=null;
+		
+		tabTvList=new ArrayList<TextView>();
+		int gapDay=0;
 		for(int i=0;i<dates.size();i++)
 		{
-			tv=new TextView(this);
-			tv.setWidth(DataConstants.screenWidth/3);
-			tv.setText(dates.get(i));
-			mTabWidget.addView(tv);
+			tabView=LayoutInflater.from(this).inflate(R.layout.view_footprint_tab, null);
+			tv=(TextView) tabView.findViewById(R.id.tab_tv);
+			tv.setWidth(tabWidth);
+			tv.setTextColor(Color.parseColor("#333333"));
+			tv.setTypeface(DataConstants.typeFZLT);
+			//Log.e(DataConstants.TAG, dates.get(i)+" -- "+DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1));
+			if(dates.get(i).equals(DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1)))
+			{
+				tv.setText(getResources().getString(R.string.yesyterday));
+			}
+			else
+			{
+				gapDay=DateUtil.getDateGapDays(UserConfigs.getStartDay(), dates.get(i));
+				tv.setText(getResources().getString(R.string.footprint_my)
+						+" "+gapDay+" "
+						+getResources().getString(R.string.footprint_day));
+			}
+			tabTvList.add(tv);
+			mTabWidget.addView(tabView);
 			tv.setOnClickListener(new TabClickListener(i));
 			FootPrintFragment fpFrag=new FootPrintFragment();
 			Bundle b=new Bundle();
@@ -94,8 +121,33 @@ public class FootPrintActivity extends FragmentActivity{
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			viewPager.setCurrentItem(index);
+			setSelectedTabColor(index);
+			
 		}
 		
+	}
+	private void setSelectedTabColor(final int index)
+	{
+		for(int i=0;i<tabTvList.size();i++)
+		{
+			TextView tv=tabTvList.get(i);
+			if(i==index)
+			{
+				
+				tv.setTextColor(Color.parseColor("#1f76dc"));
+			}
+			else
+			{
+				tv.setTextColor(Color.parseColor("#333333"));
+			}
+			
+		}
+		tabScrollView.post(new Runnable() {
+			public void run() {
+				if(index>0)
+					tabScrollView.scrollTo(tabWidth*(index-1), tabScrollView.getScrollY());
+			}
+		});
 	}
 	private OnPageChangeListener mPageChangeListener = new OnPageChangeListener() {
 
@@ -103,6 +155,7 @@ public class FootPrintActivity extends FragmentActivity{
         public void onPageSelected(int arg0)
         {
             mTabWidget.setCurrentTab(arg0);
+			setSelectedTabColor(arg0);
         }
 
         @Override

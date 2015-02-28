@@ -284,4 +284,5 @@ public class DisplayUtil {
 	  
 	        return (bitmap);  
 	    }  
+	 
 }

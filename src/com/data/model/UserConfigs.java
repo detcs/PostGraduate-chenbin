@@ -83,6 +83,16 @@ public class UserConfigs
 	{		
 		return sp.getString(context.getResources().getString(R.string.user_verify),null);
 	}
+	public static void storeSex(String sex)
+	{
+		editor= sp.edit();//获取编辑器
+		editor.putString(context.getResources().getString(R.string.user_sex),sex);
+		editor.commit();//提交修改
+	}
+	public static String getSex()
+	{		
+		return sp.getString(context.getResources().getString(R.string.user_sex),null);
+	}
 	public static void storeId(String id)
 	{
 		editor= sp.edit();//获取编辑器
@@ -184,6 +194,7 @@ public class UserConfigs
 		editor= sp.edit();//获取编辑器
 		int days=getClockDays();
 		days++;
+		Log.e(DataConstants.TAG, "days "+days);
 		editor.putInt(context.getResources().getString(R.string.clock_days),days);
 		editor.commit();//提交修改
 	}

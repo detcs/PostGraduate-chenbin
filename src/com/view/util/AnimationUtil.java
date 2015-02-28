@@ -106,4 +106,25 @@ public class AnimationUtil {
 		}
 		return rotateAction;
 	}
+	
+	public static Animation showUpAnimation()
+	{
+		Animation mShowAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f,     
+	            Animation.RELATIVE_TO_SELF, 0.0f, 
+	            Animation.RELATIVE_TO_SELF, 1.0f, 
+	            Animation.RELATIVE_TO_SELF, 0.0f);     
+	    mShowAction.setDuration(500);
+	    return mShowAction;
+	}
+	public static Animation hideDownAnimation()
+	{
+		Animation mHiddenAction = new TranslateAnimation(
+				Animation.RELATIVE_TO_SELF, 0.0f, 
+                Animation.RELATIVE_TO_SELF, 0.0f,     
+                Animation.RELATIVE_TO_SELF, 0.0f, 
+                Animation.RELATIVE_TO_SELF,1.0f);    
+		mHiddenAction.setDuration(500);
+	    return mHiddenAction;
+	}
 }

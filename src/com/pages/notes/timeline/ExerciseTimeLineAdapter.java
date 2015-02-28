@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
+import com.data.model.DataConstants.PageName;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	String tableName;
 	PhotoShowGridAdapter photoShowAdapter;
 	boolean chooseState;
+	
  	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates) {
 		super();
 		//this.paths = paths;
@@ -91,9 +94,12 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState,tableName);
+		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState,tableName,PageName.NoteReviewChoose);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    holder.day.setText(dates.get(position));
+	    holder.day.setTypeface(DataConstants.typeFZLT);
+	    if(position==0)
+	    	holder.day.setTextColor(Color.RED);
 	    return convertView; 
 	}
 	static class ViewHolder { 

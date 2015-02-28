@@ -1,6 +1,7 @@
 package com.pages.notes;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,12 +17,19 @@ import com.data.model.ImportanceFlagOnClickListener;
 import com.data.util.SysCall;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import com.squareup.picasso.Picasso.LoadedFrom;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +39,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ReviewFragment extends Fragment{
@@ -38,13 +48,16 @@ public class ReviewFragment extends Fragment{
 	View rootView;
 	TextView leftBtn;
 	TextView rightBtn;
+	TextView titleCenter;
 	ImageView reviewImg;
+	ProgressBar progressBar;
 	List<String> reviewImgPaths;
 	List<String> photoNames;
 	
 	SQLiteDatabase db;
 	String tableName;
 	int index=0;
+	int totalNum=0;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_review, container, false);
@@ -53,6 +66,7 @@ public class ReviewFragment extends Fragment{
 		leftBtn.setBackgroundResource(R.drawable.master);
 		rightBtn.setBackgroundResource(R.drawable.nomaster);
 		reviewImg=(ImageView)rootView.findViewById(R.id.review_img);
+		progressBar=(ProgressBar) rootView.findViewById(R.id.progress_horizontal);
 		Bundle bundle=getArguments();
 		String type=bundle.getString("type");
 		if(type.equals(getResources().getString(R.string.today_rec)))
@@ -95,7 +109,10 @@ public class ReviewFragment extends Fragment{
 			reviewImgPaths=new ArrayList<String>();
 			for(String name:photoNames)
 				reviewImgPaths.add(dirPath+"/"+name);
-			
+			totalNum=reviewImgPaths.size();
+			progressBar.setMax(totalNum);
+			progressBar.setProgress(1);
+			titleCenter.setText(getResources().getString(R.string.reverse_review)+" ("+(index+1)+"/"+totalNum+" )");
 			Picasso.with(getActivity()).load(new File(reviewImgPaths.get(0))).into(reviewImg);
 			leftBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_master)));
 			rightBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_unmaster)));
@@ -136,6 +153,8 @@ public class ReviewFragment extends Fragment{
 				//rootView.startAnimation(animation);
 				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_master_state), masterState, photoName);
 				index++;
+				titleCenter.setText(getResources().getString(R.string.reverse_review)+" ("+(index+1)+"/"+totalNum+" )");
+				progressBar.setProgress(progressBar.getProgress()+1);
 				if(index==reviewImgPaths.size())
 				{
 					jumpToCompleteFragment();
@@ -165,7 +184,9 @@ public class ReviewFragment extends Fragment{
 	}
 	private void initTitleView()
 	{
-		Button right=(Button)getActivity().findViewById(R.id.right_btn);
+		RelativeLayout title=(RelativeLayout) getActivity().findViewById(R.id.title);
+		title.setBackgroundResource(R.drawable.gradual_title_bg);
+		TextView right=(TextView)getActivity().findViewById(R.id.right_btn);
 		right.setVisibility(View.INVISIBLE);
 		ImageView left=(ImageView) getActivity().findViewById(R.id.exercise_left_btn);
 		left.setOnClickListener(new OnClickListener() {
@@ -176,6 +197,8 @@ public class ReviewFragment extends Fragment{
 				SysCall.clickBack();
 			}
 		});
+		titleCenter=(TextView)getActivity().findViewById(R.id.title_center);
+		titleCenter.setText(getResources().getString(R.string.reverse_review));
 	}
 	private void initNoteEditView()
 	{
@@ -197,7 +220,46 @@ public class ReviewFragment extends Fragment{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).rotate(90).into(reviewImg);
+				Log.e(DataConstants.TAG, "rotate");
+				
+				
+				Bitmap bitmap=BitmapFactory.decodeFile(reviewImgPaths.get(index));
+				Matrix matrix = new Matrix(); 
+				matrix.setRotate(90);
+		          //旋转图像，并生成新的Bitmap对像  
+		        bitmap=Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		        try {
+		        	Log.e(DataConstants.TAG,"save bitmap");
+					FileDataHandler.saveBitmap(bitmap, reviewImgPaths.get(index));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        bitmap.recycle();
+		        bitmap=null;
+		        Target target=new Target() {
+					
+					@Override
+					public void onPrepareLoad(Drawable arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onBitmapLoaded(Bitmap arg0, LoadedFrom arg1) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onBitmapFailed(Drawable arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				};
+				
+				//Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).skipMemoryCache().into(target);
+		        Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).skipMemoryCache().into(reviewImg);
 			}
 		});
 		
@@ -209,12 +271,14 @@ public class ReviewFragment extends Fragment{
 	private void initRemarkEditView()
 	{
 		final TextView remarkContext=(TextView)rootView.findViewById(R.id.remark_content);
+		TextView extendBtn=(TextView)rootView.findViewById(R.id.extends_btn);
 		remarkContext.setTypeface(DataConstants.typeFZLT);
 		CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoNames.get(index));
 		String text=cri.getRemark();
 		remarkContext.setText(text);
+		remarkContext.setMovementMethod(ScrollingMovementMethod.getInstance()); 
 		//remarkContext.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa一一一一一一一一一一一一一一一一一一一一一一一一一一一一一");
-		remarkContext.setOnClickListener(new OnClickListener() {
+		extendBtn.setOnClickListener(new OnClickListener() {
 			Boolean flag = true;
 			@Override
 			public void onClick(View arg0) {
@@ -223,6 +287,7 @@ public class ReviewFragment extends Fragment{
 			        flag = false;
 			        remarkContext.setEllipsize(null); // 展开
 			        remarkContext.setSingleLine(flag);
+			        remarkContext.setLines(4);
 			        }else{
 			        	Log.e(DataConstants.TAG,"remarkcontent "+flag);
 			          flag = true;

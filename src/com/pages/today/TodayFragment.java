@@ -1,5 +1,7 @@
 package com.pages.today;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,17 +22,23 @@ import com.android.volley.toolbox.Volley;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
+import com.data.model.MusicService;
 import com.data.model.UserConfigs;
+import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
 import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
+import com.view.util.RoundProgressBar;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore.Audio;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,23 +55,33 @@ public class TodayFragment extends Fragment {
 	MediaPlayer mp;
 	View rootView;
 	ImageView todayBgImg;
+	TextView musicName;
+	TextView singerName;
+	private RoundProgressBar mRoundProgressBar;
+	int progress=0;
+	Activity mActivity; 
+	SQLiteDatabase db ;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_today, container, false);
 		initTodayView(rootView);
 		return rootView;
 	}
+	public void setActivity(Activity activity)
+	{
+		mActivity=activity;
+	}
 	public void initTodayView(View v) {
 
 		todayBgImg=(ImageView) v.findViewById(R.id.today_bg_img);
-		Picasso.with(getActivity()).load(R.drawable.today_background).resize(DataConstants.screenWidth/4, DataConstants.screenHeight/4).into(todayBgImg);
+		Picasso.with(getActivity()).load(R.drawable.today_background).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
 		TextView useDays=(TextView) v.findViewById(R.id.use_days);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
-		calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
+		//calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
 		String date = sdf.format(calendar.getTime());
 		// Log.e(DataConstants.TAG,"date:"+date);
-		int gapDays=getDateGapDays(UserConfigs.getStartDay(), date);
+		int gapDays=DateUtil.getDateGapDays(UserConfigs.getStartDay(), date);
 		if(gapDays<10)
 			useDays.setText("0"+gapDays+"");
 		else
@@ -72,29 +90,90 @@ public class TodayFragment extends Fragment {
 		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"font/AvenirNextLTPro-UltLt.otf");
 		useDays.setTypeface(typeFace);
 		useDays.setTextSize(useDaysSize);
-		// requestFirstPageJasonInfo(getFirstPageURL(date),date);
+		
 
-		mp = MediaPlayer.create(getActivity(), R.raw.song);
+		mRoundProgressBar=(RoundProgressBar)v.findViewById(R.id.roundProgressBar);
+		//mp = MediaPlayer.create(getActivity(), R.raw.song);
 		final ImageView play = (ImageView) v.findViewById(R.id.music_play);
-		play.setImageResource(R.drawable.play);
-		TextView musicName = (TextView) v.findViewById(R.id.music_name);
-		musicName.setText("可惜没如果");
+		play.setImageResource(R.drawable.music_play);
+		musicName = (TextView) v.findViewById(R.id.music_name);
+		musicName.setTypeface(DataConstants.typeFZLT);
+		singerName=(TextView) v.findViewById(R.id.singer_name);
+		singerName.setTypeface(DataConstants.typeFZLT);
+		db= DataConstants.dbHelper.getReadableDatabase();
+		FootprintInfo footPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
+		if(footPrintInfo!=null)
+		{
+			Log.e(DataConstants.TAG, "footprint not null");
+			setFirstpageView(footPrintInfo);
+		}
+		else
+		{
+			requestFirstPageJasonInfo(getFirstPageURL(date),date);
+		}
+		
 		play.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				Intent intent = new Intent(mActivity, com.data.model.MusicService.class);
+	            Bundle bundle2service = new Bundle();
+	            String audioPath=FileDataHandler.COVER_SONG_DIR_PATH+"/201512823526.mp3";
+	            //String audioPath=FileDataHandler.SD_PATH+"/kgmusic/download/1.mp3";
+	            Log.e(DataConstants.TAG,"songpath "+audioPath);
+	            String bc_receiver=DataConstants.MUSIC_SERVICE;
+	            bundle2service.putString("audioPath", audioPath);//前面要定义AUDIO_PATH
+	            //BC_RECEIVER也要在前面定义，并在manifest.xml里注册
+	            bundle2service.putString("bc_receiver",bc_receiver);
+	            intent.putExtras(bundle2service);
+	            ((MainActivity)mActivity).startMusicService(intent);
+	            /*
 				if (mp.isPlaying()) {
-					play.setImageResource(R.drawable.play);
+					play.setImageResource(R.drawable.music_play);
 					mp.pause();
 				} else {
-					play.setImageResource(R.drawable.pause);
+					play.setImageResource(R.drawable.music_pause);
 					mp.start();
+					new Thread(new Runnable() 
+					{
+						
+						@Override
+						public void run() 
+						{
+							while(progress <= 1000){
+								progress += 1;
+								
+								System.out.println(progress);
+								
+								mRoundProgressBar.setProgress(progress);
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							
+						}
+						}).start();
+					}
+					*/
 				}
-			}
+				
+			
 		});
 
 		// mp.start();
+	}
+	public void setFirstpageView(FootprintInfo info)
+	{
+		musicName.setText(info.getCoverSongName());
+		singerName.setText(info.getCoverSingerName());
+		String bgPath=FileDataHandler.COVER_PIC_DIR_PATH+"/"+info.getCoverPicName();
+		Picasso.with(getActivity()).load(new File(bgPath)).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
+		TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);
+		TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
+		encourageTv.setText(info.getEncourage());
 	}
 	private void requestFirstPageJasonInfo(String url, final String date) {
 		final FootprintInfo fpInfo;
@@ -104,7 +183,7 @@ public class TodayFragment extends Fragment {
 					@Override
 					public void onResponse(JSONObject response) {
 						Log.e(DataConstants.TAG, "response=" + response);
-						parseFirstPageInfo(response, date);
+						FootprintInfo info=parseFirstPageInfo(response, date);
 					}
 				}, new Response.ErrorListener() {
 					@Override
@@ -154,57 +233,76 @@ public class TodayFragment extends Fragment {
 			JSONArray indexs = data.getJSONArray("index_");
 			DownloadTask fileDownloadTask;
 			DownloadTask songDownloadTask;
-			SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+			
 			Log.e(DataConstants.TAG, "len:" + indexs.length() + "");
 
 			for (int i = 0; i < indexs.length(); i++) {
 				JSONObject info = indexs.getJSONObject(i);
 				JSONArray musics = info.getJSONArray("music_");
 				JSONObject music = musics.getJSONObject(0);// info.getJSONObject("music_");
+				//Log.e(DataConstants.TAG,"music "+music.toString());
 				String songName = music.getString("title_");
 				String songId = music.getString("file_");
-				String imgId = info.getString("img_");
+				String coverImgId = info.getString("img_");
+				String footprintImgId=info.getString("imgZj_");
 				String encourage = info.getString("content_");
 				String days = info.getString("days_");
 				String daysLeft = info.getString("daysLeft_");
+				String singer=music.getString("singer_");
 				// downloadHandler(DataConstants.DOWNLOAD_URL+songId,
 				// FileDataHandler.COVER_SONG_DIR_PATH+"/"+songName+".mp3");
 				// downloadHandler(DataConstants.DOWNLOAD_URL+imgId,
 				// FileDataHandler.COVER_PIC_DIR_PATH+"/"+imgId+".jpg");
+				fpInfo = new FootprintInfo("", songName,singer,"","diary", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
 				fileDownloadTask = new DownloadTask(getActivity(),
-				FileDataHandler.COVER_PIC_DIR_PATH, getResources().getString(R.string.dbcol_cover_pic), imgId,date);
-				fileDownloadTask.execute();
-				songDownloadTask = new DownloadTask(getActivity(),
-				FileDataHandler.COVER_SONG_DIR_PATH, getResources().getString(R.string.dbcol_cover_song), songId,date);
-				songDownloadTask.execute();
-				fpInfo = new FootprintInfo("", songName, "", "singer","", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
-				TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);
-				TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
-				encourageTv.setText(encourage);
-				DataConstants.dbHelper.insertFootprintInfoRecord(getActivity(), db, fpInfo);
+				 getResources().getString(R.string.dbcol_cover_pic), date,fpInfo,TodayFragment.this);
+				String[] fileIds={coverImgId,songId,footprintImgId};
+				fileDownloadTask.execute(fileIds);
+//				File songFile=new File(FileDataHandler.COVER_SONG_DIR_PATH+"/"+songId);
+//				//if(!songFile.exists())
+//				{
+//					songDownloadTask = new DownloadTask(getActivity(),
+//					 getResources().getString(R.string.dbcol_cover_song), date,fpInfo);
+//					songDownloadTask.execute();
+//				}
+				//musicName.setText(songName);
+				//mp.setDataSource(FileDataHandler.COVER_SONG_DIR_PATH+"/"+"201512823526.mp3");
+				//mp.prepare();
+				//Log.e(DataConstants.TAG,"songname "+ songName);
+				//singerName.setText(singer);
+				
+				
+				//DataConstants.dbHelper.insertFootprintInfoRecord(getActivity(), db, fpInfo);
 			}
-			db.close();
 
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return fpInfo;
 	}
-	public int getDateGapDays (String beginDate, String endDate)
-	{       
-			int gapDays=0;
-	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-	        try { 
-	                Date date = sdf.parse(endDate);// 通过日期格式的parse()方法将字符串转换成日期              
-	                Date dateBegin = sdf.parse(beginDate);
-	                long betweenTime = date.getTime() - dateBegin.getTime(); 
-	                gapDays = (int)(betweenTime  / 1000 / 60 / 60 / 24); 
-	             } catch(Exception e)
-	             {
-	              }
-	        return (int)gapDays; 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		db= DataConstants.dbHelper.getReadableDatabase();
 	}
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		db.close();
+	}
+	
 
 
 }

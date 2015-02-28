@@ -15,6 +15,7 @@ import com.pages.funsquare.ButtonsGridViewAdapter;
 import com.pages.notes.camera.CameraActivity;
 import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.notes.footprint.FootprintInfo;
+import com.pages.notes.todayrec.TodayRecommenderActivity;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 
@@ -72,6 +73,7 @@ public class NoteFragment  extends Fragment{
 		TextView cancelEdit=(TextView)v.findViewById(R.id.diary_quitView);
 		TextView saveEdit=(TextView)v.findViewById(R.id.diary_saveView);
 		final TextView diary = (TextView) v.findViewById(R.id.diary);
+		diary.setTypeface(DataConstants.typeFZLT);
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
@@ -121,14 +123,16 @@ public class NoteFragment  extends Fragment{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent();
-				intent.setClass(getActivity(), ExerciseActivity.class);
+				
 				boolean isFirstUse = UserConfigs.getIsFirstTakePhoto() == null ? true
 						: false;
 				if (isFirstUse) {
+					intent.setClass(getActivity(), ExerciseActivity.class);
 					intent.putExtra("tag",getResources().getString(R.string.first_use));
 					startActivityForResult(intent, 0);
 				}
 			   else {
+				   intent.setClass(getActivity(), TodayRecommenderActivity.class);
 					intent.putExtra("tag",getResources().getString(R.string.today_rec));
 					startActivity(intent);
 				}
@@ -280,6 +284,8 @@ public class NoteFragment  extends Fragment{
 	public void updateNoteClassList()
 	{
 		getTableAndCourseNames();
+		noteClassAdapter.setNames(names);
+		noteClassAdapter.setCourseTableNames(courseTableNames);
 		noteClassAdapter.notifyDataSetChanged();
 	}
 	private void getTableAndCourseNames()

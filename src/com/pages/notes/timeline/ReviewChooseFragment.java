@@ -12,6 +12,7 @@ import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.util.PhotoNamePathUtil;
 import com.pages.notes.ReviewFragment;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,6 +40,7 @@ import android.widget.TextView;
 
 public class ReviewChooseFragment extends Fragment{
 
+	LinearLayout bgLayout;
 	ListView exerciseTimeLine;
 	RelativeLayout layout;
 	LinearLayout reviewChooseLayout;
@@ -54,7 +57,8 @@ public class ReviewChooseFragment extends Fragment{
 	Button reviewReverse;
 	Button reviewEbbin;
 	String tableName;
-	Button choose;
+	TextView choose;
+	TextView titleCenter;
 	ExerciseTimeLineAdapter timeLineAdapter;
 	boolean chooseState=false;
 	static List<String> choosedPhotoPaths;
@@ -73,6 +77,7 @@ public class ReviewChooseFragment extends Fragment{
 		Collections.reverse(dates);
 		//Log.e(DataConstants.TAG, dates.get(0)+"--"+dates.get(1));
 		db.close();
+		bgLayout=(LinearLayout) rootView.findViewById(R.id.reviewchoose_bg);
 		layout=(RelativeLayout)rootView.findViewById(R.id.reviewchoose_layout);
 		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);	
 		timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates);
@@ -94,14 +99,35 @@ public class ReviewChooseFragment extends Fragment{
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		super.onResume();
+		
 		initTitleView();
+		super.onResume();
 	}
 
 	private void initTitleView()
 	{
-		typefaceFZLT= Typeface.createFromAsset (getActivity().getAssets(),"font/fangzhenglanting.ttf");
-		choose=(Button)getActivity().findViewById(R.id.right_btn);
+		//typefaceFZLT= Typeface.createFromAsset (getActivity().getAssets(),"font/fangzhenglanting.ttf");
+		titleCenter=(TextView)getActivity().findViewById(R.id.title_center);
+		if(tableName.equals(getResources().getString(R.string.db_english_table)))
+		{
+			titleCenter.setText(getResources().getString(R.string.english_catalog));	
+		}
+		else if(tableName.equals(getResources().getString(R.string.db_politics_table)))
+		{
+			titleCenter.setText(getResources().getString(R.string.politic_catalog));
+		}
+		else if(tableName.equals(getResources().getString(R.string.db_math_table)))
+		{
+			titleCenter.setText(getResources().getString(R.string.math_catalog));
+		}
+		else if(tableName.equals(getResources().getString(R.string.db_profess1_table)) 
+				||tableName.equals(getResources().getString(R.string.db_profess2_table)) )
+		{
+			titleCenter.setText(getResources().getString(R.string.profess_catalog));
+		}
+		choose=(TextView)getActivity().findViewById(R.id.right_btn);
+		//choose.setText(getResources().getString(R.id.ch))
+		choose.setTypeface(DataConstants.typeFZLT);
 		//choose.setBackground(background)
 		choose.setText(getResources().getString(R.string.choose));
 		choose.setOnClickListener(new OnClickListener() {
@@ -117,6 +143,8 @@ public class ReviewChooseFragment extends Fragment{
 					choose.setText(getResources().getString(R.string.cancel));
 					transferDelLayout.setVisibility(View.VISIBLE);
 					reviewChooseLayout.setVisibility(View.INVISIBLE);
+					//layout.setBackgroundResource(Color.parseColor("#000000"));
+					bgLayout.setAlpha((float) 0.5);
 				}
 				else if(choose.getText().toString().equals(getResources().getString(R.string.cancel)))
 				{
@@ -125,6 +153,8 @@ public class ReviewChooseFragment extends Fragment{
 					choose.setText(getResources().getString(R.string.choose));
 					transferDelLayout.setVisibility(View.INVISIBLE);
 					reviewChooseLayout.setVisibility(View.VISIBLE);
+					//layout.setBackgroundResource(Color.parseColor("#000000"));
+					bgLayout.setAlpha(0);
 				}
 			}
 		});
@@ -193,6 +223,7 @@ public class ReviewChooseFragment extends Fragment{
 				Log.e(DataConstants.TAG,"onclickkkk");
 				courseTransferChooseLayout.startAnimation(hideAnimation());
 				courseTransferChooseLayout.setVisibility(View.INVISIBLE);
+				
 			}
 		});
 		courseTransferChooseConfirmBtn=(TextView)rootView.findViewById(R.id.couser_transfer_choose_confirm);
@@ -250,7 +281,10 @@ public class ReviewChooseFragment extends Fragment{
 				courseTransferChooseLayout.setVisibility(View.VISIBLE);
 			}
 		});
-		deletePhoto.setOnClickListener(new OnClickListener() {
+		final LinearLayout deleteLayout=(LinearLayout) rootView.findViewById(R.id.bottom_delete);
+		TextView delete=(TextView) rootView.findViewById(R.id.delete_bg);
+		TextView deleteCancel=(TextView) rootView.findViewById(R.id.delete_cancel_bg);
+		delete.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
@@ -259,13 +293,36 @@ public class ReviewChooseFragment extends Fragment{
 				String photoname=null;
 				for(String path:choosedPhotoPaths)
 				{
-					String[] info=path.split("/");
-					int len=info.length;
-					photoname=info[len-1];
+//					String[] info=path.split("/");
+//					int len=info.length;
+//					photoname=info[len-1];
+					photoname=PhotoNamePathUtil.pathToPhotoName(path);
 					DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(getActivity(), db, tableName, photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
 				}
 				db.close();
 				timeLineAdapter.notifyDataSetChanged();
+				deleteLayout.startAnimation(hideAnimation());
+				deleteLayout.setVisibility(View.INVISIBLE);
+				bgLayout.setAlpha(0);
+			}
+		});
+		deleteCancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				deleteLayout.startAnimation(hideAnimation());
+				deleteLayout.setVisibility(View.INVISIBLE);
+				//bglayout.setAlpha(255);
+			}
+		});
+		deletePhoto.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				deleteLayout.setVisibility(View.VISIBLE);
+				deleteLayout.startAnimation(showAnimation());
 			}
 		});
 	}

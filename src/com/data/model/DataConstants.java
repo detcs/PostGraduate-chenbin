@@ -3,6 +3,7 @@ package com.data.model;
 import java.util.HashMap;
 
 import android.graphics.Typeface;
+import android.net.wifi.WifiManager;
 
 public class DataConstants {
 
@@ -24,7 +25,12 @@ public class DataConstants {
 	public static final String blured="blured";
 	public static Typeface typeFZLT; 
 	public static Typeface typeAvenir; 
-	public static enum PageName{NoteSpec,NoteReview};
+	public static enum PageName{NoteSpec,NoteReview,NoteFootprint,NoteReviewChoose};
+	public static enum CourseClassName{English,Politics,Math,ProfessOne,ProfesTwo};
+	public static final String MUSIC_SERVICE="com.data.model.MusicService";
+	
+	//system
+	WifiManager wifiManager;
 	//sina weibo
 	public final static String WEIBO_APP_KEY="77238273";
 	public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";//"http://s1.smartjiangsu.com/index.html";// 应用的回调页 

@@ -355,8 +355,8 @@ public class DragImageView extends ImageView {
 	private void clickImage()
 	{
 		//Log.e(DataConstants.TAG, "click img");
-		LinearLayout top=(LinearLayout) parentlayout.findViewById(R.id.browse_top);
-		RelativeLayout bottom=(RelativeLayout) parentlayout.findViewById(R.id.browse_bottom);
+		RelativeLayout top=(RelativeLayout) mActivity.findViewById(R.id.browse_top);
+		LinearLayout bottom=(LinearLayout) mActivity.findViewById(R.id.browse_bottom);
 		if(top.getVisibility()==View.INVISIBLE)
 			top.setVisibility(View.VISIBLE);
 		else if(top.getVisibility()==View.VISIBLE)

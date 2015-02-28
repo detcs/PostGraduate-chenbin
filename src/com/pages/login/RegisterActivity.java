@@ -20,14 +20,14 @@ public class RegisterActivity extends FragmentActivity implements FragmentAction
 
 	private List<Fragment> mFragments = new ArrayList<Fragment>();
 	private int mCurrentStepIndex;
-	Button backBtn;
+	TextView backBtn;
 	TextView centerText;
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
 		setContentView(R.layout.activity_register);
-		backBtn=(Button)findViewById(R.id.left_btn);
+		backBtn=(TextView)findViewById(R.id.left_btn);
 		backBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override

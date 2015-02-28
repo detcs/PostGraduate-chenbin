@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.GloableData;
 import com.app.ydd.R;
 import com.pages.viewpager.MainActivity;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -28,6 +29,7 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.UsersAPI;
 import com.sina.weibo.sdk.openapi.models.ErrorInfo;
 import com.sina.weibo.sdk.openapi.models.User;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -39,47 +41,90 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity{
 
-	Button weiboLogin;
-	Button qqLogin;
+	ImageView weiboLogin;
+	ImageView qqLogin;
+	ImageView wxLogin;
 	EditText phone;
 	EditText password;
 	TextView register;
-	Button phoneLogin;
+	TextView phoneLogin;
+	
+	ImageView loginBg;
 	//weibo
-		 private AuthInfo mAuthInfo;
-		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
-		 private Oauth2AccessToken mAccessToken;
-		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
-		 private SsoHandler mSsoHandler;
-		 /** 用户信息接口 */
-	     private UsersAPI mUsersAPI;
+//		 private AuthInfo mAuthInfo;
+//		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
+//		 private Oauth2AccessToken mAccessToken;
+//		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
+//		 private SsoHandler mSsoHandler;
+//		 /** 用户信息接口 */
+//	     private UsersAPI mUsersAPI;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		if(UserConfigs.getAccount()==null)//debug
+		
+		if(UserConfigs.getId()==null || 
+		  (UserConfigs.getLoginWay().equals(getResources().getString(R.string.user_phone))
+				  && UserConfigs.getPassword()==null))//debug
 		{
 			setContentView(R.layout.activity_login);
+			loginBg=(ImageView)findViewById(R.id.login_bg);
+			Picasso.with(getApplicationContext()).load(R.drawable.login_background).into(loginBg);
 			phone=(EditText)findViewById(R.id.username_edit);
 			password=(EditText)findViewById(R.id.password_edit);
-			phoneLogin=(Button)findViewById(R.id.signin_button);
-			weiboLogin=(Button)findViewById(R.id.weibologin);
-			qqLogin=(Button)findViewById(R.id.qqlogin);
+			phoneLogin=(TextView)findViewById(R.id.signin_button);
+			phoneLogin.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					phoneLogin();
+				}
+			});
+			weiboLogin=(ImageView )findViewById(R.id.weibologin);
+			qqLogin=(ImageView )findViewById(R.id.qqlogin);
+			wxLogin=(ImageView )findViewById(R.id.wxlogin);
+			Picasso.with(getApplicationContext()).load(R.drawable.login_qq_normal).into(qqLogin);
+			Picasso.with(getApplicationContext()).load(R.drawable.login_wx_normal).into(wxLogin);
+			Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_normal).into(weiboLogin);
+			qqLogin.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					//weiboLogin();
+					Picasso.with(getApplicationContext()).load(R.drawable.login_qq_click).into(qqLogin);
+					
+				}
+			});
+			wxLogin.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					//weiboLogin();
+					Picasso.with(getApplicationContext()).load(R.drawable.login_wx_click).into(wxLogin);
+					
+				}
+			});
 			weiboLogin.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					weiboLogin();
+					//weiboLogin();
+					Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_click).into(weiboLogin);
+					
 				}
 			});
-			register=(TextView)findViewById(R.id.register_link);
-			register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+			register=(TextView)findViewById(R.id.register_button);
+			//register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
 			register.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -87,6 +132,7 @@ public class LoginActivity extends Activity{
 					// TODO Auto-generated method stub
 					Intent intent=new Intent();
 					intent.setClass(LoginActivity.this, RegisterActivity.class);
+					//intent.setClass(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
 				}
 			});
@@ -95,17 +141,61 @@ public class LoginActivity extends Activity{
 		{
 			String loginWay=UserConfigs.getLoginWay();
 			if(loginWay.equals(getResources().getString(R.string.user_weibo)))
-				weiboLogin();
+				;//weiboLogin();
+			else if(loginWay.equals(getResources().getString(R.string.user_phone)))
+			{
+				phoneAutoLogin();
+			}
 			
 		}
 		
 		
 	}
+	 private void phoneLogin()
+	    {
+	    	String loginway=getResources().getString(R.string.user_phone);
+			String url=getLoginURL(loginway,phone.getText().toString(),password.getText().toString());
+			UserConfigs.storePassword(password.getText().toString());
+			serverLogin(url, loginway);
+	    }
+	    private void phoneAutoLogin()
+	    {
+	    	String loginway=getResources().getString(R.string.user_phone);
+			String url=getLoginURL(loginway,UserConfigs.getAccount(),UserConfigs.getPassword());
+			serverLogin(url, loginway);
+	    }
+	    
+	    private void serverLogin(String url,final String loginway)
+	    {
+	    	 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( url, null,
+	                 new Response.Listener<JSONObject>() {
+	                     @Override
+	                     public void onResponse(JSONObject response) {
+	                         Log.e(DataConstants.TAG,"response=" + response);
+	                         		
+	                         		parseLoginInfo(response, loginway);
+	                         		Intent intent=new Intent();
+	                  			    intent.setClass(getApplicationContext(), MainActivity.class);
+	                  			    startActivity(intent);
+	                     }}, 
+	             	new Response.ErrorListener() {
+	                     @Override
+	                     public void onErrorResponse(VolleyError arg0) {
+	                        // tv_1.setText(arg0.toString());
+	                         Log.i(DataConstants.TAG,"sorry,Error"+arg0.toString());
+//	                         if (progressDialog.isShowing()
+//	                             && progressDialog != null) {
+//	                             progressDialog.dismiss();
+//	                         }
+	                     }});
+	             GloableData.requestQueue.add(jsonObjectRequest);
+	    }
 	 /**
      * 当 SSO 授权 Activity 退出时，该函数被调用。
      * 
      * @see {@link Activity#onActivityResult}
      */
+	/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -124,6 +214,7 @@ public class LoginActivity extends Activity{
      * 2. 非 SSO 授权时，当授权结束后，该回调就会被执行。
      * 当授权成功后，请保存该 access_token、expires_in、uid 等信息到 SharedPreferences 中。
      */
+	/*
     class AuthListener implements WeiboAuthListener {
         
         @Override
@@ -213,6 +304,7 @@ public class LoginActivity extends Activity{
      * 
      * @param hasExisted 配置文件中是否已存在 token 信息并且合法
      */
+	/*
     private void updateTokenView(boolean hasExisted) {
         String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(
                 new java.util.Date(mAccessToken.getExpiresTime()));
@@ -229,6 +321,7 @@ public class LoginActivity extends Activity{
 	 /**
      * 微博 OpenAPI 回调接口。 获取微博用户昵称
      */
+	/*
     private RequestListener mListener = new RequestListener() {
         @Override
         public void onComplete(String response) {
@@ -256,6 +349,7 @@ public class LoginActivity extends Activity{
             Toast.makeText(LoginActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
     };
+    
     private void weiboLogin()
     {
     	// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
@@ -266,6 +360,7 @@ public class LoginActivity extends Activity{
 		Log.e(DataConstants.TAG,"mSsoHandler");
         mSsoHandler.authorize(new AuthListener());
     }
+    */
     private String getLoginURL(String loginWay,String account,String passward)
     {
     	List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -281,13 +376,23 @@ public class LoginActivity extends Activity{
 			pair = new BasicNameValuePair("wbAccount",account);
 		else if(loginWay.equals("qq"))
 			pair = new BasicNameValuePair("qqAccount",account);
-		else if(loginWay.equals("phone"))
+		else if(loginWay.equals(getResources().getString(R.string.user_phone)))
 		{
-			pair = new BasicNameValuePair("account",account);
-			params.add(pair);
+			Log.e(DataConstants.TAG,account+" "+account.length());
+			if(account.length()==11)
+			{
+				pair = new BasicNameValuePair("phone",account);
+				params.add(pair);
+			}
+			else
+			{
+				pair = new BasicNameValuePair("account",account);
+				params.add(pair);
+			}
 			pair = new BasicNameValuePair("password",passward);
+			params.add(pair);
 		}
-		params.add(pair);
+		//params.add(pair);
 		String resultURL=DataConstants.SERVER_URL+"?";
 		for(NameValuePair nvp:params)
 		{

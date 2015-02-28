@@ -6,9 +6,11 @@
     android:background="#ffffff" >
     <RelativeLayout
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="50dp"
     	android:layout_gravity="top"
-    	android:background="#000000"
+    	android:background="@drawable/register_title"
+    	android:id="@+id/title"
+    	android:alpha="0.5"
         >
      	<ImageView
      	    android:id="@+id/exercise_left_btn"
@@ -17,13 +19,26 @@
     		android:layout_height="12dp"
     		android:layout_alignParentLeft="true"
      	    />
-     	<Button
+     	<TextView
+     	    android:id="@+id/title_center"
+     	    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:gravity="center"
+    		android:layout_centerInParent="true"
+    		android:textColor="#ffffff"
+    		android:textSize="20sp"
+     	    />
+     	<TextView
      	    android:id="@+id/right_btn"
      	    android:text="@string/choose"
      	    android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:layout_alignParentRight="true"
-    		android:background="#ffffff"
+    	 	android:layout_alignParentBottom="true"
+    		android:textColor="#ffffff"
+    		android:textSize="15sp"
+    		android:layout_marginRight="12dp"
+    		android:layout_marginBottom="12dp"
      	    />
      </RelativeLayout>
      <FrameLayout 

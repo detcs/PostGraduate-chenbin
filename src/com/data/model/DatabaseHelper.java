@@ -66,6 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_daysleft)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
+    			songname
+    			notebgpic
         Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
@@ -249,6 +251,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     		return 0;
     	
     	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0",null); 
+	    result.moveToFirst(); 
+	    int count=0;
+	    while (!result.isAfterLast()) { 
+	         
+	        count=result.getInt(0); 
+	       // String name=result.getString(1); 
+	       // Log.e(DataConstants.TAG,"db:query count:"+tableName+":"+count);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	      return count;
+    }
+    public static int queryAllCoursesReviewedCountOnDate(Context context,SQLiteDatabase db,String date)
+    {
+    	int count=0;
+    	count+=queryCourseReviewedCount(context,db, context.getResources().getString(R.string.db_english_table),date);
+    	count+=queryCourseReviewedCount(context,db, context.getResources().getString(R.string.db_politics_table),date);
+    	count+=queryCourseReviewedCount(context,db, context.getResources().getString(R.string.db_profess1_table),date);
+    	if(UserConfigs.getCourseMathName()!=null)
+    		count+=queryCourseReviewedCount(context,db, context.getResources().getString(R.string.db_math_table),date);
+    	if(UserConfigs.getCourseProfessTwoName()!=null)
+    		count+=queryCourseReviewedCount(context,db, context.getResources().getString(R.string.db_profess2_table),date);
+	      return count;
+    }
+    public static int queryCourseReviewedCount(Context context,SQLiteDatabase db,String tableName,String date)
+    {
+    	
+    	boolean tableExist=isTableExists(db,tableName);
+    	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
+    	if(tableExist==false)
+    		return 0;
+    	
+    	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
+    	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
+    	+"' and "+
+   		context.getResources().getString(R.string.dbcol_date)+"= '"+date+"'",null); 
 	    result.moveToFirst(); 
 	    int count=0;
 	    while (!result.isAfterLast()) { 

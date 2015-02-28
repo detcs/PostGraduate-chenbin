@@ -43,8 +43,11 @@ import com.pages.today.TodayFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -96,6 +99,7 @@ public class MainActivity extends FragmentActivity {
 		fragList.add(todayFragment);
 		fragList.add(noteFragment);
 		fragList.add(funtionsSquareFragment);
+		todayFragment.setActivity(this);
 		viewPager = (com.mobovip.views.DirectionalViewPager) findViewById(R.id.viewPager);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(),fragList));
 		//viewPager.setAdapter(new MyPagerAdapter(listViews));
@@ -122,6 +126,18 @@ public class MainActivity extends FragmentActivity {
 
 			}
 		});
+		//onCreate()里注册BroadcastReceiver
+        //onDestroy()里解除注册
+        //下面的"giuz.receiver.music"要在manifest.xml里注册　　
+        IntentFilter filter = new IntentFilter(DataConstants.MUSIC_SERVICE);
+        registerReceiver(updateUIReceiver, filter);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		unregisterReceiver(updateUIReceiver);
 	}
 
 	@Override
@@ -160,13 +176,41 @@ public class MainActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		//super.onActivityResult(requestCode, resultCode, data);
 		Log.e(DataConstants.TAG, "resultCode"+resultCode+" requestcode"+requestCode+" ");
-		if(requestCode==DataConstants.REQUEST_CODE_CAMERA | requestCode==DataConstants.REQUEST_CODE_EXERCISE)
-		{
-			Log.e(DataConstants.TAG, resultCode+"");
-			noteFragment.updateNoteClassList();
-	
-		}
+//		if(requestCode==DataConstants.REQUEST_CODE_CAMERA | requestCode==DataConstants.REQUEST_CODE_EXERCISE)
+//		{
+//			Log.e(DataConstants.TAG, resultCode+"");
+//			noteFragment.updateNoteClassList();
+//	
+//		}
 	}
-	
+	//定义一个BroadcastReceiver
+    private BroadcastReceiver updateUIReceiver = new BroadcastReceiver() {
+        //当service发出广播后，此方法就可以得到service传回来的值
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //更新界面。这里改变Button的值
+            //得到intent返回来的值,0表示此时是播放，1表示暂停, 2是停止
+            int backFlag = intent.getExtras().getInt("backFlag");
+            switch(backFlag){
+            case 0:
+                //btnStartOrPause.setText("暂停");
+            	Log.e(DataConstants.TAG, "暂停");
+                break;
+            case 1:
+            case 2:
+                //btnStartOrPause.setText("播放");
+            	Log.e(DataConstants.TAG, "播放");
+                break;
+            }
+        }
+    };
+    public void startMusicService(Intent intent)
+    {
+    	startService(intent);
+    }
+    public void stopMusicService(Intent intent)
+    {
+    	stopService(intent);
+    }
 
 }

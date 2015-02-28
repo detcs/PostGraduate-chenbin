@@ -5,15 +5,16 @@
     android:orientation="vertical" >
      <RelativeLayout
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="50dp"
     	android:layout_gravity="top"
+    	android:background="@drawable/register_title"
         >
-     	<Button
+     	<TextView
      	    android:id="@+id/left_btn"
-     	    android:text="@string/back"
      	    android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
+    		android:layout_height="24dp"
     		android:layout_alignParentLeft="true"
+    		android:background="@drawable/register_back"
      	    />
      	<TextView
      	     android:id="@+id/center_text"
@@ -27,6 +28,7 @@
          android:id="@+id/register_frame"
          android:layout_width="match_parent"
     	 android:layout_height="match_parent"
+    	 android:background="#f2f2f2"
          >
          
      </FrameLayout>
