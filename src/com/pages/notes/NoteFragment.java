@@ -18,6 +18,8 @@ import com.pages.notes.footprint.FootprintInfo;
 import com.pages.notes.todayrec.TodayRecommenderActivity;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
+import com.view.util.AutoScrollTextView;
+import com.view.util.AutoScrollView;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -260,16 +262,19 @@ public class NoteFragment  extends Fragment{
 		countClockTv.setTypeface(typeFace);
 		countClockTv.setTextSize(countSize);
 		
-		TextView countNoteTv=(TextView) v.findViewById(R.id.count_note);
+		AutoScrollTextView countNoteTv=(AutoScrollTextView) v.findViewById(R.id.count_note);
+		
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		int countNote=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
 		//countSize=DisplayUtil.spTopx(24*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);
 		countNoteTv.setTypeface(typeFace);
 		countNoteTv.setTextSize(countSize);
 		countNoteTv.setText(countNote+"");
-		
+		countNoteTv.init(getActivity().getWindowManager());
+		countNoteTv.startScroll();
 		
 		TextView countTodayAdd=(TextView)v.findViewById(R.id.today_add);
+		
 		int count=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
 		sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -279,7 +284,10 @@ public class NoteFragment  extends Fragment{
 		countTodayAdd.setTypeface(typeFace);
 		countTodayAdd.setTextSize(countSize);
 		countTodayAdd.setText(todayAdd+"");
-		
+		//countTodayAdd.init(getActivity().getWindowManager());
+		//countTodayAdd.startScroll();
+		//AutoScrollView todayAddScrollView=(AutoScrollView) v.findViewById(R.id.today_add_scrollview);
+		//todayAddScrollView.setScrolled(true);
 	}
 	public void updateNoteClassList()
 	{

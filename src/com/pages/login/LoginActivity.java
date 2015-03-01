@@ -59,13 +59,13 @@ public class LoginActivity extends Activity{
 	TextView forgetPwd;
 	ImageView loginBg;
 	//weibo
-//		 private AuthInfo mAuthInfo;
-//		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
-//		 private Oauth2AccessToken mAccessToken;
-//		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
-//		 private SsoHandler mSsoHandler;
-//		 /** 用户信息接口 */
-//	     private UsersAPI mUsersAPI;
+		 private AuthInfo mAuthInfo;
+		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
+		 private Oauth2AccessToken mAccessToken;
+		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
+		 private SsoHandler mSsoHandler;
+		 /** 用户信息接口 */
+	     private UsersAPI mUsersAPI;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -120,7 +120,7 @@ public class LoginActivity extends Activity{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					//weiboLogin();
+					weiboLogin();
 					Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_click).into(weiboLogin);
 					
 				}
@@ -136,6 +136,16 @@ public class LoginActivity extends Activity{
 					intent.setClass(LoginActivity.this, RegisterActivity.class);
 					//intent.setClass(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
+				}
+			});
+			forgetPwd=(TextView)findViewById(R.id.forget_pwd);
+			forgetPwd.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG ); 
+			forgetPwd.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					
 				}
 			});
 		}
@@ -221,7 +231,7 @@ public class LoginActivity extends Activity{
      * 
      * @see {@link Activity#onActivityResult}
      */
-	/*
+	
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,7 +250,7 @@ public class LoginActivity extends Activity{
      * 2. 非 SSO 授权时，当授权结束后，该回调就会被执行。
      * 当授权成功后，请保存该 access_token、expires_in、uid 等信息到 SharedPreferences 中。
      */
-	/*
+	
     class AuthListener implements WeiboAuthListener {
         
         @Override
@@ -330,7 +340,7 @@ public class LoginActivity extends Activity{
      * 
      * @param hasExisted 配置文件中是否已存在 token 信息并且合法
      */
-	/*
+	
     private void updateTokenView(boolean hasExisted) {
         String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(
                 new java.util.Date(mAccessToken.getExpiresTime()));
@@ -347,7 +357,7 @@ public class LoginActivity extends Activity{
 	 /**
      * 微博 OpenAPI 回调接口。 获取微博用户昵称
      */
-	/*
+	
     private RequestListener mListener = new RequestListener() {
         @Override
         public void onComplete(String response) {
@@ -356,11 +366,12 @@ public class LoginActivity extends Activity{
                 // 调用 User#parse 将JSON串解析成User对象
                 User user = User.parse(response);
                 if (user != null) {
+                	UserConfigs.storeNickName(user.screen_name);
                 	
                    // Toast.makeText(LoginRegisterActivity.this, "获取User信息成功，用户昵称：" + user.screen_name, Toast.LENGTH_LONG).show();
-                   // CCPConfig.storeScreenName(getApplicationContext(), user.screen_name);
+                 //  CCPConfig.storeScreenName(getApplicationContext(), user.screen_name);
                    // CCPConfig.storeWeiboId(getApplicationContext(), user.id);
-                    Log.i(DataConstants.TAG,"listen weibo uid:"+user.id);
+                    Log.i(DataConstants.TAG,"listen weibo uid sex :"+user.id+":"+user.gender);
                     
                 } else {
                     Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
@@ -386,7 +397,7 @@ public class LoginActivity extends Activity{
 		Log.e(DataConstants.TAG,"mSsoHandler");
         mSsoHandler.authorize(new AuthListener());
     }
-    */
+    
     private String getLoginURL(String loginWay,String account,String passward)
     {
     	List<NameValuePair> params=new ArrayList<NameValuePair>();

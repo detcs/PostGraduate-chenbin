@@ -70,7 +70,7 @@ public class PhotoBrowseActivity extends Activity{
 	//ArrayList<TextContentShowUtil> textUtils;
 	//TextContentShowUtil textUtil;
 	int currentIndex=0;
-	SQLiteDatabase db;
+	SQLiteDatabase db=null;
 	
 	//text
 	TextView remarkContent; 
@@ -313,6 +313,8 @@ public class PhotoBrowseActivity extends Activity{
 	}
 	private void initBottomView()
 	{
+		ImageView textBg=(ImageView) findViewById(R.id.gradual_text_bg);
+		Picasso.with(getApplicationContext()).load(R.drawable.gradual_text_bg).into(textBg);
 		
 		//bottom=(LinearLayout) findViewById(R.id.bottom_text_layout);
 		

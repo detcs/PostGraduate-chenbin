@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.Log;
@@ -81,6 +82,7 @@ public class DragImageView extends ImageView {
 
 	View parentlayout; 
 	/** ���췽�� **/
+	Handler handler=new Handler();  
 	public DragImageView(Context context) {
 		super(context);
 	}
@@ -114,11 +116,11 @@ public class DragImageView extends ImageView {
 		bitmap_W = bm.getWidth();
 		bitmap_H = bm.getHeight();
 
-		MAX_W = bitmap_W * 3;
-		MAX_H = bitmap_H * 3;
+		MAX_W =(int) (DataConstants.screenWidth * 1.5);
+		MAX_H = DataConstants.screenHeight;
 
-		MIN_W = bitmap_W / 2;
-		MIN_H = bitmap_H / 2;
+		MIN_W = DataConstants.screenWidth/ 2;
+		MIN_H = DataConstants.screenHeight/ 2;
 
 	}
 
@@ -151,8 +153,10 @@ public class DragImageView extends ImageView {
 				getParent().requestDisallowInterceptTouchEvent(true);
 			}
 			Log.i(TAG, "ACTION_DOWN");
+			handler.postDelayed(runnable, 300);
 			if (System.currentTimeMillis() - lastClick < 300) {
 				// double click
+				handler.removeCallbacks(runnable);
 				doubleClick();
 				break;
 			}
@@ -167,6 +171,7 @@ public class DragImageView extends ImageView {
 			onPointerDown(event);
 			break;
 		case MotionEvent.ACTION_MOVE:
+			handler.removeCallbacks(runnable); 
 			if (this.getWidth() > screen_W) {
 				getParent().requestDisallowInterceptTouchEvent(true);
 			}
@@ -175,7 +180,7 @@ public class DragImageView extends ImageView {
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.i(TAG, "ACTION_UP");
-			clickImage();
+			//clickImage();
 			onTouchUp(event);
 			mode = MODE.NONE;
 			break;
@@ -367,7 +372,7 @@ public class DragImageView extends ImageView {
 			bottom.setVisibility(View.INVISIBLE);
 	}
 	private void doubleClick() {
-		if (this.getWidth() == bitmap_W) {
+		if (this.getWidth() == DataConstants.screenWidth) {
 			// �Ŵ�����
 			int current_Top, current_Right, current_Bottom, current_Left;// Ŀ��λ��
 			int disX = (int) (this.getWidth() * Math.abs(1 - 3)) / 4;
@@ -584,5 +589,13 @@ public class DragImageView extends ImageView {
 		// TODO Auto-generated method stub
 		parentlayout=content;
 	}
+	Runnable runnable=new Runnable() {  
+	    @Override  
+	    public void run() {  
+	        // TODO Auto-generated method stub  
+	        //要做的事情  
+	       clickImage();  
+	    }  
+	};  
 
 }

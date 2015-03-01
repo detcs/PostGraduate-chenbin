@@ -20,7 +20,8 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/browse_viewpager"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:layout_gravity="center" >
     </android.support.v4.view.ViewPager>
     <RelativeLayout
         android:id="@+id/browse_top"
@@ -53,13 +54,14 @@
         <FrameLayout
             android:layout_width="match_parent"
 		   	android:layout_height="wrap_content"
+		   	android:layout_gravity="bottom"
             >
         	<ImageView
+        	    android:id="@+id/gradual_text_bg"
         	    android:layout_width="match_parent"
         	    android:layout_height="wrap_content"
         	    android:maxHeight="60dp"
         	    android:adjustViewBounds="true"
-        	    android:background="@drawable/gradual_text_bg"
         	    />
 		    <LinearLayout 
 		        android:id="@+id/browse_bottom"
