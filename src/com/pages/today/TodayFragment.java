@@ -26,6 +26,7 @@ import com.data.model.MusicService;
 import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
+import com.data.util.NetWorkUtil;
 import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.viewpager.MainActivity;
@@ -48,6 +49,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class TodayFragment extends Fragment {
@@ -109,7 +111,29 @@ public class TodayFragment extends Fragment {
 		}
 		else
 		{
-			requestFirstPageJasonInfo(getFirstPageURL(date),date);
+			if(!NetWorkUtil.isNetworkConnected(getActivity()) && !NetWorkUtil.isWifiConnected(getActivity()))
+			{
+				NetWorkUtil.showNoNetwork(getActivity());
+			}
+			else
+			{
+				requestFirstPageJasonInfo(getFirstPageURL(date),date,true);
+				if(NetWorkUtil.isWifiConnected(getActivity()))
+				{
+					String laterDate=null;
+					FootprintInfo laterFootPrintInfo=null;
+					for(int i=1;i<10;i++)
+					{
+						laterDate=DateUtil.getLaterDateStringAfter(date, i);
+						laterFootPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, laterDate);
+						if(laterFootPrintInfo==null)
+						{
+							requestFirstPageJasonInfo(getFirstPageURL(laterDate),laterDate,false);
+						}
+					}
+					
+				}
+			}
 		}
 		
 		play.setOnClickListener(new OnClickListener() {
@@ -175,7 +199,7 @@ public class TodayFragment extends Fragment {
 		TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
 		encourageTv.setText(info.getEncourage());
 	}
-	private void requestFirstPageJasonInfo(String url, final String date) {
+	private void requestFirstPageJasonInfo(String url, final String date,final boolean updateUI) {
 		final FootprintInfo fpInfo;
 		RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
@@ -183,7 +207,7 @@ public class TodayFragment extends Fragment {
 					@Override
 					public void onResponse(JSONObject response) {
 						Log.e(DataConstants.TAG, "response=" + response);
-						FootprintInfo info=parseFirstPageInfo(response, date);
+						FootprintInfo info=parseFirstPageInfo(response, date,updateUI);
 					}
 				}, new Response.ErrorListener() {
 					@Override
@@ -226,7 +250,7 @@ public class TodayFragment extends Fragment {
 		return resultURL;
 	}
 
-	private FootprintInfo parseFirstPageInfo(JSONObject job, String date) {
+	private FootprintInfo parseFirstPageInfo(JSONObject job, String date,boolean updateUI) {
 		FootprintInfo fpInfo = null;
 		try {
 			JSONObject data = job.getJSONObject("data");
@@ -245,6 +269,7 @@ public class TodayFragment extends Fragment {
 				String songId = music.getString("file_");
 				String coverImgId = info.getString("img_");
 				String footprintImgId=info.getString("imgZj_");
+				String coverTwoImgId=info.getString("imgGn_");
 				String encourage = info.getString("content_");
 				String days = info.getString("days_");
 				String daysLeft = info.getString("daysLeft_");
@@ -253,10 +278,9 @@ public class TodayFragment extends Fragment {
 				// FileDataHandler.COVER_SONG_DIR_PATH+"/"+songName+".mp3");
 				// downloadHandler(DataConstants.DOWNLOAD_URL+imgId,
 				// FileDataHandler.COVER_PIC_DIR_PATH+"/"+imgId+".jpg");
-				fpInfo = new FootprintInfo("", songName,singer,"","diary", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
-				fileDownloadTask = new DownloadTask(getActivity(),
-				 getResources().getString(R.string.dbcol_cover_pic), date,fpInfo,TodayFragment.this);
-				String[] fileIds={coverImgId,songId,footprintImgId};
+				fpInfo = new FootprintInfo("","songfile", songName,singer,"","covertwopic","diary", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
+				fileDownloadTask = new DownloadTask(getActivity(), date,fpInfo,TodayFragment.this,updateUI);
+				String[] fileIds={coverImgId,songId,footprintImgId,coverTwoImgId};
 				fileDownloadTask.execute(fileIds);
 //				File songFile=new File(FileDataHandler.COVER_SONG_DIR_PATH+"/"+songId);
 //				//if(!songFile.exists())

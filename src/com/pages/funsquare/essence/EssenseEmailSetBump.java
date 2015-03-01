@@ -1,6 +1,7 @@
 package com.pages.funsquare.essence;
 
 import com.app.ydd.R;
+import com.data.model.UserConfigs;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.data.util.NetCall.InfoChangeCallback;
@@ -11,6 +12,8 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 	private View view;
 	private FrameLayout frame;
 	private ESBumpCallback callback;
+	private View RelativeLayout1;
 	private TextView quitView_e;
 	private TextView saveView_e;
 	private EditText editView_e;
@@ -40,12 +44,47 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 
 	public void show() {
 		frame.addView(view);
-		view.startAnimation(AnimationUtil.showAnimation());
 		init();
-		// SysCall.bumpSoftInput(editView_e, activity);
+		Animation anim = AnimationUtil.showAnimation();
+		anim.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// TODO Auto-generated method stub
+				SysCall.bumpSoftInput(editView_e, activity);
+				RelativeLayout1.setBackgroundColor(activity.getResources()
+						.getColor(R.color.default_float_back));
+				RelativeLayout1.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						SysCall.hideSoftInput(view, activity);
+						RelativeLayout1.setBackgroundColor(0xffffff);
+						view.startAnimation(AnimationUtil.hideAnimation());
+						frame.removeView(view);
+					}
+				});
+			}
+		});
+		view.startAnimation(anim);
+
 	}
 
 	private void init() {
+		RelativeLayout1 = view.findViewById(R.id.RelativeLayout1);
 		quitView_e = (TextView) view.findViewById(R.id.quitView);
 		saveView_e = (TextView) view.findViewById(R.id.saveView);
 		editView_e = (EditText) view.findViewById(R.id.editView);
@@ -67,7 +106,8 @@ public class EssenseEmailSetBump implements InfoChangeCallback {
 				// reset the email
 				String email = editView_e.getText().toString();
 				if (SysCall.isEmail(email)) {
-					NetCall.changeInfo("", "", email, EssenseEmailSetBump.this);
+					NetCall.changeInfo("", "", email, -1,
+							EssenseEmailSetBump.this);
 				} else {
 					Toast.makeText(activity, "邮箱格式错误", 500).show();
 				}

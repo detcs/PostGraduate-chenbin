@@ -7,6 +7,7 @@ import com.data.util.SysCall;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,11 @@ public class SquarePublishFragment extends Fragment implements UploadData {
 		titleText = (EditText) view.findViewById(R.id.titleText);
 		editText1 = (EditText) view.findViewById(R.id.editText1);
 		publishBu = view.findViewById(R.id.publishBu);
+
+		Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+				"font/fangzhenglanting.ttf");
+		titleText.setTypeface(face);
+		editText1.setTypeface(face);
 	}
 
 	private void setListener() {

@@ -9,6 +9,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/essense_query_clean_his" />
+        android:text="@string/essense_query_clean_his"
+        android:textColor="#999999"
+        android:textSize="12dp" />
 
 </LinearLayout>

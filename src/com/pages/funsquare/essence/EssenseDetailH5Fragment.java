@@ -7,16 +7,18 @@ import com.data.util.NetCall;
 import com.data.util.NetCall.ReserveCallback;
 import com.data.util.SysCall;
 import com.pages.funsquare.essence.EssenseShareBump.ShareBumpCallback;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EssenseDetailH5Fragment extends Fragment implements
@@ -25,8 +27,9 @@ public class EssenseDetailH5Fragment extends Fragment implements
 	private View base;
 	private FrameLayout frame;
 	private View rootView;
-	private View backBu, reserveView, reserveText, shareView, shareText;
-	private WebView webView1;
+	private View backBu, shareView;
+	private ImageView backupView;
+	private TextView titleText, timeText, contentText, moreEssView;
 	private EssenseDetail ed;
 
 	public EssenseDetailH5Fragment(EssenseDetail ed) {
@@ -51,17 +54,36 @@ public class EssenseDetailH5Fragment extends Fragment implements
 
 	private void init(View view) {
 		findViews(view);
+		setContent();
 		setListener();
-		setWebView();
 	}
 
 	private void findViews(View view) {
 		backBu = view.findViewById(R.id.backBu);
-		reserveView = view.findViewById(R.id.reserveView);
-		reserveText = view.findViewById(R.id.reserveText);
-		shareText = view.findViewById(R.id.shareText);
+		backupView = (ImageView) view.findViewById(R.id.backupView);
 		shareView = view.findViewById(R.id.shareView);
-		webView1 = (WebView) view.findViewById(R.id.webView1);
+		titleText = (TextView) view.findViewById(R.id.titleText);
+		timeText = (TextView) view.findViewById(R.id.timeText);
+		contentText = (TextView) view.findViewById(R.id.contentText);
+		moreEssView = (TextView) view.findViewById(R.id.moreEssView);
+
+		Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+				"font/fangzhenglanting.ttf");
+
+		moreEssView.setTypeface(face);
+		titleText.setTypeface(face);
+		timeText.setTypeface(face);
+		contentText.setTypeface(face);
+	}
+
+	private void setContent() {
+		titleText.setText(ed.getTitle());
+		timeText.setText(ed.getTime());
+		contentText.setText(ed.getContent_());
+		if (EssenseDetail.ISCOLLECTED == ed.getIsCollected_()) {
+			backupView.setImageDrawable(getActivity().getResources()
+					.getDrawable(R.drawable.essense_backup_over));
+		}
 	}
 
 	private void setListener() {
@@ -88,8 +110,7 @@ public class EssenseDetailH5Fragment extends Fragment implements
 				NetCall.reserve(id, type, EssenseDetailH5Fragment.this);
 			}
 		};
-		reserveText.setOnClickListener(reserveListener);
-		reserveView.setOnClickListener(reserveListener);
+		backupView.setOnClickListener(reserveListener);
 		OnClickListener shareListener = new OnClickListener() {
 
 			@Override
@@ -100,27 +121,21 @@ public class EssenseDetailH5Fragment extends Fragment implements
 						EssenseDetailH5Fragment.this).show();
 			}
 		};
-		shareText.setOnClickListener(shareListener);
 		shareView.setOnClickListener(shareListener);
-	}
-
-	private void setWebView() {
-		webView1.loadUrl(ed.getUrl_());
-		webView1.setWebViewClient(new WebViewClient() {
-			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				view.loadUrl(url);
-				return true;
-			}
-		});
 	}
 
 	// NetCall.ReserveCallback
 	@Override
 	public void requestSuccess() {
 		// TODO Auto-generated method stub
+		if ((ed.getIsCollected_() + 1) % 2 == GloableData.RESERVE_ENSURE) {
+			backupView.setImageDrawable(getActivity().getResources()
+					.getDrawable(R.drawable.essense_backup_over));
+		} else {
+			backupView.setImageDrawable(getActivity().getResources()
+					.getDrawable(R.drawable.essense_backup));
+		}
 		ed.setIsCollected_((ed.getIsCollected_() + 1) % 2);
-		SysCall.error("change the share image");
 	}
 
 	@SuppressLint("ShowToast")

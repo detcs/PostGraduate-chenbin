@@ -30,6 +30,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -63,7 +64,7 @@ public class ShowFragment extends Fragment {
 	private List<String> items;
 	private ImageView imageView1;// 要显示的图片
 	private String finalRemarks = "";
-	private int selectIndex = 0;
+	private int selectIndex = -1;
 
 	private LinearLayout hideBar;// hide
 	private RelativeLayout hideChoose;
@@ -72,6 +73,7 @@ public class ShowFragment extends Fragment {
 	private EditText remarksView;// is empty before edit
 
 	// 所有要旋转的内容
+	private boolean canRotate = true;
 	private FrameLayout chooseBar;
 	private TextView[] radios;
 	private VerticalTextView[] radiosx;
@@ -176,14 +178,18 @@ public class ShowFragment extends Fragment {
 		quitView = (TextView) view.findViewById(R.id.quitView);
 		saveView = (TextView) view.findViewById(R.id.saveView);
 		remarksView = (EditText) view.findViewById(R.id.remarksView);
-
+		// 设置字体
+		Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+				"font/fangzhenglanting.ttf");
+		remarksView.setTypeface(face);
 		chooseBar = (FrameLayout) view.findViewById(R.id.chooseBar);
 
 		saveBu = (ImageView) view.findViewById(R.id.saveBu);
 	}
 
 	@SuppressLint("ResourceAsColor")
-	private void initItem(int chooseId) {
+	private void initItem(int chooseId) {// 这里的参数是指选择哪一种倾斜模式
+		// init show subjects
 		if (null == items) {
 			items = new ArrayList<String>();
 			List<String> cont = new ArrayList<String>();
@@ -215,22 +221,32 @@ public class ShowFragment extends Fragment {
 							selectIndex = i;
 							Log.i(TAG, "choose: " + selectIndex);
 							radios[i].setTextColor(R.color.camera_choosen_word);
+							radios[i].setBackground(getActivity()
+									.getResources().getDrawable(
+											R.drawable.camera_item_chosen));
 						} else {
 							radios[i].setTextColor(R.color.camera_choose_word);
+							radios[i].setBackground(getActivity()
+									.getResources().getDrawable(
+											R.drawable.camera_item));
 						}
 					}
 				}
 			};
 			for (int i = 0; i < 4; i++) {
 				radios[i] = (TextView) choose.findViewById(radiosId[i]);
+				// radios[i].setTypeface(face);
 				radios[i].setText(items.get(i));
 				radios[i].setOnClickListener(listener);
 				if (i == selectIndex) {
-					radios[i].setTextColor(R.color.blue);
+					radios[i].setTextColor(R.color.camera_choosen_word);
+					radios[i].setBackground(getActivity().getResources()
+							.getDrawable(R.drawable.camera_item_chosen));
 				} else {
 					radios[i].setTextColor(R.color.camera_choose_word);
+					radios[i].setBackground(getActivity().getResources()
+							.getDrawable(R.drawable.camera_item));
 				}
-				radios[i].setTextSize(30);
 			}
 		} else {
 			radiosx = new VerticalTextView[4];
@@ -244,8 +260,14 @@ public class ShowFragment extends Fragment {
 							selectIndex = i;
 							radiosx[i]
 									.setTextColor(R.color.camera_choosen_word);
+							radiosx[i].setBackground(getActivity()
+									.getResources().getDrawable(
+											R.drawable.camera_item_chosen));
 						} else {
 							radiosx[i].setTextColor(R.color.camera_choose_word);
+							radiosx[i].setBackground(getActivity()
+									.getResources().getDrawable(
+											R.drawable.camera_item));
 						}
 					}
 				}
@@ -253,14 +275,20 @@ public class ShowFragment extends Fragment {
 			for (int i = 0; i < 4; i++) {
 				radiosx[i] = (VerticalTextView) choose
 						.findViewById(radiosId[i]);
+				// radiosx[i].setTypeface(face);
 				radiosx[i].setText(items.get(i));
 				radiosx[i].setOnClickListener(listener);
 				if (i == selectIndex) {
-					radiosx[i].setTextColor(R.color.blue);
+					radiosx[i].setTextColor(R.color.camera_choosen_word);
+					radiosx[i].setBackground(getActivity().getResources()
+							.getDrawable(R.drawable.camera_item_chosen));
 				} else {
 					radiosx[i].setTextColor(R.color.camera_choose_word);
 				}
-				radiosx[i].setTextSize(90);
+				radiosx[i].setTextSize(getActivity().getResources()
+						.getDimension(R.dimen.camera_item_text));
+				radiosx[i].setBackground(getActivity().getResources()
+						.getDrawable(R.drawable.camera_item));
 			}
 		}
 
@@ -283,6 +311,7 @@ public class ShowFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				canRotate = false;
 				String remarks = remarksView.getText().toString();
 				if (remarks.trim().equals("")) {
 					showRemark();
@@ -298,6 +327,7 @@ public class ShowFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				canRotate = true;
 				hideRemark();
 			}
 		});
@@ -306,6 +336,7 @@ public class ShowFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				canRotate = true;
 				String remarks = remarksView.getText().toString().trim();
 				// no mater whether has remarks: do as has remarks
 				finalRemarks = remarks;
@@ -337,6 +368,9 @@ public class ShowFragment extends Fragment {
 	// *************sensor util*************
 
 	private void rotate(float x) {
+		if (!canRotate) {
+			return;
+		}
 		int state = 0;
 		if (x > 7) {// left
 			state = 1;
@@ -400,7 +434,6 @@ public class ShowFragment extends Fragment {
 		}
 		cannotEdit();
 	}
-
 	// *******************save util*******************
 
 	public void saveMyBitmap(Bitmap bitmap,String path) throws IOException {

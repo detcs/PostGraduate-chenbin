@@ -4,8 +4,32 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.util.Log;
+
 public class ComputeURL {
 	private static final String TAG = "ComputeURL";
+
+	public static String getPrintURL(String from, String to) {
+		String re = GloableData.URL + GloableData.PRINT_PATH
+				+ GloableData.getParam() + "&endDate=" + str(to)
+				+ "&startDate=" + str(from);
+		return re;
+	}
+
+	// 上传头像
+	public static String getUploadHeadURL2() {
+		// UPLOAD_HEAD_PATH
+		String re = GloableData.URL + GloableData.UPLOAD_HEAD_PATH
+				+ GloableData.getParam();
+		return re;
+	}
+
+	public static String getUploadHeadURL(String base) {
+		// UPLOAD_HEAD_PATH
+		String re = GloableData.URL + GloableData.UPLOAD_HEAD_PATH
+				+ GloableData.getParam() + "&img=" + base;
+		return re;
+	}
 
 	// 广场举报帖子
 	public static String getReportURL(String pid) {
@@ -21,10 +45,11 @@ public class ComputeURL {
 	}
 
 	public static String getInfoChangeURL(String nickname, String headimg,
-			String email) {
+			String email, int sex) {
 		String re = GloableData.URL + GloableData.INFOCHANGE_PATH
 				+ GloableData.getParam() + "&nickname=" + str(nickname)
-				+ "&headimg=" + str(headimg) + "&email=" + str(email);
+				+ "&headimg=" + str(headimg) + "&email=" + str(email) + "&sex="
+				+ sex;
 		return re;
 	}
 
@@ -41,9 +66,10 @@ public class ComputeURL {
 		return re;
 	}
 
-	public static String getReserveListURL() {
+	public static String getReserveListURL(int page, int limit) {
 		String re = GloableData.URL + GloableData.RESERVE_LIST_PATH
-				+ GloableData.getParam();
+				+ GloableData.getParam() + "&page=" + page + "&limit=" + limit;
+		// Log.i("wsy", re);
 		return re;
 	}
 

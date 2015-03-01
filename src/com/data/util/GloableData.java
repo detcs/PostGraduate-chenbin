@@ -10,6 +10,7 @@ public class GloableData {
 	public static final int TYPE_MATERIAL = 0, TYPE_INFORMATION = 1,
 			TYPE_EXERCISE = 2, TYPE_POST = 3, TYPE_COMMENT = 4,
 			TYPE_INFORM = 5, TYPE_NEW = 6, TYPE_SEARCH = 100;
+	public static final int BOY = 1, GIRL = 0;
 	public static final int NET_ERROR = 111;
 	public static final int ISNEW = 1;
 	public static final String URL = "http://114.215.196.179:8080/gs";
@@ -32,6 +33,8 @@ public class GloableData {
 	public static final String INFOCHANGE_PATH = "/mobile?methodno=MUpdateUserInfo";
 	public static final String MSGCOUNT_PATH = "/mobile?methodno=MGetMsgCount";
 	public static final String REPORT_PATH = "/mobile?methodno=MPostReport";
+	public static final String UPLOAD_HEAD_PATH = "/mobile?methodno=MImgUpload";
+	public static final String PRINT_PATH = "/mobile?methodno=MQuesPrint";
 	public static int RESERVE_QUIT = 0, RESERVE_ENSURE = 1;
 
 	public static final String UPLOAD_SUCCESS_MSG = "发布成功";
@@ -40,30 +43,31 @@ public class GloableData {
 	private static String userid = "6dfae24f-a77a-11e4-9812-ac853dac2305";
 	// private static String userid;
 	private static String verify = "1";
+
 	// private static String verify;
-	private static String email;
+	// private static String email;
 
-	public static String getEmail() {
-		if (null == email)
-			email = "";
-		return email;
-	}
+	// public static String getEmail() {
+	// if (null == email)
+	// email = "";
+	// return email;
+	// }
 
-	public static boolean hasSetEmail() {
-		return false;
-	}
+	// public static boolean hasSetEmail() {
+	// return false;
+	// }
 
-	public static boolean setEmail(String email_in) {
-		if (email_in != null) {
-			if (!email_in.trim().equals("")) {
-				if (email_in.contains("@")) {
-					email = email_in;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	// public static boolean setEmail(String email_in) {
+	// if (email_in != null) {
+	// if (!email_in.trim().equals("")) {
+	// if (email_in.contains("@")) {
+	// email = email_in;
+	// return true;
+	// }
+	// }
+	// }
+	// return false;
+	// }
 
 	public static void init(Context context) {
 		// userid = UserConfigs.getId();

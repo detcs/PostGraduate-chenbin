@@ -15,6 +15,7 @@ import com.view.util.EssenseAdapter.ViewHolder;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
@@ -32,6 +34,9 @@ import android.widget.TextView;
 public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 		RecommendKeysCallback {
 	// private String TAG = "EssenseQueryFragment";
+	private View base;
+	private FrameLayout frame;
+
 	private View rootView;
 	private EssenseJump jump;
 
@@ -46,12 +51,17 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
+		if (null == base) {
+			base = inflater.inflate(R.layout.frame, container, false);
+		}
+		frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_essense_query,
 					container, false);
+			init(rootView);
+			frame.addView(rootView);
 		}
-		init(rootView);
-		return rootView;
+		return base;
 	}
 
 	@Override
@@ -72,6 +82,9 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 	private void findViews(View view) {
 		hintList = (ListView) view.findViewById(R.id.hintList);
 		searchView = (EditText) view.findViewById(R.id.searchView);
+		Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+				"font/fangzhenglanting.ttf");
+		searchView.setTypeface(face);
 		cleanView = view.findViewById(R.id.cleanView);
 		searchBu = view.findViewById(R.id.searchBu);
 		quitView = view.findViewById(R.id.quitView);
@@ -110,6 +123,9 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 				// save the search key
 				// change the editText's background
 				// show the query result
+				hintList.setVisibility(View.INVISIBLE);
+				hintList.setClickable(false);
+				hintList.setEnabled(false);
 				String key = searchView.getText().toString();
 				initListView();
 				adapter.search(key);
@@ -185,12 +201,23 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 			public View getView(int position, View convertView, ViewGroup parent) {
 				// TODO Auto-generated method stub
 				if (0 == position) {
-					return LayoutInflater.from(getActivity()).inflate(
+					View view = LayoutInflater.from(getActivity()).inflate(
 							R.layout.essense_query_hisroty_hint, parent, false);
+					TextView text = (TextView) view
+							.findViewById(R.id.textView1);
+					Typeface face = Typeface.createFromAsset(getActivity()
+							.getAssets(), "font/fangzhenglanting.ttf");
+					text.setTypeface(face);
+					return view;
 				} else if (history.size() + 1 == position) {
 					View his_bottom = LayoutInflater.from(getActivity())
 							.inflate(R.layout.essense_query_clean_his_hint,
 									parent, false);
+					Typeface face = Typeface.createFromAsset(getActivity()
+							.getAssets(), "font/fangzhenglanting.ttf");
+					TextView text = (TextView) his_bottom
+							.findViewById(R.id.textView1);
+					text.setTypeface(face);
 					his_bottom.setOnClickListener(new OnClickListener() {
 
 						@Override
@@ -205,6 +232,9 @@ public class EssenseQueryFragment extends Fragment implements ListDownEssense,
 							R.layout.essense_query_hint_item, parent, false);
 					TextView textView1 = (TextView) view
 							.findViewById(R.id.textView1);
+					Typeface face = Typeface.createFromAsset(getActivity()
+							.getAssets(), "font/fangzhenglanting.ttf");
+					textView1.setTypeface(face);
 					textView1.setText(history.get(position - 1));
 					return view;
 				}

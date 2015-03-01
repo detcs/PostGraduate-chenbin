@@ -5,6 +5,8 @@ package com.pages.login;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -32,6 +34,7 @@ import com.pages.notes.footprint.FootprintInfo;
 import com.view.util.FragmentActionListener;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -49,7 +52,7 @@ public class PhoneVerifyFragment extends Fragment {
 
 	private FragmentActionListener mListener = null;
 	EditText phone;
-	Button obtainVerifyNum; 
+	TextView obtainVerifyNum; 
 	EditText verifyNum;
 	TextView nextStep;
 	private TimeCount time;
@@ -69,7 +72,9 @@ public class PhoneVerifyFragment extends Fragment {
 		phone=(EditText)rootView.findViewById(R.id.phone);
 		verifyNum=(EditText)rootView.findViewById(R.id.verify_num);
 		time = new TimeCount(60000, 1000);//构造CountDownTimer对象
-		obtainVerifyNum=(Button)rootView.findViewById(R.id.get_verify_num);
+		obtainVerifyNum=(TextView)rootView.findViewById(R.id.get_verify_num);
+		obtainVerifyNum.setTextColor(Color.parseColor("#333333"));
+		obtainVerifyNum.setBackgroundResource(R.drawable.obtain_verifynum_init);
 		obtainVerifyNum.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -79,6 +84,8 @@ public class PhoneVerifyFragment extends Fragment {
 				time.start();
 //				GetPhoneVerifyNum gpv=new GetPhoneVerifyNum();
 //				 gpv.execute(DataConstants.SERVER_URL);
+				obtainVerifyNum.setTextColor(Color.parseColor("#ffffff"));
+				obtainVerifyNum.setBackgroundResource(R.drawable.obtain_verifynum_normal);
 			}
 		});
 		nextStep=(TextView)rootView.findViewById(R.id.next_step);
@@ -211,6 +218,14 @@ public class PhoneVerifyFragment extends Fragment {
 		Log.e(DataConstants.TAG, "fpage:" + resultURL);
 		return resultURL;
 	}
+	public static boolean isMobileNum(String mobiles) {
+        Pattern p = Pattern
+                .compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+        Matcher m = p.matcher(mobiles);
+        System.out.println(m.matches() + "---");
+        return m.matches();
+
+    }
 //	//获取手机验证码
 //		class GetPhoneVerifyNum extends AsyncTask<String, Integer, String>
 //		{

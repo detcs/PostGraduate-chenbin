@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class EmailHintDialog {
 	private Dialog dialog;
-	private Button quitBu;
-	private Button ensureBu;
+	private TextView quitBu;
+	private TextView ensureBu;
 	private EmailHintDialogCallBack callback;
 
 	public EmailHintDialog(Activity activity,
@@ -24,8 +25,8 @@ public class EmailHintDialog {
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.essense_email_hint_dialog);
 		// dialog.setTitle("Custom Dialog");
-		quitBu = (Button) dialog.findViewById(R.id.quitBu);
-		ensureBu = (Button) dialog.findViewById(R.id.ensureBu);
+		quitBu = (TextView) dialog.findViewById(R.id.quitBu);
+		ensureBu = (TextView) dialog.findViewById(R.id.ensureBu);
 		setListener();
 	}
 

@@ -29,7 +29,6 @@
                 android:id="@+id/hideChoose"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/camera_hide_edit_bar_height"
-                android:background="@color/camera_float_bar"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -54,11 +53,15 @@
                 android:id="@+id/remarksView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/camera_float_bar"
                 android:ems="10"
                 android:gravity="top"
                 android:minHeight="@dimen/camera_edit_min_height"
-                android:textColor="@color/camera_edit_word_color" />
+                android:paddingBottom="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/camera_edit_word_color"
+                android:textSize="12.8dp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -72,16 +75,18 @@
                 android:id="@+id/againView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginLeft="12dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/small" />
+                android:src="@drawable/camera_retake" />
 
             <ImageView
                 android:id="@+id/editView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="12dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/small" />
+                android:src="@drawable/camera_edit" />
         </RelativeLayout>
 
         <FrameLayout
@@ -95,17 +100,18 @@
         <LinearLayout
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="71dp"
             android:layout_alignParentBottom="true"
             android:background="@color/camera_float_bar"
             android:gravity="center" >
 
             <ImageView
                 android:id="@+id/saveBu"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="6dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/small" />
+                android:src="@drawable/camera_ensure" />
         </LinearLayout>
     </RelativeLayout>
 

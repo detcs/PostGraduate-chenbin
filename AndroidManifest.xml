@@ -18,11 +18,7 @@
         <activity
             android:name="com.pages.login.LoginActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           
         </activity>
         <activity
             android:name="com.pages.login.RegisterActivity"
@@ -35,7 +31,11 @@
         <activity
             android:name="com.pages.viewpager.MainActivity"
             android:label="@string/app_name" >
-            
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.pages.notes.ExerciseActivity"
@@ -78,6 +78,10 @@
         <activity android:name="com.pages.funsquare.reserve.ReservedActivity" >
         </activity>
 
+        <activity android:name="com.pages.funsquare.reserve.ReserveModeActivity" >
+        </activity>
+        <activity android:name="com.pages.funsquare.contact.ContactActivity" >
+        </activity>
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"

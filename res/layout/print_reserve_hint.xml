@@ -9,6 +9,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="您还未完成备份，请先备份" />
+        android:layout_marginBottom="25.6dp"
+        android:text="您还未完成备份，请先备份"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
 
 </LinearLayout>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="@dimen/default_dialog_width"
+    android:layout_height="@dimen/default_dialog_height"
+    android:background="@drawable/dialog_background"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -9,18 +11,32 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_hint" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17.6dp"
+        android:text="@string/default_hint"
+        android:textColor="@color/dialog_color"
+        android:textSize="@dimen/dialog_title_size" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/person_pw_old_error" />
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6.4dp"
+        android:text="@string/person_pw_old_error"
+        android:textColor="@color/dialog_color"
+        android:textSize="@dimen/dialog_content_size" />
 
-    <Button
+    <TextView
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_ensure" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_dialog_bottom_height"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="@string/default_ensure"
+        android:textColor="@color/dialog_click_color"
+        android:textSize="@dimen/dialog_click_size" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="166.4dp"
         android:layout_alignParentBottom="true"
         android:orientation="vertical" >
 
@@ -15,20 +15,31 @@
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/person_logout_hint" />
+            android:layout_marginTop="19.2dp"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="@string/person_logout_hint"
+            android:textColor="#333333"
+            android:textSize="9.6dp" />
 
         <Button
             android:id="@+id/logoutView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/person_logout_log" />
+            android:layout_height="36dp"
+            android:layout_marginLeft="17.2dp"
+            android:layout_marginRight="17.2dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/person_center_logout_out" />
 
         <Button
             android:id="@+id/quitView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_quit" />
-
+            android:layout_height="36dp"
+            android:layout_marginLeft="17.2dp"
+            android:layout_marginRight="17.2dp"
+            android:layout_marginTop="17.6dp"
+            android:background="@drawable/person_center_logout_quit" />
     </LinearLayout>
 
 </RelativeLayout>

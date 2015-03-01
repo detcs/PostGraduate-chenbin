@@ -2,48 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f2f2f2"
     android:orientation="vertical" >
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="@dimen/default_headbar_height"
+        android:background="@color/default_headbar_background"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+        <ImageView
+            android:id="@+id/backView"
+            android:layout_width="@dimen/default_back_width"
+            android:layout_height="@dimen/default_back_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back" />
 
-            <ImageView
-                android:id="@+id/backView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/play" />
+        <TextView
+            android:id="@+id/saveView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/default_save"
+            android:textColor="#ffffff"
+            android:textSize="13.6dp" />
 
-            <TextView
-                android:id="@+id/saveView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="@string/default_save" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/person_pw_head_title" />
-        </LinearLayout>
-    </FrameLayout>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/person_pw_head_title"
+            android:textColor="@color/default_headbar_title"
+            android:textSize="@dimen/default_headbar_titlesize" />
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="47.2dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="@string/person_pw_old_hint"
         android:inputType="textPassword" >
@@ -54,7 +56,7 @@
     <EditText
         android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="47.2dp"
         android:ems="10"
         android:hint="@string/person_pw_new_hint"
         android:inputType="textPassword" />
@@ -62,7 +64,7 @@
     <EditText
         android:id="@+id/textView4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="47.2dp"
         android:ems="10"
         android:hint="@string/person_pw_new_rehint"
         android:inputType="textPassword" />

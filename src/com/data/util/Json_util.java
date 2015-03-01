@@ -60,6 +60,7 @@ public class Json_util {
 		String browseTimes_ = "";
 		String downloadTimes_ = "";
 		int isCollected_;
+		String content_ = "";
 		JSONObject item;
 		try {
 			item = (JSONObject) json.get("data");
@@ -77,9 +78,11 @@ public class Json_util {
 			browseTimes_ = item.getString("browseTimes_");
 			downloadTimes_ = item.getString("downloadTimes_");
 			isCollected_ = item.getInt("isCollected_");
+			content_ = item.getString("content_");
 			ed = new EssenseDetail(title, author, time, id, needShare_,
 					hasDownload_, isDownloaded_, resType_, url_, resid_,
-					resSize_, browseTimes_, downloadTimes_, isCollected_);
+					resSize_, browseTimes_, downloadTimes_, isCollected_,
+					content_);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,8 +114,10 @@ public class Json_util {
 			String headimg = data.getString("headimg_");
 			String content = data.getString("content_");
 			int comments = data.getInt("commentCount_");
+			int sex = data.getInt("sex_");
 
-			vg = new Post(title, author, time, id, headimg, content, comments);
+			vg = new Post(title, author, time, id, headimg, content, comments,
+					sex);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,6 +206,7 @@ public class Json_util {
 			String headimg;
 			String time;
 			String userId;
+			int sex;
 			for (int i = 0; i < array.length(); i++) {
 				item = array.getJSONObject(i);
 				id = item.getString("id_");
@@ -209,9 +215,11 @@ public class Json_util {
 				headimg = item.getString("headimg_");
 				time = item.getString("time_");
 				userId = item.getString("userid_");
+				sex = item.getInt("sex_");
 				// Comment(String id, String nickName, String headimg, String
 				// time,String content)
-				vg = new Comment(id, nickName, headimg, time, content, userId);
+				vg = new Comment(id, nickName, headimg, time, content, userId,
+						sex);
 				reList.add(vg);
 			}
 		} catch (JSONException e) {
@@ -235,6 +243,7 @@ public class Json_util {
 			String headimg = "";
 			String content = "";
 			int comments = 0;
+			int sex = 0;
 			for (int i = 0; i < array.length(); i++) {
 				item = array.getJSONObject(i);
 				title = item.getString("title_");
@@ -244,8 +253,9 @@ public class Json_util {
 				headimg = item.getString("headimg_");
 				content = item.getString("content_");
 				comments = item.getInt("commentCount_");
+				sex = item.getInt("sex_");
 				vg = new Post(title, author, time, id, headimg, content,
-						comments);
+						comments, sex);
 				reList.add(vg);
 			}
 		} catch (JSONException e) {

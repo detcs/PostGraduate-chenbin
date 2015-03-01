@@ -68,6 +68,13 @@ public class VerticalTextView extends View {
 		invalidate();
 	}
 
+	// wsy 2/15
+	public void setTextSize(float size) {
+		mTextPaint.setTextSize(size);
+		requestLayout();
+		invalidate();
+	}
+
 	public void setTextColor(int color) {
 		mTextPaint.setColor(color);
 		invalidate();

@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 public class ReserveModeActivity extends Activity {
 	private RelativeLayout[] modes;
 	private ImageView[] imageViews;
-	private ImageView backView;
+	private View backView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +29,13 @@ public class ReserveModeActivity extends Activity {
 	}
 
 	private void findViews() {
-		backView = (ImageView) findViewById(R.id.backView);
+		backView = findViewById(R.id.backView);
 		modes = new RelativeLayout[2];
 		imageViews = new ImageView[2];
 		modes[0] = (RelativeLayout) findViewById(R.id.mode1);
 		modes[1] = (RelativeLayout) findViewById(R.id.mode2);
-		imageViews[0] = (ImageView) findViewById(R.id.imageView1);
-		imageViews[1] = (ImageView) findViewById(R.id.ImageView01);
+		imageViews[0] = (ImageView) findViewById(R.id.nike1);
+		imageViews[1] = (ImageView) findViewById(R.id.nike2);
 	}
 
 	private void initViews() {

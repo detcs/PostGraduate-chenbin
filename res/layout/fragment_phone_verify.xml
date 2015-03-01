@@ -10,52 +10,61 @@
     	android:layout_height="wrap_content"
     	android:text="@string/register_illustration"
     	android:layout_marginTop="12dp"
+    	android:textColor="#a4a4a4"
         />
 	<EditText 
 	    android:id="@+id/phone"
-	    android:gravity="center_horizontal"
+	    android:gravity="center"
 	    android:layout_gravity="center_horizontal"
-        android:layout_width="270dp"
+        android:layout_width="match_parent"
     	android:layout_height="32dp"
     	android:hint="@string/phone_num"
+    	android:textColor="#333333"
     	android:layout_marginTop="12dp"
     	android:background="@drawable/register_edit_shape"
+    	android:layout_marginLeft="12dp"
+	    android:layout_marginRight="12dp"
 	    />
 	<LinearLayout 
 	    android:layout_gravity="center_horizontal"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal" 
-	    android:layout_marginTop="8dp">
+	    android:layout_marginTop="8dp"
+	    android:layout_marginLeft="12dp"
+	    android:layout_marginRight="12dp">
 	    <EditText 
 		    android:id="@+id/verify_num"
-		    android:gravity="center_horizontal"
-		    android:layout_gravity="center_horizontal"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
+		    android:gravity="center"
+	        android:layout_width="0dp"
+	    	android:layout_height="32dp"
 	    	android:hint="@string/verify_num"
 	    	android:background="@drawable/register_edit_shape"
 	    	android:layout_weight="1"   	
+	    	android:textColor="#333333"
 	    />
-	    <Button
+	    <TextView
 		    android:id="@+id/get_verify_num"
-		    android:gravity="center_horizontal"
-		    android:layout_gravity="center_horizontal"
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
+		    android:gravity="center"
+	        android:layout_width="0dp"
+	    	android:layout_height="32dp"
 	    	android:text="@string/obtain_verify_num"
 	    	android:layout_weight="1"   
+	    	android:layout_marginLeft="8dp"
+	 
 	    />
     </LinearLayout>
     <TextView
           android:id="@+id/next_step"
 		  android:layout_gravity="center_horizontal"
 	      android:layout_width="wrap_content"
-	   	  android:layout_height="32dp"
+	   	  android:layout_height="36dp"
 	   	  android:textColor="#ffffff"
 	   	  android:gravity="center"
 	      android:text="@string/next_step"
 	      android:background="@drawable/register_nextstep"
-	      android:layout_marginTop="45dp"
+	      android:layout_marginTop="48dp"
+	      android:layout_marginLeft="12dp"
+	      android:layout_marginRight="12dp"
         />
 </LinearLayout>

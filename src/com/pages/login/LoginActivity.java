@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
 import com.data.util.GloableData;
+import com.data.util.NetWorkUtil;
 import com.app.ydd.R;
 import com.pages.viewpager.MainActivity;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,7 +56,7 @@ public class LoginActivity extends Activity{
 	EditText password;
 	TextView register;
 	TextView phoneLogin;
-	
+	TextView forgetPwd;
 	ImageView loginBg;
 	//weibo
 //		 private AuthInfo mAuthInfo;
@@ -153,10 +155,18 @@ public class LoginActivity extends Activity{
 	}
 	 private void phoneLogin()
 	    {
-	    	String loginway=getResources().getString(R.string.user_phone);
-			String url=getLoginURL(loginway,phone.getText().toString(),password.getText().toString());
-			UserConfigs.storePassword(password.getText().toString());
-			serverLogin(url, loginway);
+		 	if(!NetWorkUtil.isNetworkConnected(this) && !NetWorkUtil.isWifiConnected(this))
+		 	{
+		 		Toast.makeText(this, "no network",2000).show();
+		 	}
+		 	else
+		 	{
+		 		String loginway=getResources().getString(R.string.user_phone);
+		 		String url=getLoginURL(loginway,phone.getText().toString(),password.getText().toString());
+		 		UserConfigs.storePassword(password.getText().toString());
+		 		
+		 		serverLogin(url, loginway);
+		 	}
 	    }
 	    private void phoneAutoLogin()
 	    {
@@ -167,16 +177,32 @@ public class LoginActivity extends Activity{
 	    
 	    private void serverLogin(String url,final String loginway)
 	    {
+	    	Log.e(DataConstants.TAG,"phonelogin "+ url+"--"+loginway);
 	    	 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( url, null,
 	                 new Response.Listener<JSONObject>() {
 	                     @Override
 	                     public void onResponse(JSONObject response) {
 	                         Log.e(DataConstants.TAG,"response=" + response);
-	                         		
+	                         int errorCode =0;
+							try {
+								errorCode = response.getInt("errorCode");
+								//String error=response.getString("errorCode");
+								//Log.e(DataConstants.TAG,"errorCode=" + errorCode+"*"+error);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+	                         if(errorCode==10004)
+	                         {
+	                        	 Toast.makeText(getApplicationContext(), "用户名或密码错误",Toast.LENGTH_LONG).show();
+	                         }
+	                         else
+	                         {
 	                         		parseLoginInfo(response, loginway);
 	                         		Intent intent=new Intent();
 	                  			    intent.setClass(getApplicationContext(), MainActivity.class);
 	                  			    startActivity(intent);
+	                         }
 	                     }}, 
 	             	new Response.ErrorListener() {
 	                     @Override

@@ -2,8 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="110dp"
+    android:layout_marginTop="4dp"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingBottom="9.6dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp" >
 
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
@@ -12,28 +17,35 @@
 
         <ImageView
             android:id="@+id/headView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/default_head" />
 
         <TextView
             android:id="@+id/nickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/timeView"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="8dp"
             android:layout_toRightOf="@+id/headView"
             android:text="nickName"
+            android:textColor="#429dd7"
             android:textSize="@dimen/name_size" />
 
         <TextView
             android:id="@+id/timeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/headView"
             android:layout_alignLeft="@+id/nickName"
-            android:layout_below="@+id/nickName"
-            android:text="time" />
+            android:text="time"
+            android:textColor="#a5a5a5"
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/countView"
@@ -41,33 +53,42 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:text="Count" />
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="11.2dp"
+            android:text="Count"
+            android:textColor="#a5a5a5"
+            android:textSize="12dp" />
 
         <ImageView
             android:id="@+id/sexImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_above="@+id/timeView"
+            android:layout_marginTop="11.2dp"
             android:layout_toRightOf="@+id/nickName"
-            android:src="@drawable/play" />
+            android:src="@drawable/square_boy" />
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/sexImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="6.4dp"
+            android:layout_marginTop="10.4dp"
             android:layout_toLeftOf="@+id/countView"
-            android:src="@drawable/play" />
+            android:src="@drawable/square_reply" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="7.2dp"
+        android:layout_marginTop="7.2dp"
         android:gravity="center"
         android:maxLines="1"
         android:text="title"
-        android:textSize="@dimen/title_size" />
+        android:textColor="#333333"
+        android:textSize="13.6dp" />
 
     <TextView
         android:id="@+id/contentView"
@@ -76,6 +97,8 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="3"
-        android:text="content" />
+        android:text="content"
+        android:textColor="#b0b0b0"
+        android:textSize="10.4dp" />
 
 </LinearLayout>

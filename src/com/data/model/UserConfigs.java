@@ -14,15 +14,61 @@ import android.util.Log;
 
 public class UserConfigs 
 {
+	public static final int BOY = 1, GIRL = 0;
 	static SharedPreferences sp=null;
 	static Context context;
 	static Editor editor;
+	
 	public UserConfigs(Context mcontext)
 	{
 		this.context=mcontext;
 		sp=context.getSharedPreferences(context.getResources().getString(R.string.user_config_file), Context.MODE_PRIVATE);
 		
 	}
+	// wsy 2/27
+		public static void storeHeadImg(String headImg) {
+			editor = sp.edit();// 获取编辑器
+			editor.putString(context.getResources()
+					.getString(R.string.user_headImg), headImg);
+			editor.commit();// 提交修改
+		}
+
+		public static String getHeadImg() {
+			return sp.getString(
+					context.getResources().getString(R.string.user_headImg), "");
+		}
+
+		public static void storeEmail(String email) {
+			editor = sp.edit();// 获取编辑器
+			editor.putString(context.getResources().getString(R.string.user_email),
+					email);
+			editor.commit();// 提交修改
+		}
+
+		public static String getEmail() {
+			return sp.getString(
+					context.getResources().getString(R.string.user_email), null);
+		}
+
+		// wsy 2/25
+		public static void storeSex(int sex) {
+			editor = sp.edit();// 获取编辑器
+			editor.putString(context.getResources().getString(R.string.sex), ""
+					+ sex);
+			editor.commit();// 提交修改
+		}
+		public static void storeSex(String sex)
+		{
+			editor= sp.edit();//获取编辑器
+			editor.putString(context.getResources().getString(R.string.user_sex),sex);
+			editor.commit();//提交修改
+		}
+		public static int getSex()
+		{		
+			String s=sp.getString(context.getResources().getString(R.string.sex),"");
+			int sex=s.equals("1")?1:0;
+			return sex;
+		}
 	public static void storeLoginWay(String loginWay)
 	{
 		editor= sp.edit();//获取编辑器
@@ -83,16 +129,8 @@ public class UserConfigs
 	{		
 		return sp.getString(context.getResources().getString(R.string.user_verify),null);
 	}
-	public static void storeSex(String sex)
-	{
-		editor= sp.edit();//获取编辑器
-		editor.putString(context.getResources().getString(R.string.user_sex),sex);
-		editor.commit();//提交修改
-	}
-	public static String getSex()
-	{		
-		return sp.getString(context.getResources().getString(R.string.user_sex),null);
-	}
+	
+	
 	public static void storeId(String id)
 	{
 		editor= sp.edit();//获取编辑器

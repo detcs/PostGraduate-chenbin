@@ -7,9 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="19dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="20dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,23 +22,31 @@
 
             <ImageView
                 android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/play" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="66dp"
+                android:src="@drawable/essense_share_friends" />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/pause" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/essense_share_xinna" />
         </LinearLayout>
 
-        <Button
+        <TextView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginTop="11dp"
+            android:background="#e5e5e5" />
+
+        <TextView
             android:id="@+id/button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/default_quit" />
     </LinearLayout>
 

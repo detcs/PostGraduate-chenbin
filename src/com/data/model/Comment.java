@@ -7,15 +7,21 @@ public class Comment {
 	private String headimg;
 	private String time;
 	private String userId;
+	private int sex_;
 
 	public Comment(String id, String nickName, String headimg, String time,
-			String content, String userId) {
+			String content, String userId, int sex) {
 		this.id = id + "";
 		this.nickName = nickName + "";
 		this.headimg = headimg + "";
 		this.time = time + "";
 		this.content = content + "";
 		this.userId = userId;
+		this.sex_ = sex;
+	}
+
+	public int getSex_() {
+		return sex_;
 	}
 
 	public String getAuthor() {

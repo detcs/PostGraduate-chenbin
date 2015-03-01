@@ -26,19 +26,21 @@ import android.util.Log;
 public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 	Context context;
 	//String dirPath;
-	String updateCol;
+	//String updateCol;
 	//String id;
 	String date;
 	FootprintInfo fpInfo;
 	Fragment requestFragment;
-	public DownloadTask(Context context,String updateCol,String date,FootprintInfo info,Fragment fragment) {
+	boolean updateUI=false;
+	public DownloadTask(Context context,String date,FootprintInfo info,Fragment fragment,boolean updateUI) {
 		super();
 		this.context = context;
 		//this.dirPath = dirPath;
-		this.updateCol=updateCol;
+		//this.updateCol=updateCol;
 		//this.id=id;
 		fpInfo=info;
 		requestFragment=fragment;
+		this.updateUI=updateUI;
 	}
 	/* @Desciption: 利用Http协议下载文件并存储到SDCard 
     1.创建一个URL对象 
@@ -57,8 +59,8 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 //		String coverBgPic=null;
 //		String coverSong=null;
 //		String footprintBgPic=null;
-		String downloadedNames[]=new String[3];
-		String downloadedDirPaths[]={FileDataHandler.COVER_PIC_DIR_PATH,FileDataHandler.COVER_SONG_DIR_PATH,FileDataHandler.FOOTPRINT_PIC_DIR_PATH};
+		String downloadedNames[]=new String[4];
+		String downloadedDirPaths[]={FileDataHandler.COVER_PIC_DIR_PATH,FileDataHandler.COVER_SONG_DIR_PATH,FileDataHandler.FOOTPRINT_PIC_DIR_PATH,FileDataHandler.COVER_TWO_PIC_DIR_PATH};
 		String urlStr=null;//DataConstants.DOWNLOAD_URL+id;  
 		//Log.e(DataConstants.TAG,"cover_bgpic "+urlStr);
 		for(int i=0;i<param.length;i++)
@@ -110,7 +112,7 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 	            }  
 	        }
     }  
-		urlInfo=new DownloadUrlInfo(downloadedNames[0], downloadedNames[1], downloadedNames[2]);
+		urlInfo=new DownloadUrlInfo(downloadedNames[0], downloadedNames[1], downloadedNames[2], downloadedNames[3]);
 		return urlInfo;
 	}
 	@Override
@@ -119,12 +121,14 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 		super.onPostExecute(result);
 		 Log.e(DataConstants.TAG,"onpost:");
 		 fpInfo.setCoverPicName(result.getCoverBgPic());
-		 fpInfo.setCoverSongName(result.getCoverSong());
+		 fpInfo.setCoverSongFileName(result.getCoverSong());
 		 fpInfo.setFootprintPicName(result.getFootPrintBgPic());
+		 fpInfo.setCoverTwoPicName(result.getCoverTwoBgPic());
 		 SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		 DataConstants.dbHelper.insertFootprintInfoRecord(context, db, fpInfo);
 		 db.close();
-		 ((TodayFragment)requestFragment).setFirstpageView(fpInfo);
+		 if(updateUI)
+			 ((TodayFragment)requestFragment).setFirstpageView(fpInfo);
 		//DataConstants.dbHelper.updateFootprintRecord(context, db, updateCol, result, date);
 	}
 	

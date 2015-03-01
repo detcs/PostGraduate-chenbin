@@ -2,50 +2,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/quitView" >
-
-        <ImageView
-            android:id="@+id/friendsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/pause" />
-
-        <ImageView
-            android:id="@+id/weixinView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/play" />
-
-        <ImageView
-            android:id="@+id/xinnaView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/play" />
-
-        <ImageView
-            android:id="@+id/qqView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/pause" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/quitView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:text="@string/default_quit" />
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp" >
+
+            <ImageView
+                android:id="@+id/friendsView"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="11.2dp"
+                android:layout_marginRight="11.2dp"
+                android:layout_weight="1"
+                android:src="@drawable/square_share_friends" />
+
+            <ImageView
+                android:id="@+id/weixinView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="11.2dp"
+                android:layout_marginRight="11.2dp"
+                android:layout_weight="1"
+                android:src="@drawable/square_share_weixin" />
+
+            <ImageView
+                android:id="@+id/xinnaView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="11.2dp"
+                android:layout_marginRight="11.2dp"
+                android:layout_weight="1"
+                android:src="@drawable/square_share_weibo" />
+
+            <ImageView
+                android:id="@+id/qqView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="11.2dp"
+                android:layout_marginRight="11.2dp"
+                android:layout_weight="1"
+                android:src="@drawable/square_share_qq" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="11.2dp"
+            android:layout_marginRight="11.2dp"
+            android:textColor="#e5e5e5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48.4dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/quitView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12.8dp"
+                android:gravity="center"
+                android:text="@string/default_quit"
+                android:textColor="#ec3113"
+                android:textSize="18dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

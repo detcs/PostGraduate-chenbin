@@ -6,82 +6,118 @@
     android:orientation="vertical"
     tools:context="com.pages.funsquare.contact.ContactActivity" >
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="50dp"
+        android:background="@color/default_headbar_background" >
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/backView"
+            android:layout_width="@dimen/default_back_width"
+            android:layout_height="@dimen/default_back_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/contact_head_title"
+            android:textColor="@color/default_headbar_title"
+            android:textSize="@dimen/default_headbar_titlesize" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="19.2dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_hint_words"
+            android:textColor="#333333"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/contentText"
+            android:layout_width="276dp"
+            android:layout_height="143.2dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/person_contact_hint1"
+            android:paddingLeft="12dp"
+            android:paddingTop="10.4dp"
+            android:textColor="#a4a4a4"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="276dp"
+            android:layout_height="31.2dp"
+            android:hint="@string/contact_hint_funcs_words"
+            android:paddingBottom="8dp"
+            android:paddingTop="12dp"
+            android:textColor="#333333"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/contactText"
+            android:layout_width="276dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:hint="@string/person_contact_hint2"
+            android:paddingLeft="12dp"
+            android:textColor="#a4a4a4"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/commitView"
+            android:layout_width="276dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/contact_commit"
+            android:hint="@string/default_commit"
+            android:textColor="#ffffff"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#f2f2f2"
+        android:orientation="vertical"
+        android:paddingTop="14.4dp" >
+
+        <TextView
+            android:id="@+id/textView6"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/person_contact_hint3"
+            android:textColor="#a4a4a4"
+            android:textSize="9.6dp" />
 
-            <ImageView
-                android:id="@+id/backView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/play" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/contact_head_title" />
-        </LinearLayout>
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/contact_hint_words" />
-
-    <EditText
-        android:id="@+id/contentText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/person_contact_hint1" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/contact_hint_funcs_words" />
-
-    <EditText
-        android:id="@+id/contactText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/person_contact_hint2" />
-
-    <Button
-        android:id="@+id/commitView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/default_commit" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/person_contact_hint3" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/person_contact_hint4" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/person_contact_hint4"
+            android:textColor="#a4a4a4"
+            android:textSize="9.6dp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -7,22 +7,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="124dp"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical" >
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="17.2dp"
+        android:paddingRight="17.2dp"
+        android:paddingTop="24dp" >
 
         <Button
             android:id="@+id/reportBu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_report" />
+            android:layout_width="265.6dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/square_report" />
 
         <Button
             android:id="@+id/quitBu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_quit" />
-
+            android:layout_width="265.6dp"
+            android:layout_height="36dp"
+            android:background="@drawable/square_quit" />
     </LinearLayout>
 
 </RelativeLayout>

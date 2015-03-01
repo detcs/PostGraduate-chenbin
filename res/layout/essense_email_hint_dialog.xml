@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="@dimen/default_dialog_width"
+    android:layout_height="@dimen/default_dialog_height"
+    android:background="@drawable/dialog_background"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -10,32 +11,46 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/essense_email_hint_title" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17.6dp"
+        android:text="@string/essense_email_hint_title"
+        android:textColor="#333333"
+        android:textSize="13.6dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/essense_email_hint_content" />
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6.4dp"
+        android:text="@string/essense_email_hint_content"
+        android:textColor="#333333"
+        android:textSize="9.6dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:layout_height="@dimen/default_dialog_bottom_height"
+        android:layout_alignParentBottom="true" >
 
-        <Button
+        <TextView
             android:id="@+id/quitBu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/default_quit"
             android:textColor="@color/blue" />
 
-        <Button
+        <TextView
             android:id="@+id/ensureBu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/default_ensure"
             android:textColor="@color/blue" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

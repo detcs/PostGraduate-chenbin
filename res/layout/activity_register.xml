@@ -11,9 +11,12 @@
         >
      	<TextView
      	    android:id="@+id/left_btn"
-     	    android:layout_width="wrap_content"
+     	    android:layout_width="15dp"
     		android:layout_height="24dp"
     		android:layout_alignParentLeft="true"
+    		android:layout_marginLeft="12dp"
+    		android:gravity="center_vertical"
+    		android:layout_marginTop="12dp"
     		android:background="@drawable/register_back"
      	    />
      	<TextView

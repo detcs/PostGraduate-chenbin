@@ -57,17 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	String sql = "create table if not exists "+context.getResources().getString(R.string.db_footprint_table)
     			+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
     			+context.getResources().getString(R.string.dbcol_cover_pic)+" TEXT not null , "
-    			+context.getResources().getString(R.string.dbcol_cover_song)+" TEXT not null,"
-    			+context.getResources().getString(R.string.dbcol_footprint_pic)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_cover_song_file)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_cover_song_name)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_cover_singer)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_footprint_pic)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_cover_two_pic)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_diary)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_encourage)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_days)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_daysleft)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
-    			songname
-    			notebgpic
         Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
@@ -79,14 +79,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    while (!result.isAfterLast()) { 
 	         
 	        String coverPicPath=result.getString(1); 
-	        String coverSongName=result.getString(2);
-	        String footprintPic=result.getString(3);
+	        String coverSongFile=result.getString(2);
+	        String coverSongName=result.getString(3);
 	        String coverSinger=result.getString(4);
-	        String diary=result.getString(5);
-	        String encourage=result.getString(6);
-	        String days=result.getString(7);
-	        String daysleft=result.getString(8);
-	        fpInfo=new FootprintInfo(coverPicPath,coverSongName,footprintPic,coverSinger,diary,encourage,days,daysleft,date,context.getResources().getString(R.string.upload_no)); 
+	        String footprintPic=result.getString(5);
+	        String coverTwoPic=result.getString(6);
+	        String diary=result.getString(7);
+	        String encourage=result.getString(8);
+	        String days=result.getString(9);
+	        String daysleft=result.getString(10);
+	        fpInfo=new FootprintInfo(coverPicPath,coverSongFile,coverSongName,coverSinger,footprintPic,coverTwoPic,diary,date,encourage,days,daysleft,context.getResources().getString(R.string.upload_no)); 
 	       // Log.e(DataConstants.TAG,"db:query "+id+","+name);
 	        result.moveToNext(); 
 	      } 
@@ -99,8 +101,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	ContentValues cv=new ContentValues();
     	cv.put(context.getResources().getString(R.string.dbcol_cover_pic), fpInfo.getCoverPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_footprint_pic), fpInfo.getFootprintPicName());
-    	cv.put(context.getResources().getString(R.string.dbcol_cover_song), fpInfo.getCoverSongName());
+    	cv.put(context.getResources().getString(R.string.dbcol_cover_song_file), fpInfo.getCoverSongFileName());
+    	cv.put(context.getResources().getString(R.string.dbcol_cover_song_name), fpInfo.getCoverSongName());
     	cv.put(context.getResources().getString(R.string.dbcol_cover_singer), fpInfo.getCoverSongName());
+    	cv.put(context.getResources().getString(R.string.dbcol_cover_two_pic), fpInfo.getCoverTwoPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_encourage), fpInfo.getEncourage());
     	cv.put(context.getResources().getString(R.string.dbcol_date), fpInfo.getDate());
     	cv.put(context.getResources().getString(R.string.dbcol_diary), fpInfo.getDiary());

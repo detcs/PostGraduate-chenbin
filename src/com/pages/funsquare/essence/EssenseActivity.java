@@ -67,7 +67,7 @@ public class EssenseActivity extends Activity implements EssenseJump,
 		FragmentManager manager = getFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		Fragment detailFragment;
-		if (null == ed.getUrl_() || ed.getUrl_().equals("")) {
+		if (null == ed.getContent_() || ed.getContent_().equals("")) {
 			detailFragment = new EssenseDetailFragment(ed);
 		} else {
 			detailFragment = new EssenseDetailH5Fragment(ed);

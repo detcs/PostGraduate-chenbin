@@ -1,8 +1,17 @@
 package com.data.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +30,128 @@ public class NetCall {
 	private static final String TAG = "NetCall";
 
 	private static RequestQueue requestQueue = GloableData.requestQueue;
+
+	public static void print(String from, String to,
+			final PrintCallback callback) {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, ComputeURL.getPrintURL(from, to), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							int errorCode = response.getInt("errorCode");
+							if (0 == errorCode) {
+								JSONObject data = (JSONObject) response
+										.get("data");
+								int code_ = data.getInt("code_");
+								if (1 == code_) {
+									callback.printSuccess();
+									return;
+								}
+							}
+							callback.printFail();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// TODO Auto-generated method stub
+						callback.printFail();
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+
+	public interface PrintCallback {
+		public void printSuccess();
+
+		public void printFail();
+	}
+
+	public static void uploadHead2(final String base,
+			final UploadHeadCallback callback) {
+		// url:ComputeURL.getUploadHeadURL(base)
+		new Thread() {
+			public void run() {
+				HttpPost post = new HttpPost(ComputeURL.getUploadHeadURL2());
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("img", base));
+				HttpClient httpClient = new DefaultHttpClient();
+				try {
+					HttpResponse res = httpClient.execute(post);
+					if (res.getStatusLine().getStatusCode() == 200) {
+						String msg = EntityUtils.toString(res.getEntity());
+						JSONObject response = new JSONObject(msg);
+						int errorCode = response.getInt("errorCode");
+						if (0 == errorCode) {
+							JSONObject data = (JSONObject) response.get("data");
+							int code_ = data.getInt("code_");
+							if (1 == code_) {
+								String headimg = data.getString("msg_");
+								callback.headsuccess(headimg);
+								return;
+							}
+						}
+						callback.headfail();
+					}
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+	}
+
+	// public static void uploadHead(String base, final UploadHeadCallback
+	// callback) {
+	// // url:ComputeURL.getUploadHeadURL(base)
+	// JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+	// Request.Method.POST, ComputeURL.getUploadHeadURL(base), null,
+	// new Response.Listener<JSONObject>() {
+	// @Override
+	// public void onResponse(JSONObject response) {
+	// try {
+	// int errorCode = response.getInt("errorCode");
+	// if (0 == errorCode) {
+	// JSONObject data = (JSONObject) response
+	// .get("data");
+	// int code_ = data.getInt("code_");
+	// if (1 == code_) {
+	// String headimg = data.getString("msg_");
+	// callback.headsuccess(headimg);
+	// return;
+	// }
+	// }
+	// callback.headfail();
+	// } catch (JSONException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// }, new Response.ErrorListener() {
+	// @Override
+	// public void onErrorResponse(VolleyError arg0) {
+	// // TODO Auto-generated method stub
+	// callback.headfail();
+	// }
+	// });
+	// requestQueue.add(jsonObjectRequest);
+	// }
+
+	public interface UploadHeadCallback {
+		public void headsuccess(String headImg);
+
+		public void headfail();
+	}
 
 	// 广场举报贴子
 	public static void report(String pid, final ReportCallback callback) {
@@ -96,12 +227,12 @@ public class NetCall {
 		public void getSuccess(int essence_, int square_);
 	}
 
-	// 修改个人信息： 昵称，头像，邮箱
+	// 修改个人信息： 昵称，头像，邮箱,sex
 	public static void changeInfo(String nickname, String headimg,
-			String email, final InfoChangeCallback callback) {
+			String email, int sex, final InfoChangeCallback callback) {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 				Request.Method.GET, ComputeURL.getInfoChangeURL(nickname,
-						headimg, email), null,
+						headimg, email, sex), null,
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {

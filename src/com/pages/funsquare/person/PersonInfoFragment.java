@@ -3,10 +3,14 @@ package com.pages.funsquare.person;
 import java.io.File;
 
 import com.app.ydd.R;
+import com.data.model.UserConfigs;
 import com.data.util.BitmapUtil;
+import com.data.util.ComputeURL;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.data.util.NetCall.InfoChangeCallback;
+import com.data.util.NetCall.UploadHeadCallback;
+import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
 
 import android.annotation.SuppressLint;
@@ -15,6 +19,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,9 +31,12 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
+public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
+		UploadHeadCallback {
 	private static final int PICK = 100;
 	private static final int TAKE = 101;
 	private static final int CROP = 102;
@@ -36,11 +44,18 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 	private View base;
 	private FrameLayout frame;
 	private static final String TAG = "bump";
+	private TextView[] fonts;
+	private static final int[] fontsId = { R.id.saveView, R.id.textView1,
+			R.id.textView3, R.id.nickNameText, R.id.textView5 };
 
+	private TextView nickNameText;
 	private View rootView;
 	private View backView;
 	private View saveView;
-	private View imageView1;// head img
+	private ImageView imageView1;// head img
+	private ImageView sexchooseImg;
+	private int showSex = 1;
+	private String headimg;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,16 +67,17 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_person_info,
 					container, false);
+			frame.addView(rootView);
+			init(rootView);
 		}
-		frame.addView(rootView);
-		init(rootView);
 		return base;
 	}
 
 	private void init(View view) {
 		backView = view.findViewById(R.id.backView);
 		saveView = view.findViewById(R.id.saveView);
-		imageView1 = view.findViewById(R.id.imageView1);
+		imageView1 = (ImageView) view.findViewById(R.id.imageView1);
+		initShow(view);
 		backView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -75,7 +91,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SysCall.error("save info");
+				saveChange();
 			}
 		});
 		imageView1.setOnLongClickListener(new OnLongClickListener() {
@@ -96,6 +112,45 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 				return true;
 			}
 		});
+		sexchooseImg.setOnClickListener(new OnClickListener() {// 只改变显示的，本地的网络的均未改动
+					private final int[] ids = {
+							R.drawable.person_center_sexchoose_girl,
+							R.drawable.person_center_sexchoose_boy };
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						showSex = (showSex + 1) % 2;
+						sexchooseImg.setImageDrawable(getActivity()
+								.getResources().getDrawable(ids[showSex]));
+					}
+				});
+	}
+
+	private void initShow(View view) {
+		// fonts set
+		Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+				"font/fangzhenglanting.ttf");
+		fonts = new TextView[fontsId.length];
+		for (int i = 0; i < fontsId.length; i++) {
+			fonts[i] = (TextView) view.findViewById(fontsId[i]);
+			fonts[i].setTypeface(face);
+		}
+		// nick name set
+		nickNameText = (TextView) view.findViewById(R.id.nickNameText);
+		nickNameText.setText(UserConfigs.getNickName());
+		// head set
+		Picasso.with(getActivity())
+				.load(ComputeURL.getHeadImgURL(UserConfigs.getHeadImg()))
+				.error(R.drawable.square_boy);
+		headimg = UserConfigs.getHeadImg();
+		// sex set
+		sexchooseImg = (ImageView) view.findViewById(R.id.sexchooseImg);
+		if (UserConfigs.GIRL == UserConfigs.getSex()) {
+			showSex = UserConfigs.GIRL;
+			sexchooseImg.setImageDrawable(getResources().getDrawable(
+					R.drawable.person_center_sexchoose_girl));
+		}
 	}
 
 	// ******************init head set******************
@@ -110,6 +165,8 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				view.startAnimation(AnimationUtil.hideAnimation());
+				frame.removeView(view);
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
 						Environment.getExternalStorageDirectory() + "/",
@@ -122,6 +179,8 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 
 			@Override
 			public void onClick(View v) {
+				view.startAnimation(AnimationUtil.hideAnimation());
+				frame.removeView(view);
 				// TODO Auto-generated method stub
 				// Intent intent = new Intent(
 				// Intent.ACTION_PICK,
@@ -169,6 +228,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 								+ "/temp.jpg", options);
 				BitmapUtil.saveBitmap(Environment.getExternalStorageDirectory()
 						+ "/temp.jpg", bitmap);
+				bitmap.recycle();
 
 				Intent intent = new Intent();
 				intent.setAction("com.android.camera.action.CROP");
@@ -181,7 +241,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 				intent.putExtra("outputX", 100);// 输出图片大小
 				intent.putExtra("outputY", 100);
 				intent.putExtra("return-data", true);
-				startActivityForResult(intent, 200);
+				startActivityForResult(intent, CROP);
 			}
 				break;
 			case PICK:// pick and crop
@@ -196,8 +256,9 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 				Bundle bundle = data.getExtras();
 				Bitmap bitmap = (Bitmap) bundle.get("data");
 				// change head
-				String headimg = "";
-				NetCall.changeInfo("", headimg, "", this);
+				imageView1.setImageBitmap(bitmap);
+				NetCall.uploadHead2(BitmapUtil.bitmapToString(bitmap),
+						PersonInfoFragment.this);
 				break;
 			default:
 				SysCall.error("unknown request");
@@ -209,17 +270,40 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback {
 		}
 	}
 
+	private void saveChange() {
+		String email = "";
+		String nickname = "";
+		NetCall.changeInfo(nickname, headimg, email, showSex,
+				PersonInfoFragment.this);
+	}
+
 	// NetCall.InfoChangeCallback
 	@Override
 	public void changeSuccess() {
 		// TODO Auto-generated method stub
 		// change the head img
+		UserConfigs.storeHeadImg(headimg);
+		UserConfigs.storeSex(showSex);
+		Toast.makeText(getActivity(), "保存成功", 500).show();
 	}
 
 	@Override
 	public void changeFail() {
 		// TODO Auto-generated method stub
 		// 修改失败
-		Toast.makeText(getActivity(), "修改失败", 500);
+		Toast.makeText(getActivity(), "修改失败", 500).show();
+	}
+
+	// UploadHeadCallback
+	@Override
+	public void headsuccess(String headImg) {
+		// TODO Auto-generated method stub
+		this.headimg = headImg;
+	}
+
+	@Override
+	public void headfail() {
+		// TODO Auto-generated method stub
+
 	}
 }

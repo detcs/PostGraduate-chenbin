@@ -1,7 +1,10 @@
 package com.pages.funsquare.person;
 
 import com.app.ydd.R;
+import com.data.model.UserConfigs;
+import com.data.util.ComputeURL;
 import com.data.util.SysCall;
+import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
 
 import android.annotation.SuppressLint;
@@ -20,14 +23,17 @@ public class PersonCenterFragment extends Fragment {
 	private PersonJump jump;
 	private View base;
 	private FrameLayout frame;
+	private TextView nameText, idText, textView6;// textView6:email
 	private static final String TAG = "bump";
+	private static final String ROOT = "ROOT";
 	// private static final String[] TAGS = { "fragment_person_email_set",
 	// "fragment_person_logout" };
 
 	private View rootView;
-	private View infoView, emailChangeView, pwChangeView, myreserve, checknew,
-			aboutus, logoutBu;
-	private ImageView imageView5;
+	private TextView emailChangeView;
+	private View infoView, pwChangeView, myreserve, checknew, aboutus,
+			logoutBu, imageView1;// imageView1_back
+	private ImageView imageView2;
 
 	@Override
 	public void onAttach(android.app.Activity activity) {
@@ -40,14 +46,17 @@ public class PersonCenterFragment extends Fragment {
 			Bundle saveInstanceState) {
 		if (null == base) {
 			base = inflater.inflate(R.layout.frame, container, false);
+			frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
 		}
-		frame = (FrameLayout) base.findViewById(R.id.FrameLayout1);
-		if (null == rootView) {
-			rootView = inflater.inflate(R.layout.fragment_person_center,
-					container, false);
+		if (null == frame.findViewWithTag(ROOT)) {
+			if (null == rootView) {
+				rootView = inflater.inflate(R.layout.fragment_person_center,
+						null);
+				init(rootView);
+			}
+			rootView.setTag(ROOT);
+			frame.addView(rootView);
 		}
-		init(rootView);
-		frame.addView(rootView);
 		// frame.findViewWithTag(tag)
 		return base;
 	}
@@ -59,10 +68,14 @@ public class PersonCenterFragment extends Fragment {
 	}
 
 	private void findViews(View view) {
-		imageView5 = (ImageView) view.findViewById(R.id.imageView5);
+		nameText = (TextView) view.findViewById(R.id.nameText);
+		idText = (TextView) view.findViewById(R.id.idText);
+		textView6 = (TextView) view.findViewById(R.id.textView6);
 
+		imageView2 = (ImageView) view.findViewById(R.id.imageView2);
+		imageView1 = view.findViewById(R.id.imageView1);
 		infoView = view.findViewById(R.id.infoView);
-		emailChangeView = view.findViewById(R.id.emailChangeView);
+		emailChangeView = (TextView) view.findViewById(R.id.emailChangeView);
 		pwChangeView = view.findViewById(R.id.pwChangeView);
 		myreserve = view.findViewById(R.id.myreserve);
 		checknew = view.findViewById(R.id.checknew);
@@ -71,11 +84,28 @@ public class PersonCenterFragment extends Fragment {
 	}
 
 	private void initView() {
-		SysCall.error("check whether has update");
-		imageView5.setImageBitmap(null);
+		Picasso.with(getActivity())
+				.load(ComputeURL.getHeadImgURL(UserConfigs.getHeadImg()))
+				.error(R.drawable.person_center_boyhead).into(imageView2);
+		nameText.setText(UserConfigs.getAccount());
+		idText.setText("研大大ID：" + UserConfigs.getId());
+		if (null == UserConfigs.getEmail() || UserConfigs.getEmail().equals("")) {
+			emailChangeView.setText("设置");
+		} else {
+			textView6.setText(UserConfigs.getEmail());
+		}
 	}
 
 	private void setListener() {
+		// back
+		imageView1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				SysCall.clickBack();
+			}
+		});
 		infoView.setOnClickListener(new OnClickListener() {
 
 			@Override

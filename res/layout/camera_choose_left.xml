@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="33.6dp"
+    android:layout_marginBottom="6.4dp"
+    android:layout_marginTop="12dp"
     android:gravity="center"
     android:orientation="horizontal" >
 
     <com.view.util.VerticalTextView
         xmlns:app="http://schemas.android.com/apk/res/com.app.ydd"
         android:id="@+id/radioButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/camera_item_size"
+        android:layout_height="@dimen/camera_item_size"
+        android:background="@drawable/camera_item"
         android:gravity="center"
         android:textColor="@color/camera_choose_word"
+        android:textSize="@dimen/camera_item_text"
         app:direction="downtoup" />
 
     <com.view.util.VerticalTextView
         xmlns:app="http://schemas.android.com/apk/res/com.app.ydd"
         android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/camera_item_size"
+        android:layout_height="@dimen/camera_item_size"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/camera_item"
         android:gravity="center"
         android:textColor="@color/camera_choose_word"
+        android:textSize="@dimen/camera_item_text"
         app:direction="downtoup" />
 
     <com.view.util.VerticalTextView
         xmlns:app="http://schemas.android.com/apk/res/com.app.ydd"
         android:id="@+id/radioButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/camera_item_size"
+        android:layout_height="@dimen/camera_item_size"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/camera_item"
         android:gravity="center"
         android:textColor="@color/camera_choose_word"
+        android:textSize="@dimen/camera_item_text"
         app:direction="downtoup" />
 
     <com.view.util.VerticalTextView
         xmlns:app="http://schemas.android.com/apk/res/com.app.ydd"
         android:id="@+id/radioButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/camera_item_size"
+        android:layout_height="@dimen/camera_item_size"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/camera_item"
         android:gravity="center"
         android:textColor="@color/camera_choose_word"
+        android:textSize="@dimen/camera_item_text"
         app:direction="downtoup" />
 
 </LinearLayout>

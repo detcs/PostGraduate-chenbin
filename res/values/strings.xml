@@ -5,7 +5,9 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <!-- user configs -->
-
+	<string name="user_headImg">head</string>
+    <string name="user_email">email</string>
+    <string name="sex">sex</string>
     <string name="user_config_file">userConfigs</string>
     <string name="login_way">loginWay</string>
     <string name="user_account">account</string>
@@ -40,7 +42,9 @@
     <string name="db_profess2_table">professTwoTable</string>
     <string name="db_footprint_table">footprintTable</string>
     <string name="dbcol_cover_pic">dbCoverPic</string>
-    <string name="dbcol_cover_song">dbCoverSong</string>
+    <string name="dbcol_cover_two_pic">dbCoverTwoPic</string>
+    <string name="dbcol_cover_song_file">dbCoverSongFile</string>
+    <string name="dbcol_cover_song_name">dbCoverSongName</string>
     <string name="dbcol_cover_singer">dbCoverSinger</string>
     <string name="dbcol_footprint_pic">dbFootprintPic</string>
     <string name="dbcol_diary">dbDiary</string>
@@ -57,6 +61,7 @@
     <string name="dir_app">Android/data/ydd</string>
     <string name="dir_cover_song">coverSong</string>
     <string name="dir_cover_pic">coverPic</string>
+    <string name="dir_cover_two_pic">coverTwoPic</string>
     <string name="dir_footprint_pic">footprintPic</string>
     <string name="dir_english">EnglishDir</string>
     <string name="dir_politics">PoliticsDir</string>
@@ -66,6 +71,7 @@
     <!-- login -->
     <string name="account">账号</string>
     <string name="password">密码</string>
+    <string name="forget_password">忘记密码?</string>
     <string name="phone_num">手机号</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
@@ -200,7 +206,7 @@
     <string name="title_activity_group_search">GroupSearchActivity</string>
 
     <!-- camera -->
-    <string name="camera_close_preview">关闭</string>
+     <string name="camera_close_preview">关闭</string>
     <string name="camera_pick_album">从相册选取</string>
     <string name="camera_retake">重拍</string>
     <string name="camera_edit">编辑</string>
@@ -267,7 +273,7 @@
     <string name="person_headset_album">从相册选择</string>
     <string name="person_reserve_head_title">我的收藏</string>
     <string name="reserve_head_title">备份</string>
-    <string name="reserve_top_hint">备份下来的资料对您非常重要</string>
+    <string name="reserve_top_hint">笔记备份可以向您推送笔记知识点相关的试题，整理打印，防丢，节约手机空间。</string>
     <string name="reserve_button_words">一键备份</string>
     <string name="default_set">设置</string>
     <string name="cancel">取消</string>

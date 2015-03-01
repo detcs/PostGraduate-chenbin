@@ -28,6 +28,20 @@ public class DateUtil {
 		String d = sdf.format(calendar.getTime());
 		return d;
 	}
+	public static String getLaterDateStringAfter(String date,int n)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		try {
+			calendar.setTime(sdf.parse(date));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		calendar.add(Calendar.DAY_OF_YEAR, n);
+		String d = sdf.format(calendar.getTime());
+		return d;
+	}
 	public static int getDateGapDays (String beginDate, String endDate)
 	{       
 			int gapDays=0;

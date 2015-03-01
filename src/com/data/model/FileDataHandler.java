@@ -21,6 +21,7 @@ public class FileDataHandler {
 	public static String COVER_SONG_DIR_PATH=null;
 	public static String COVER_PIC_DIR_PATH=null;
 	public static String FOOTPRINT_PIC_DIR_PATH=null;
+	public static String COVER_TWO_PIC_DIR_PATH=null;
 
 	public static void init(Context context)
 	{
@@ -31,6 +32,7 @@ public class FileDataHandler {
 			COVER_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_pic);
 			COVER_SONG_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_song);
 			FOOTPRINT_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_footprint_pic);
+			COVER_TWO_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_two_pic);
 		}
 	}
 	public static boolean sdCardExist()

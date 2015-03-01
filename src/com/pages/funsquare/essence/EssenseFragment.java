@@ -3,6 +3,7 @@ package com.pages.funsquare.essence;
 import com.app.ydd.R;
 import com.data.model.Essense;
 import com.data.model.EssenseDetail;
+import com.data.model.UserConfigs;
 import com.data.util.GloableData;
 import com.data.util.NetCall;
 import com.data.util.NetCall.DownloadSource;
@@ -16,6 +17,7 @@ import com.view.util.AnimationUtil;
 import com.view.util.EssenseAdapter;
 import com.view.util.EssenseAdapter.ListDownEssense;
 import com.view.util.EssenseAdapter.ViewHolder;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -52,14 +54,22 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 	private static final int[] typeArray = new int[] { GloableData.TYPE_NEW,
 			GloableData.TYPE_MATERIAL, GloableData.TYPE_INFORMATION,
 			GloableData.TYPE_EXERCISE };
-	private TextView[] tabs;
+	private ImageView[] tabs;
+	private static final int[] lines = { R.id.line1, R.id.line2, R.id.line3,
+			R.id.line4 };
+	private static final int[][] tabsImgId = {
+			{ R.drawable.essense_newest, R.drawable.essense_info,
+					R.drawable.essense_material, R.drawable.essense_exercise },
+			{ R.drawable.essense_newest_chosen, R.drawable.essense_info_chosen,
+					R.drawable.essense_material_chosen,
+					R.drawable.essense_exercise_chosen } };
 	private int[] tabsId = { R.id.tab1, R.id.tab2, R.id.tab3, R.id.tab4 };
 	private EssenseAdapter[] adapters;
 	private ListView[] lists;
 	private EssenseJump jump;
 	private View rootView;
-	private ImageView backImg;
-	private ImageView queryImg;
+	private View backImg;
+	private View queryImg;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,7 +101,7 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 	// *********init variable*********
 
 	private void initVariable(View view) {
-		tabs = new TextView[4];
+		tabs = new ImageView[4];
 		lists = new ListView[4];
 		adapters = new EssenseAdapter[4];
 		findViews(view);
@@ -102,24 +112,26 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 	@SuppressLint("InflateParams")
 	private void findViews(View view) {
 		for (int i = 0; i < 4; i++) {
-			tabs[i] = (TextView) view.findViewById(tabsId[i]);
+			tabs[i] = (ImageView) view.findViewById(tabsId[i]);
 			lists[i] = (ListView) LayoutInflater.from(getActivity()).inflate(
 					R.layout.fragment_essense_flip_listview, null);
 			adapters[i] = new EssenseAdapter(getActivity(), typeArray[i], this);
 			lists[i].setAdapter(adapters[i]);
 		}
-		backImg = (ImageView) view.findViewById(R.id.backImg);
-		queryImg = (ImageView) view.findViewById(R.id.queryImg);
+		backImg = view.findViewById(R.id.backImg);
+		queryImg = view.findViewById(R.id.queryImg);
 		content = (FrameLayout) view.findViewById(R.id.content);
 	}
 
 	private void initContent() {
 		for (int i = 0; i < 4; i++) {
-			tabs[i].setTextSize(UNCHOOSEN_SIZE);
-			tabs[i].setTextColor(UNCHOOSEN_COLOR);
+			tabs[i].setImageDrawable(getActivity().getResources().getDrawable(
+					tabsImgId[0][i]));
+			tabs[i].setBackgroundColor(0xffffff);
 		}
-		tabs[0].setTextSize(CHOOSEN_SIZE);
-		tabs[0].setTextColor(CHOOSEN_COLOR);
+		tabs[0].setImageDrawable(getActivity().getResources().getDrawable(
+				tabsImgId[1][0]));
+		tabs[0].setBackgroundColor(0x429dd7);
 		content.addView(lists[0]);
 	}
 
@@ -189,10 +201,12 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 			lists[result].startAnimation(AnimationUtil.getShowAnim(preTab,
 					newTab));
 			// head bar: text size changed
-			tabs[preTab].setTextSize(UNCHOOSEN_SIZE);
-			tabs[preTab].setTextColor(UNCHOOSEN_COLOR);
-			tabs[result].setTextSize(CHOOSEN_SIZE);
-			tabs[result].setTextColor(CHOOSEN_COLOR);
+			tabs[preTab].setImageDrawable(getActivity().getResources()
+					.getDrawable(tabsImgId[0][preTab]));
+			tabs[preTab].setBackgroundColor(0xffffff);
+			tabs[result].setImageDrawable(getActivity().getResources()
+					.getDrawable(tabsImgId[1][result]));
+			tabs[result].setBackgroundColor(0x429dd7);
 			preTab = result;
 		}
 	}
@@ -205,7 +219,8 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 		// TODO Auto-generated method stub
 		// 如果没有资源文件，则不会执行到这里
 		this.ed = ed;
-		if (!GloableData.hasSetEmail()) {
+		if (null == UserConfigs.getEmail()
+				|| UserConfigs.getEmail().equals("")) {
 			// 检验邮箱是否已经设置
 			new EmailHintDialog(getActivity(), this).show();
 			return;
@@ -214,7 +229,7 @@ public class EssenseFragment extends Fragment implements ShareHintCallBack,
 			new ShareHintDialog(getActivity(), this).show();
 			return;
 		}
-		NetCall.download(ed.getId(), "314784088@qq.com", ed.getResid_(), ""
+		NetCall.download(ed.getId(), UserConfigs.getEmail(), ed.getResid_(), ""
 				+ ed.getNeedShare_(), this);
 	}
 

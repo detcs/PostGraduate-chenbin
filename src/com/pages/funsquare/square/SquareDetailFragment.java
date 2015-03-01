@@ -75,9 +75,9 @@ public class SquareDetailFragment extends Fragment implements
 		if (null == rootView) {
 			rootView = inflater.inflate(R.layout.fragment_square_detail,
 					container, false);
+			init(rootView);
+			frame.addView(rootView);
 		}
-		init(rootView);
-		frame.addView(rootView);
 		return base;
 	}
 

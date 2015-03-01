@@ -11,7 +11,7 @@ public class ReserveUtil implements NetUtil<Reserve> {
 	@Override
 	public String getURL(int page, int limit) {
 		// TODO Auto-generated method stub
-		return ComputeURL.getReserveListURL();
+		return ComputeURL.getReserveListURL(page, limit);
 	}
 
 	@Override

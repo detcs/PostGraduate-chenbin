@@ -2,42 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f2f2f2"
     android:orientation="vertical" >
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="@dimen/default_headbar_height"
+        android:background="@color/default_headbar_background"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+        <ImageView
+            android:id="@+id/backView"
+            android:layout_width="@dimen/default_back_width"
+            android:layout_height="@dimen/default_back_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back" />
 
-            <ImageView
-                android:id="@+id/backView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/play" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/modeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reserve_modes_head_title" />
-        </LinearLayout>
-    </FrameLayout>
+        <TextView
+            android:id="@+id/modeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/reserve_modes_head_title"
+            android:textColor="@color/default_headbar_title"
+            android:textSize="@dimen/default_headbar_titlesize" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/mode1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical" >
+        android:layout_height="47.2dp"
+        android:layout_marginTop="12dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -45,30 +46,44 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="@string/reserve_mode1_title" />
+            android:layout_marginTop="10dp"
+            android:text="@string/reserve_mode1_title"
+            android:textColor="#333333"
+            android:textSize="13.6dp" />
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
+            android:id="@+id/nike1"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/choose" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/nike" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView1"
-            android:layout_alignLeft="@+id/textView1"
-            android:text="@string/reserve_mode1_content" />
+            android:text="@string/reserve_mode1_content"
+            android:textColor="#999999"
+            android:textSize="12dp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e5e5e5" />
 
     <RelativeLayout
         android:id="@+id/mode2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="47.2dp"
+        android:background="#ffffff"
+        android:paddingLeft="12dp" >
 
         <TextView
             android:id="@+id/textView2"
@@ -76,23 +91,29 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="@string/reserve_mode2_title" />
+            android:layout_marginTop="10dp"
+            android:text="@string/reserve_mode2_title"
+            android:textColor="#333333"
+            android:textSize="13.6dp" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
-            android:layout_below="@+id/textView2"
             android:layout_height="wrap_content"
-            android:text="@string/reserve_mode2_content" />
+            android:layout_below="@+id/textView2"
+            android:text="@string/reserve_mode2_content"
+            android:textColor="#999999"
+            android:textSize="12dp" />
 
         <ImageView
-            android:id="@+id/ImageView01"
-            android:layout_width="wrap_content"
+            android:id="@+id/nike2"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/choose" />
-
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/nike"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -12,9 +12,10 @@ public class Post {
 	private String id;
 	private String content;
 	private int comments;
+	private int sex_;
 
 	public Post(String title, String nickName, String time, String id,
-			String headimg, String content, int comments) {
+			String headimg, String content, int comments, int sex) {
 		this.title = title;
 		this.nickName = nickName;
 		this.time = time;
@@ -22,6 +23,11 @@ public class Post {
 		this.id = id;
 		this.content = content;
 		this.comments = comments;
+		this.sex_ = sex;
+	}
+
+	public int getSex_() {
+		return sex_;
 	}
 
 	public String getTitle() {

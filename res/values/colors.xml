@@ -19,5 +19,10 @@
     <color name="black">#000000</color>
     <color name="grey">#808080</color>
     <color name="right_delete">#696969</color>
-    
+     <color name="essense_detail_word_color">#333333</color>
+    <color name="default_headbar_background">#2e2e45</color>
+    <color name="default_headbar_title">#ffffff</color>
+    <color name="default_float_back">#7f000000</color>
+    <color name="dialog_color">#333333</color>
+    <color name="dialog_click_color">#1f76dc</color>
 </resources>

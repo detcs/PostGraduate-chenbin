@@ -11,6 +11,12 @@ import android.view.animation.TranslateAnimation;
 
 public class AnimationUtil {
 	private static final String TAG = "AnimationUtil";
+	public static final int TIME = 200;
+
+	public static int dip2px(Context context, float dpValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
 
 	public static Animation getShowAnim(int prePosition, int newPosition) {
 		if (prePosition < newPosition) {
@@ -39,7 +45,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF,
 				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f);
-		mShowAction.setDuration(500);
+		mShowAction.setDuration(TIME);
 		return mShowAction;
 	}
 
@@ -48,7 +54,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF,
 				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f);
-		mShowAction.setDuration(500);
+		mShowAction.setDuration(TIME);
 		return mShowAction;
 	}
 
@@ -57,7 +63,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
 				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f);
-		mShowAction.setDuration(500);
+		mShowAction.setDuration(TIME);
 		return mShowAction;
 	}
 
@@ -66,7 +72,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
 				1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f);
-		mShowAction.setDuration(500);
+		mShowAction.setDuration(TIME);
 		return mShowAction;
 	}
 
@@ -75,7 +81,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
 				0.0f, Animation.RELATIVE_TO_SELF, 1.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f);
-		mShowAction.setDuration(500);
+		mShowAction.setDuration(TIME);
 		return mShowAction;
 	}
 
@@ -84,7 +90,7 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
 				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 1.0f);
-		mHiddenAction.setDuration(500);
+		mHiddenAction.setDuration(TIME);
 		return mHiddenAction;
 	}
 
@@ -106,7 +112,6 @@ public class AnimationUtil {
 		}
 		return rotateAction;
 	}
-	
 	public static Animation showUpAnimation()
 	{
 		Animation mShowAction = new TranslateAnimation(

@@ -5,13 +5,15 @@ public class DownloadUrlInfo
 	String coverBgPic;
 	String coverSong;
 	String footPrintBgPic;
+	String coverTwoBgPic;
 	
 	public DownloadUrlInfo(String coverBgPic, String coverSong,
-			String footPrintBgPic) {
+			String footPrintBgPic, String coverTwoBgPic) {
 		super();
 		this.coverBgPic = coverBgPic;
 		this.coverSong = coverSong;
 		this.footPrintBgPic = footPrintBgPic;
+		this.coverTwoBgPic = coverTwoBgPic;
 	}
 	public String getCoverBgPic() {
 		return coverBgPic;
@@ -30,6 +32,12 @@ public class DownloadUrlInfo
 	}
 	public void setFootPrintBgPic(String footPrintBgPic) {
 		this.footPrintBgPic = footPrintBgPic;
+	}
+	public String getCoverTwoBgPic() {
+		return coverTwoBgPic;
+	}
+	public void setCoverTwoBgPic(String coverTwoBgPic) {
+		this.coverTwoBgPic = coverTwoBgPic;
 	}
 	
 }

@@ -11,13 +11,13 @@ import android.widget.Button;
 
 public class IsNewDialog {
 	private Dialog dialog;
-	private Button button1;
+	private View button1;
 
 	public IsNewDialog(Activity activity) {
 		dialog = new Dialog(activity);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.is_new_dialog);
-		button1 = (Button) dialog.findViewById(R.id.button1);
+		button1 = dialog.findViewById(R.id.button1);
 		button1.setOnClickListener(new OnClickListener() {
 
 			@Override

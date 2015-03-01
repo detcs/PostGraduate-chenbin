@@ -3,72 +3,76 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#7abb74"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context="${relativePackage}.${activityClass}" >
+    android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/FrameLayout1"
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="51.2dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/backBu"
+            android:layout_width="@dimen/default_back_width"
+            android:layout_height="@dimen/default_back_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back" />
 
-            <ImageView
-                android:id="@+id/backBu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pause" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/print" />
+    </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/print" />
-        </LinearLayout>
-    </FrameLayout>
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#41ffffff" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/print_top_hint1" />
+        android:layout_marginTop="16dp"
+        android:text="@string/print_top_hint1"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/print_top_hint2" />
+        android:text="@string/print_top_hint2"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:layout_width="140dp"
+        android:layout_height="132.8dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/printer" />
 
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="1" >
     </FrameLayout>
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/backup" />
+        android:layout_width="104dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/backup" />
 
 </LinearLayout>

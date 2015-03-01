@@ -5,6 +5,7 @@ import com.app.ydd.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 
 public class ContactThanksDialog {
@@ -14,6 +15,7 @@ public class ContactThanksDialog {
 	public ContactThanksDialog(Activity activity) {
 		if (null == dialog) {
 			dialog = new Dialog(activity);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			dialog.setContentView(R.layout.contact_thanks_dialog);
 		}
 		ensureView = dialog.findViewById(R.id.button1);

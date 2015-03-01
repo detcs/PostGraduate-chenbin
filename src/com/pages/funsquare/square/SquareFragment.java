@@ -26,6 +26,7 @@ public class SquareFragment extends Fragment implements MsgCountCallback {
 
 	private ImageView backBu;
 	private ImageView informBu;
+	private ImageView red_dot;
 
 	private ListView listView1;
 
@@ -38,6 +39,12 @@ public class SquareFragment extends Fragment implements MsgCountCallback {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		pubOrDetail = (SquareJump) activity;
+	};
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		initInform();
 	};
 
 	@Override
@@ -56,12 +63,6 @@ public class SquareFragment extends Fragment implements MsgCountCallback {
 		return rootView;
 	}
 
-	// @Override
-	// public void onStop() {
-	// postAdapter.destroy();
-	// super.onStop();
-	// }
-
 	// ******************init******************
 
 	private void init(View view) {
@@ -76,6 +77,7 @@ public class SquareFragment extends Fragment implements MsgCountCallback {
 		backBu = (ImageView) view.findViewById(R.id.backBu);
 		publishBu = (Button) view.findViewById(R.id.publishBu);
 		informBu = (ImageView) view.findViewById(R.id.informBu);
+		red_dot = (ImageView) view.findViewById(R.id.red_dot);
 	}
 
 	private void initListView() {
@@ -132,5 +134,8 @@ public class SquareFragment extends Fragment implements MsgCountCallback {
 	public void getSuccess(int essence_, int square_) {
 		// TODO Auto-generated method stub
 		// informBu.setImageResource(resId);
+		if (square_ > 0) {
+			red_dot.setVisibility(View.VISIBLE);
+		}
 	}
 }
