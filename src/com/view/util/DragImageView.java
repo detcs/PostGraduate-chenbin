@@ -153,8 +153,8 @@ public class DragImageView extends ImageView {
 				getParent().requestDisallowInterceptTouchEvent(true);
 			}
 			Log.i(TAG, "ACTION_DOWN");
-			handler.postDelayed(runnable, 300);
-			if (System.currentTimeMillis() - lastClick < 300) {
+			handler.postDelayed(runnable, 200);
+			if (System.currentTimeMillis() - lastClick <200) {
 				// double click
 				handler.removeCallbacks(runnable);
 				doubleClick();

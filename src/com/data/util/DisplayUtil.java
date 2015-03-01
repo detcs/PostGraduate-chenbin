@@ -1,7 +1,14 @@
 package com.data.util;
 
+import java.io.InputStream;
+
+import com.app.ydd.R;
+
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.DisplayMetrics;
 
 public class DisplayUtil {
@@ -284,5 +291,15 @@ public class DisplayUtil {
 	  
 	        return (bitmap);  
 	    }  
-	 
+	 public static BitmapDrawable drawableTransfer(Context context,int resId)
+	 {
+		 BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inPreferredConfig = Bitmap.Config.RGB_565;
+			opt.inPurgeable = true;
+			opt.inInputShareable = true;
+			InputStream is = context.getResources().openRawResource(resId );
+			Bitmap bm = BitmapFactory.decodeStream(is, null, opt);
+			BitmapDrawable bd = new BitmapDrawable(context.getResources(), bm);
+			return bd;
+	 }
 }

@@ -1,5 +1,6 @@
 package com.pages.notes;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +9,9 @@ import java.util.List;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
+import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
 import com.pages.funsquare.ButtonsGridViewAdapter;
@@ -64,7 +67,18 @@ public class NoteFragment  extends Fragment{
 		// isFirstUse=UserConfigs.getIsFirstTakePhoto()==null?true:false;
 		//RelativeLayout headLayout=(RelativeLayout) v.findViewById(R.id.head_layout);
 		ImageView bg=(ImageView) v.findViewById(R.id.note_bg_img);
-		Picasso.with(getActivity()).load(R.drawable.note_bg).resize(100, 100).into(bg);
+		SQLiteDatabase db= DataConstants.dbHelper.getReadableDatabase();
+		FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, DateUtil.getTodayDateString());
+		db.close();
+		if(fpInfo!=null)
+		{
+			String bgFilePath=FileDataHandler.COVER_NOTE_PIC_DIR_PATH+"/"+fpInfo.getCoverNotePicName();
+			Picasso.with(getActivity()).load(new File(bgFilePath)).resize(200, 200).into(bg);
+		}
+		else
+		{
+			Picasso.with(getActivity()).load(R.drawable.note_bg).resize(200, 200).into(bg);
+		}
 		ImageView headImg=(ImageView) v.findViewById(R.id.head_img);
 		Picasso.with(getActivity()).load(R.drawable.note_default_male).resize(100, 100).into(headImg);
 		
@@ -76,12 +90,12 @@ public class NoteFragment  extends Fragment{
 		TextView saveEdit=(TextView)v.findViewById(R.id.diary_saveView);
 		final TextView diary = (TextView) v.findViewById(R.id.diary);
 		diary.setTypeface(DataConstants.typeFZLT);
-		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+		//SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = sdf.format(calendar.getTime());
-		FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
-		db.close();
+		//FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
+		
 		if(fpInfo!=null)
 			diary.setText(fpInfo.getDiary());
 		cancelEdit.setOnClickListener(new OnClickListener() {
@@ -262,7 +276,7 @@ public class NoteFragment  extends Fragment{
 		countClockTv.setTypeface(typeFace);
 		countClockTv.setTextSize(countSize);
 		
-		AutoScrollTextView countNoteTv=(AutoScrollTextView) v.findViewById(R.id.count_note);
+		TextView countNoteTv=(TextView) v.findViewById(R.id.count_note);
 		
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		int countNote=DataConstants.dbHelper.queryAllCourseRecordsCount(getActivity(), db);
@@ -270,8 +284,8 @@ public class NoteFragment  extends Fragment{
 		countNoteTv.setTypeface(typeFace);
 		countNoteTv.setTextSize(countSize);
 		countNoteTv.setText(countNote+"");
-		countNoteTv.init(getActivity().getWindowManager());
-		countNoteTv.startScroll();
+		//countNoteTv.init(getActivity().getWindowManager());
+		//countNoteTv.startScroll();
 		
 		TextView countTodayAdd=(TextView)v.findViewById(R.id.today_add);
 		

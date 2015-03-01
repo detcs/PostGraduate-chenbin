@@ -6,8 +6,8 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/picasso-jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/utf-8_volley.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/android-support-v4.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/WeiboSDK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WeiboSDK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

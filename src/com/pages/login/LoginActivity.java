@@ -59,13 +59,13 @@ public class LoginActivity extends Activity{
 	TextView forgetPwd;
 	ImageView loginBg;
 	//weibo
-		 private AuthInfo mAuthInfo;
-		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
-		 private Oauth2AccessToken mAccessToken;
-		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
-		 private SsoHandler mSsoHandler;
-		 /** 用户信息接口 */
-	     private UsersAPI mUsersAPI;
+//		 private AuthInfo mAuthInfo;
+//		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
+//		 private Oauth2AccessToken mAccessToken;
+//		 /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
+//		 private SsoHandler mSsoHandler;
+//		 /** 用户信息接口 */
+//	     private UsersAPI mUsersAPI;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -120,7 +120,7 @@ public class LoginActivity extends Activity{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					weiboLogin();
+				//	weiboLogin();
 					Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_click).into(weiboLogin);
 					
 				}
@@ -145,7 +145,10 @@ public class LoginActivity extends Activity{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					
+					Intent intent=new Intent();
+					intent.setClass(LoginActivity.this, ForgetPasswordActivity.class);
+					//intent.setClass(LoginActivity.this, MainActivity.class);
+					startActivity(intent);
 				}
 			});
 		}
@@ -231,7 +234,7 @@ public class LoginActivity extends Activity{
      * 
      * @see {@link Activity#onActivityResult}
      */
-	
+	/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -242,7 +245,7 @@ public class LoginActivity extends Activity{
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
-
+*/
 	 /**
      * 微博认证授权回调类。
      * 1. SSO 授权时，需要在 {@link #onActivityResult} 中调用 {@link SsoHandler#authorizeCallBack} 后，
@@ -250,7 +253,7 @@ public class LoginActivity extends Activity{
      * 2. 非 SSO 授权时，当授权结束后，该回调就会被执行。
      * 当授权成功后，请保存该 access_token、expires_in、uid 等信息到 SharedPreferences 中。
      */
-	
+	/*
     class AuthListener implements WeiboAuthListener {
         
         @Override
@@ -340,7 +343,7 @@ public class LoginActivity extends Activity{
      * 
      * @param hasExisted 配置文件中是否已存在 token 信息并且合法
      */
-	
+	/*
     private void updateTokenView(boolean hasExisted) {
         String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(
                 new java.util.Date(mAccessToken.getExpiresTime()));
@@ -353,11 +356,11 @@ public class LoginActivity extends Activity{
         }
         //mTokenText.setText(message);
     }
-	
+	*/
 	 /**
      * 微博 OpenAPI 回调接口。 获取微博用户昵称
      */
-	
+	/*
     private RequestListener mListener = new RequestListener() {
         @Override
         public void onComplete(String response) {
@@ -386,7 +389,8 @@ public class LoginActivity extends Activity{
             Toast.makeText(LoginActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
     };
-    
+    */
+/*
     private void weiboLogin()
     {
     	// 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
@@ -397,7 +401,7 @@ public class LoginActivity extends Activity{
 		Log.e(DataConstants.TAG,"mSsoHandler");
         mSsoHandler.authorize(new AuthListener());
     }
-    
+   */ 
     private String getLoginURL(String loginWay,String account,String passward)
     {
     	List<NameValuePair> params=new ArrayList<NameValuePair>();

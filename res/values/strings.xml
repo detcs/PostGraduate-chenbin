@@ -42,7 +42,7 @@
     <string name="db_profess2_table">professTwoTable</string>
     <string name="db_footprint_table">footprintTable</string>
     <string name="dbcol_cover_pic">dbCoverPic</string>
-    <string name="dbcol_cover_two_pic">dbCoverTwoPic</string>
+    <string name="dbcol_cover_note_pic">dbCoverNotePic</string>
     <string name="dbcol_cover_song_file">dbCoverSongFile</string>
     <string name="dbcol_cover_song_name">dbCoverSongName</string>
     <string name="dbcol_cover_singer">dbCoverSinger</string>
@@ -61,7 +61,7 @@
     <string name="dir_app">Android/data/ydd</string>
     <string name="dir_cover_song">coverSong</string>
     <string name="dir_cover_pic">coverPic</string>
-    <string name="dir_cover_two_pic">coverTwoPic</string>
+    <string name="dir_cover_note_pic">coverNotePic</string>
     <string name="dir_footprint_pic">footprintPic</string>
     <string name="dir_english">EnglishDir</string>
     <string name="dir_politics">PoliticsDir</string>
@@ -82,6 +82,7 @@
     <string name="resend_verify_num">秒后重发</string>
     <string name="next_step">下一步</string>
     <string name="set_password">设置密码</string>
+    <string name="set_new_password">设置新密码</string>
     <string name="reinput_password">重复密码</string>
     <string name="set_nickname">设置昵称</string>
     <string name="sex_select">选择性别</string>

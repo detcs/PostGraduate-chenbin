@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_cover_song_name)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_cover_singer)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_footprint_pic)+" TEXT not null,"
-    			+context.getResources().getString(R.string.dbcol_cover_two_pic)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_cover_note_pic)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_diary)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_encourage)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_days)+" TEXT not null,"
@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static FootprintInfo queryFootPrintInfo(Context context,SQLiteDatabase db,String date)
     {
     	FootprintInfo fpInfo=null;
-    	Cursor result=db.rawQuery("SELECT * FROM "+context.getResources().getString(R.string.db_footprint_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"=' "+date+"'",null); 
+    	Cursor result=db.rawQuery("SELECT * FROM "+context.getResources().getString(R.string.db_footprint_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"'",null); 
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
 	         
@@ -93,18 +93,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        result.moveToNext(); 
 	      } 
 	      result.close();
+	     // Log.e(DataConstants.TAG,"db:query FootPrintInfo:"+"SELECT * FROM "+context.getResources().getString(R.string.db_footprint_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"=' "+date+"'"+(fpInfo==null));
 	      return fpInfo;
     }
     
     public static void insertFootprintInfoRecord(Context context,SQLiteDatabase db,FootprintInfo fpInfo)
     {
+    	Log.e(DataConstants.TAG,"insertFootprintInfoRecord "+ fpInfo);
     	ContentValues cv=new ContentValues();
     	cv.put(context.getResources().getString(R.string.dbcol_cover_pic), fpInfo.getCoverPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_footprint_pic), fpInfo.getFootprintPicName());
     	cv.put(context.getResources().getString(R.string.dbcol_cover_song_file), fpInfo.getCoverSongFileName());
     	cv.put(context.getResources().getString(R.string.dbcol_cover_song_name), fpInfo.getCoverSongName());
     	cv.put(context.getResources().getString(R.string.dbcol_cover_singer), fpInfo.getCoverSongName());
-    	cv.put(context.getResources().getString(R.string.dbcol_cover_two_pic), fpInfo.getCoverTwoPicName());
+    	cv.put(context.getResources().getString(R.string.dbcol_cover_note_pic), fpInfo.getCoverNotePicName());
     	cv.put(context.getResources().getString(R.string.dbcol_encourage), fpInfo.getEncourage());
     	cv.put(context.getResources().getString(R.string.dbcol_date), fpInfo.getDate());
     	cv.put(context.getResources().getString(R.string.dbcol_diary), fpInfo.getDiary());

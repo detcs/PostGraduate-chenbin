@@ -60,7 +60,7 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 //		String coverSong=null;
 //		String footprintBgPic=null;
 		String downloadedNames[]=new String[4];
-		String downloadedDirPaths[]={FileDataHandler.COVER_PIC_DIR_PATH,FileDataHandler.COVER_SONG_DIR_PATH,FileDataHandler.FOOTPRINT_PIC_DIR_PATH,FileDataHandler.COVER_TWO_PIC_DIR_PATH};
+		String downloadedDirPaths[]={FileDataHandler.COVER_PIC_DIR_PATH,FileDataHandler.COVER_SONG_DIR_PATH,FileDataHandler.FOOTPRINT_PIC_DIR_PATH,FileDataHandler.COVER_NOTE_PIC_DIR_PATH};
 		String urlStr=null;//DataConstants.DOWNLOAD_URL+id;  
 		//Log.e(DataConstants.TAG,"cover_bgpic "+urlStr);
 		for(int i=0;i<param.length;i++)
@@ -83,7 +83,7 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 	            String nameInfo=conn.getHeaderField("Content-disposition");
 	            fileName=nameInfo.split("=")[1];
 	            downloadedNames[i]=fileName;
-	            Log.e(DataConstants.TAG,"download filename:"+fileName);
+	            //Log.e(DataConstants.TAG,"download filename:"+fileName);
 	            File file=new File(downloadedDirPaths[i]+"/"+fileName);
 	            file.createNewFile();
 	            output=new FileOutputStream(file);
@@ -103,7 +103,9 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 		            e.printStackTrace();  
 		        }  finally{  
 	            try {  
-	                output.close();  
+	            	if(output!=null)
+	                output.close(); 
+	            	if(input!=null)
 	                input.close();
 	               // System.out.println("success");  
 	            } catch (IOException e) {  
@@ -119,11 +121,11 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadUrlInfo>{
 	protected void onPostExecute(DownloadUrlInfo result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		 Log.e(DataConstants.TAG,"onpost:");
+		// Log.e(DataConstants.TAG,"onpost:");
 		 fpInfo.setCoverPicName(result.getCoverBgPic());
 		 fpInfo.setCoverSongFileName(result.getCoverSong());
 		 fpInfo.setFootprintPicName(result.getFootPrintBgPic());
-		 fpInfo.setCoverTwoPicName(result.getCoverTwoBgPic());
+		 fpInfo.setCoverNotePicName(result.getCoverTwoBgPic());
 		 SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		 DataConstants.dbHelper.insertFootprintInfoRecord(context, db, fpInfo);
 		 db.close();

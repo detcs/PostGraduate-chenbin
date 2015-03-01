@@ -3,6 +3,7 @@ package com.pages.login;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,17 +30,26 @@ import com.android.volley.toolbox.Volley;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 import com.data.util.GloableData;
 import com.pages.notes.footprint.FootprintInfo;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import com.squareup.picasso.Picasso.LoadedFrom;
 import com.view.util.FragmentActionListener;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +84,8 @@ public class PhoneVerifyFragment extends Fragment {
 		time = new TimeCount(60000, 1000);//构造CountDownTimer对象
 		obtainVerifyNum=(TextView)rootView.findViewById(R.id.get_verify_num);
 		obtainVerifyNum.setTextColor(Color.parseColor("#333333"));
-		obtainVerifyNum.setBackgroundResource(R.drawable.obtain_verifynum_init);
+		//obtainVerifyNum.setBackgroundResource();
+		obtainVerifyNum.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.obtain_verifynum_init));
 		obtainVerifyNum.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -96,6 +107,7 @@ public class PhoneVerifyFragment extends Fragment {
 				// TODO Auto-generated method stub
 //				if(verifyNum.getText().toString().equals(arg0))
 //				mListener.switchToNext();
+				nextStep.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.register_complete_click));
 				requestIsVerifyNumRight(getIsVeifyNumRightURL(phone.getText().toString(), verifyNum.getText().toString()));
 			}
 		});
@@ -153,7 +165,7 @@ public class PhoneVerifyFragment extends Fragment {
 			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
 
 		}
-		Log.e(DataConstants.TAG, "fpage:" + resultURL);
+		Log.e(DataConstants.TAG, "getObtainVeifyNum:" + resultURL);
 		return resultURL;
 	}
 	private boolean requestIsVerifyNumRight(String url) {
@@ -215,7 +227,7 @@ public class PhoneVerifyFragment extends Fragment {
 			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
 
 		}
-		Log.e(DataConstants.TAG, "fpage:" + resultURL);
+		Log.e(DataConstants.TAG, "getIsVeifyNumRight:" + resultURL);
 		return resultURL;
 	}
 	public static boolean isMobileNum(String mobiles) {

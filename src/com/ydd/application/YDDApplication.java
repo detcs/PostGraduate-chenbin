@@ -51,6 +51,9 @@ public class YDDApplication extends Application {
 			dir = new File(FileDataHandler.FOOTPRINT_PIC_DIR_PATH);
 			if (!dir.exists())
 				dir.mkdir();
+			dir = new File(FileDataHandler.COVER_NOTE_PIC_DIR_PATH);
+			if (!dir.exists())
+				dir.mkdir();
 		}
 
 	}

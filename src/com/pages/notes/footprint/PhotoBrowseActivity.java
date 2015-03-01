@@ -15,6 +15,7 @@ import com.data.model.ImportanceFlagOnClickListener;
 import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
 import com.data.util.DateUtil;
+import com.data.util.DisplayUtil;
 import com.data.util.PhotoNamePathUtil;
 import com.data.util.PhotoNameTableInfo;
 import com.data.util.SysCall;
@@ -136,131 +137,142 @@ public class PhotoBrowseActivity extends Activity{
 				}
 			}
 		}
-		
-		contents = new ArrayList<View>();
-		images = new ArrayList<DragImageView>();
-		
-		
-		View content;
-		DragImageView dragImageView;
-		Bitmap bmp=null;
-		BitmapFactory.Options opt=new BitmapFactory.Options();
-		opt.inSampleSize=4;
-		//Bitmap bmp = BitmapUtil.ReadBitmapById(this, R.drawable.today_background,windowWidth, windowHeight);
-		for (int i = 0; i < photoInfos.size(); i++) {
-			content = LayoutInflater.from(this).inflate(R.layout.content_layout, null);
-
-			dragImageView = (DragImageView) content.findViewById(R.id.div_main);
-			bmp=BitmapFactory.decodeFile(photoInfos.get(i).getPath(), opt);
-			dragImageView.setImageBitmap(bmp);
-			dragImageView.setmActivity(this);// ע��Activity.
-			dragImageView.setLayout(content);
-			dragImageView.setBumpHeight(300);
-			dragImageView.setScreen_H(windowHeight-stateHeight);
-			dragImageView.setScreen_W(windowWidth);
-			images.add(dragImageView);
-			contents.add(content);
+		ImageView firstUseBg=(ImageView) findViewById(R.id.footprint_first_use_bg);
+		if(photoInfos.size()==0)
+		{
+			
+			Picasso.with(getApplicationContext()).load(R.drawable.footprint_first_use).into(firstUseBg);
+			firstUseBg.setVisibility(View.VISIBLE);
 		}
-		
-		viewPager=(ViewPager) findViewById(R.id.browse_viewpager);
-		pageAdapter=new PagerAdapter() {
-
-
-			@Override
-			public boolean isViewFromObject(View arg0, Object arg1) {
-				// TODO Auto-generated method stub
-				return arg0 == arg1;
-			}
-
-			@Override
-			public int getCount() {
-				// TODO Auto-generated method stub
-				return contents.size();
-			}
-
-			@Override
-			public void destroyItem(View container, int position,
-					Object object) {
-				((ViewPager)container).removeView(contents.get(position));
-			}
-
-			@Override
-			public int getItemPosition(Object object) {
-
-				return super.getItemPosition(object);
-			}
-
-			@Override
-			public Object instantiateItem(View container, int position) {
-				((ViewPager)container).addView(contents.get(position));
-				return contents.get(position);
-			}
-
-			@Override
-			public void finishUpdate(View arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void restoreState(Parcelable arg0, ClassLoader arg1) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public Parcelable saveState() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void startUpdate(View arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		viewPager.setAdapter(pageAdapter);
-		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+		else
+		{
+			firstUseBg.setVisibility(View.INVISIBLE);
+			contents = new ArrayList<View>();
+			images = new ArrayList<DragImageView>();
 			
-			@Override
-			public void onPageSelected(int arg0) {
-				// TODO Auto-generated method stub
-				currentIndex=arg0;
-				
-				String blurPath=FileDataHandler.photoPathToBlurPath(photoInfos.get(currentIndex).getPath());
-				File blurFile=new File(blurPath);
-				if(blurFile.exists())
-					Picasso.with(getApplicationContext()).load(blurFile).into(flurImg);
-				CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getApplicationContext(), db, photoInfos.get(currentIndex).getTableName(), photoInfos.get(currentIndex).getPhotoName());
-				String text=cri.getRemark();
-				remarkContent.setText(text);
-				//textUtil.setTextContent(text, true);
-				
-				if(cri.getFlag()==1)
-					Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance_click).into(importantImg);
-				else
-					Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
-				boolean currentFlag=cri.getFlag()==1?true:false;
-				importantImg.setOnClickListener(new ImportanceFlagOnClickListener(photoInfos.get(currentIndex).getPhotoName(),photoInfos.get(currentIndex).getTableName(), PhotoBrowseActivity.this,importantImg,currentFlag,PageName.NoteSpec));
+			
+			View content;
+			DragImageView dragImageView;
+			Bitmap bmp=null;
+			BitmapFactory.Options opt=new BitmapFactory.Options();
+			opt.inSampleSize=4;
+			//Bitmap bmp = BitmapUtil.ReadBitmapById(this, R.drawable.today_background,windowWidth, windowHeight);
+			for (int i = 0; i < photoInfos.size(); i++) {
+				content = LayoutInflater.from(this).inflate(R.layout.content_layout, null);
+	
+				dragImageView = (DragImageView) content.findViewById(R.id.div_main);
+				bmp=BitmapFactory.decodeFile(photoInfos.get(i).getPath(), opt);
+				dragImageView.setImageBitmap(bmp);
+				dragImageView.setmActivity(this);// ע��Activity.
+				dragImageView.setLayout(content);
+				dragImageView.setBumpHeight(300);
+				dragImageView.setScreen_H(windowHeight-stateHeight);
+				dragImageView.setScreen_W(windowWidth);
+				images.add(dragImageView);
+				contents.add(content);
 			}
 			
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
+			viewPager=(ViewPager) findViewById(R.id.browse_viewpager);
+			pageAdapter=new PagerAdapter() {
+	
+	
+				@Override
+				public boolean isViewFromObject(View arg0, Object arg1) {
+					// TODO Auto-generated method stub
+					return arg0 == arg1;
+				}
+	
+				@Override
+				public int getCount() {
+					// TODO Auto-generated method stub
+					return contents.size();
+				}
+	
+				@Override
+				public void destroyItem(View container, int position,
+						Object object) {
+					((ViewPager)container).removeView(contents.get(position));
+				}
+	
+				@Override
+				public int getItemPosition(Object object) {
+	
+					return super.getItemPosition(object);
+				}
+	
+				@Override
+				public Object instantiateItem(View container, int position) {
+					((ViewPager)container).addView(contents.get(position));
+					return contents.get(position);
+				}
+	
+				@Override
+				public void finishUpdate(View arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+	
+				@Override
+				public void restoreState(Parcelable arg0, ClassLoader arg1) {
+					// TODO Auto-generated method stub
+					
+				}
+	
+				@Override
+				public Parcelable saveState() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+	
+				@Override
+				public void startUpdate(View arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+			viewPager.setAdapter(pageAdapter);
+			viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 				
-			}
-			
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
+				@Override
+				public void onPageSelected(int arg0) {
+					// TODO Auto-generated method stub
+					currentIndex=arg0;
+					
+					String blurPath=FileDataHandler.photoPathToBlurPath(photoInfos.get(currentIndex).getPath());
+					File blurFile=new File(blurPath);
+					if(blurFile.exists())
+						Picasso.with(getApplicationContext()).load(blurFile).into(flurImg);
+					CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getApplicationContext(), db, photoInfos.get(currentIndex).getTableName(), photoInfos.get(currentIndex).getPhotoName());
+					String text=cri.getRemark();
+					remarkContent.setText(text);
+					//textUtil.setTextContent(text, true);
+					
+					if(cri.getFlag()==1)
+						Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance_click).into(importantImg);
+					else
+						Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
+					boolean currentFlag=cri.getFlag()==1?true:false;
+					importantImg.setOnClickListener(new ImportanceFlagOnClickListener(photoInfos.get(currentIndex).getPhotoName(),photoInfos.get(currentIndex).getTableName(), PhotoBrowseActivity.this,importantImg,currentFlag,PageName.NoteSpec));
+				}
 				
-			}
-		});
-		
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onPageScrollStateChanged(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
 	}
 	private void initTitleView()
 	{
+		RelativeLayout browseTop=(RelativeLayout) findViewById(R.id.browse_top);
+		browseTop.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_title_bg));
 		TextView back=(TextView) findViewById(R.id.browse_back);
 		back.setOnClickListener(new OnClickListener() {
 			
@@ -379,6 +391,7 @@ public class PhotoBrowseActivity extends Activity{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				editRemarkLayout.setVisibility(View.VISIBLE);
+				editRemark.setText(remarkContent.getText().toString());
 				SysCall.bumpSoftInput(editRemark,PhotoBrowseActivity.this);
 			}
 		});

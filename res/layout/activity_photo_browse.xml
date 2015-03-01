@@ -21,14 +21,13 @@
         android:id="@+id/browse_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center" >
+    >
     </android.support.v4.view.ViewPager>
     <RelativeLayout
         android:id="@+id/browse_top"
         android:layout_width="match_parent"
     	android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@drawable/gradual_title_bg"
         android:layout_gravity="top"
         >
         <TextView 
@@ -60,8 +59,7 @@
         	    android:id="@+id/gradual_text_bg"
         	    android:layout_width="match_parent"
         	    android:layout_height="wrap_content"
-        	    android:maxHeight="60dp"
-        	    android:adjustViewBounds="true"
+        	    android:layout_gravity="bottom"
         	    />
 		    <LinearLayout 
 		        android:id="@+id/browse_bottom"
@@ -228,4 +226,11 @@
         	android:background="@drawable/delete_long_btn"
             />
         </LinearLayout>
+        <!-- first use -->
+        <ImageView 
+            android:id="@+id/footprint_first_use_bg"
+            android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+        	android:visibility="invisible"
+            />
 </FrameLayout>

@@ -39,6 +39,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.ContactsContract.Contacts.Data;
 import android.provider.MediaStore.Audio;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -128,6 +129,7 @@ public class TodayFragment extends Fragment {
 						laterFootPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, laterDate);
 						if(laterFootPrintInfo==null)
 						{
+							Log.e(DataConstants.TAG, "laterFootPrintInfo==null");
 							requestFirstPageJasonInfo(getFirstPageURL(laterDate),laterDate,false);
 						}
 					}
@@ -206,7 +208,7 @@ public class TodayFragment extends Fragment {
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
-						Log.e(DataConstants.TAG, "response=" + response);
+						//Log.e(DataConstants.TAG, "response=" + response);
 						FootprintInfo info=parseFirstPageInfo(response, date,updateUI);
 					}
 				}, new Response.ErrorListener() {

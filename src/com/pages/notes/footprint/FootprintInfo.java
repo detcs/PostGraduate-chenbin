@@ -8,7 +8,7 @@ public class FootprintInfo {
 	String coverSongName;
 	String coverSingerName;
 	String footprintPicName;
-	String coverTwoPicName;
+	String coverNotePicName;
 	String diary;
 	String date;
 	String encourage;
@@ -17,7 +17,7 @@ public class FootprintInfo {
 	String ifUpload;
 	public FootprintInfo(String coverPicName, String coverSongFileName,
 			String coverSongName, String coverSingerName,
-			String footprintPicName, String coverTwoPicName, String diary,
+			String footprintPicName, String coverNotePicName, String diary,
 			String date, String encourage, String days, String daysLeft,
 			String ifUpload) {
 		super();
@@ -26,7 +26,7 @@ public class FootprintInfo {
 		this.coverSongName = coverSongName;
 		this.coverSingerName = coverSingerName;
 		this.footprintPicName = footprintPicName;
-		this.coverTwoPicName = coverTwoPicName;
+		this.coverNotePicName = coverNotePicName;
 		this.diary = diary;
 		this.date = date;
 		this.encourage = encourage;
@@ -64,12 +64,7 @@ public class FootprintInfo {
 	public void setFootprintPicName(String footprintPicName) {
 		this.footprintPicName = footprintPicName;
 	}
-	public String getCoverTwoPicName() {
-		return coverTwoPicName;
-	}
-	public void setCoverTwoPicName(String coverTwoPicName) {
-		this.coverTwoPicName = coverTwoPicName;
-	}
+	
 	public String getDiary() {
 		return diary;
 	}
@@ -105,6 +100,30 @@ public class FootprintInfo {
 	}
 	public void setIfUpload(String ifUpload) {
 		this.ifUpload = ifUpload;
+	}
+	
+	public String getCoverNotePicName() {
+		return coverNotePicName;
+	}
+	public void setCoverNotePicName(String coverNotePicName) {
+		this.coverNotePicName = coverNotePicName;
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String result="coverPicName" + coverPicName+
+		"coverSongFileName" + coverSongFileName+
+		"coverSongName" + coverSongName+
+		"coverSingerName" + coverSingerName+
+		"footprintPicName" + footprintPicName+
+		"coverTwoPicName " + coverNotePicName+
+		"diary " + diary+
+		"date" + date+
+		"encourage " + encourage+
+		"days " + days+
+		"daysLeft " + daysLeft+
+		"ifUpload " + ifUpload;
+		return result;
 	}
 
 	

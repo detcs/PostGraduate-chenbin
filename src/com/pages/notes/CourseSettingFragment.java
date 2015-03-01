@@ -8,6 +8,7 @@ import com.data.model.DataConstants;
 import com.data.model.DatabaseHelper;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -66,6 +67,7 @@ public class CourseSettingFragment extends Fragment {
 		//english1.setTextColor(choosedTextColor);
 		//english1.setBackgroundResource(R.drawable.choose_english);
 		setButtonChooseState(english1Bg,english1, true,Courses.English);
+		setButtonChooseState(english2Bg,english2, false,Courses.English);
 		info.setEnglish("1");
 		//english2.setTextColor(defaultTextColor);
 		english1.setOnClickListener(new OnClickListener() {
@@ -101,6 +103,9 @@ public class CourseSettingFragment extends Fragment {
 //		math3Bg=(ImageView) rootView.findViewById(R.id.math3_bg);
 //		mathNoBg=(ImageView) rootView.findViewById(R.id.math_no_bg);
 		setButtonChooseState(math1Bg,math1, true,Courses.Math);
+		setButtonChooseState(math2Bg,math2, false,Courses.Math);
+		setButtonChooseState(math3Bg,math3, false,Courses.Math);
+		setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
 		info.setMath("1");
 		math1.setOnClickListener(new OnClickListener() {
 			
@@ -169,11 +174,13 @@ public class CourseSettingFragment extends Fragment {
 		professEdit1=(EditText)rootView.findViewById(R.id.input_profess_course1);
 		professEdit2=(EditText)rootView.findViewById(R.id.input_profess_course2);
 		complete=(Button)rootView.findViewById(R.id.complete_choose);
+		complete.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.register_complete_normal));
 		complete.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				complete.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.register_complete_click));
 				info.setProfess1(professEdit1.getText().toString());
 				info.storeToConfig();
 				makeCourseFileDir(info);
