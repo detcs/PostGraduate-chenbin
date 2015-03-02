@@ -1,6 +1,7 @@
 package com.pages.viewpager;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +41,7 @@ import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.today.TodayFragment;
+import com.view.util.ViewPagerScroller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -51,6 +53,7 @@ import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -66,6 +69,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -85,6 +89,7 @@ public class MainActivity extends FragmentActivity {
 	TodayFragment todayFragment;
 	NoteFragment noteFragment;
 	FunctionsSquareFragment funtionsSquareFragment;
+	Handler handler;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,8 +136,42 @@ public class MainActivity extends FragmentActivity {
         //下面的"giuz.receiver.music"要在manifest.xml里注册　　
         IntentFilter filter = new IntentFilter(DataConstants.MUSIC_SERVICE);
         registerReceiver(updateUIReceiver, filter);
+        viewPager.setCurrentItem(0);
+        handler=new Handler();
+       
+        handler.postDelayed(runnable, 3000);
 	}
-	
+	private void controlViewPagerSpeed() {  
+		try {  
+		    Field mField;  
+		  
+		    mField = ViewPager.class.getDeclaredField("mScroller");  
+		    mField.setAccessible(true);  
+		  
+		    ViewPagerScroller mScroller = new ViewPagerScroller(  
+		        MainActivity.this,  
+		        new AccelerateInterpolator());  
+		    mScroller.setmDuration(2000); // 2000ms  
+		    mField.set(MainActivity.this, mScroller);  
+		} catch (Exception e) {  
+		    e.printStackTrace();  
+		}  
+		   }  
+	Runnable runnable=new Runnable() {  
+	    @Override  
+	    public void run() {  
+	        // TODO Auto-generated method stub  
+	        //要做的事情  
+//	    	 ViewPagerScroller scroller = new ViewPagerScroller(MainActivity.this);
+//	         scroller.setScrollDuration(2000);
+//	         scroller.initViewPagerScroll(viewPager);//这个是设置切换过渡时间为2秒
+	    	controlViewPagerSpeed();
+	    	 viewPager.setCurrentItem(1);
+//	    	 scroller = new ViewPagerScroller(MainActivity.this);
+//	         scroller.setScrollDuration(2000);
+//	         scroller.initViewPagerScroll(viewPager);//这个是设置切换过渡时间为2秒
+	    }  
+	};  
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub

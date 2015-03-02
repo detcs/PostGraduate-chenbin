@@ -30,10 +30,10 @@
 	
 		<!-- title -->
 		<RelativeLayout 
+		    android:id="@+id/today_rec_title"
 		    android:layout_width="match_parent"
     		android:layout_height="40dp"
     		android:layout_gravity="top"
-    		android:background="@drawable/gradual_title_bg"
 		    >
 	        <TextView 
 	            android:id="@+id/todayrec_back"

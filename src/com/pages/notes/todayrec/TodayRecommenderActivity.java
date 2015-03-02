@@ -36,6 +36,7 @@ import com.pages.notes.footprint.FootprintInfo;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,16 +87,6 @@ public class TodayRecommenderActivity extends Activity{
 		//recViews=new ArrayList<View>();
 		ImageView img;
 		View view;
-		FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-//		for (int i = 0; i <3;i++)
-//		{
-//			view=LayoutInflater.from(this).inflate(R.layout.view_today_rec, null);
-//			img=(ImageView) view.findViewById(R.id.rec_img);
-//			//Picasso.with(getApplicationContext()).load(R.drawable.note_thumb).into(img);
-//			img.setImageResource(R.drawable.note_thumb);
-//			//recViews.add(view);
-//		}
-		
 		viewPager=(ViewPager) findViewById(R.id.today_rec_viewpager);
 		
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
@@ -111,98 +103,7 @@ public class TodayRecommenderActivity extends Activity{
 			todayRecList=recInfos;
 			setPageViewAdapter(todayRecList);
 		}
-		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-			
-			@Override
-			public void onPageSelected(int position) {
-				// TODO Auto-generated method stub
-				recIndex.setText((position+1)+"");
-				recContent.setText(todayRecList.get(position).getRemark());
-//				View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
-//				ImageView img=(ImageView) view.findViewById(R.id.rec_img);
-				//String uri=DataConstants.DOWNLOAD_URL+todayRecList.get(position).getImgId();
-				//Log.e(DataConstants.TAG, "uri "+uri);
-				//Picasso.with(getApplicationContext()).load(uri).into(img);
-				final int  index=position;
-				boolean collected=todayRecList.get(position).isIfCollected();
-				if(!collected)
-				{
-					collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_note));
-					collect.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View arg0) {
-							// TODO Auto-generated method stub
-							todayRecList.get(index).setIfCollected(true);
-							collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_cancel));
-							SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-							DataConstants.dbHelper.updateTodayRecommenderRecord(getApplicationContext(), db, getResources().getString(R.string.dbcol_rec_if_collect), "1", todayRecList.get(index).getId());
-							
-							String fileName=todayRecList.get(index).getPicFileName();
-							String srcPath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
-							String subject=todayRecList.get(index).getSubject();
-							String targetPath=FileDataHandler.APP_DIR_PATH+"/";
-							String tableName = null;
-							if(subject.contains(getResources().getString(R.string.english)))
-							{
-								targetPath+=getResources().getString(R.string.dir_english);
-								tableName=getResources().getString(R.string.db_english_table);
-							}
-							else if(subject.equals(getResources().getString(R.string.politics)))
-							{
-								targetPath+=getResources().getString(R.string.dir_politics);
-								tableName=getResources().getString(R.string.db_politics_table);
-							}
-							if(subject.contains(getResources().getString(R.string.math)))
-							{
-								targetPath+=getResources().getString(R.string.dir_math);
-								tableName=getResources().getString(R.string.db_math_table);
-							}
-							if(tableName!=null)
-							{
-								targetPath+="/"+fileName;
-								Log.e(DataConstants.TAG, "subject"+subject+": "+srcPath+" to "+targetPath);
-								FileDataHandler.copyFile(srcPath, targetPath);
-								String timeInfo=fileName.split("\\|")[2];
-								String time=fileName.split("\\|")[1]+"|"+timeInfo;
-								Log.e(DataConstants.TAG,"insert time "+time);
-								CourseRecordInfo cri=new CourseRecordInfo(fileName, "", todayRecList.get(index).getRemark(), DateUtil.getTodayDateString(), time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), 0, 0, 1);
-								DataConstants.dbHelper.insertCourseRecord(getApplicationContext(), db, tableName, cri);
-								db.close();
-								Toast.makeText(getApplicationContext(), getResources().getString(R.string.collect_success), Toast.LENGTH_LONG).show();
-							}
-						}
-					});
-				}
-				else
-				{
-					
-					collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_cancel));
-					collect.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View arg0) {
-							todayRecList.get(index).setIfCollected(false);
-							collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_note));
-						}
-					});
-					
-					
-				}
-			}
-			
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		
 		//requestTodayRecommenderInfo(getGetTodayRecommenderURL());
 	}
 	private void initBottomView() {
@@ -212,6 +113,8 @@ public class TodayRecommenderActivity extends Activity{
 	}
 	private void initTitleView()
 	{
+		RelativeLayout title=(RelativeLayout) findViewById(R.id.today_rec_title);
+		title.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_title_bg));
 		titleBack=(TextView) findViewById(R.id.todayrec_back);
 		titleBack.setOnClickListener(new OnClickListener() {
 			
@@ -238,26 +141,9 @@ public class TodayRecommenderActivity extends Activity{
 		}
 		return false;
 	}
-//	private List<String> getTodayRecFiles()
-//	{
-//		File dir=new File(FileDataHandler.TODAY_REC_PIC_DIR_PATH);
-//		String[] filelist = dir.list();
-//		List<String> list=new ArrayList<String>();
-//		String todayDate=DateUtil.getTodayDateString();
-//		for(int i=0;i<filelist.length;i++)
-//		{
-//			String fileDate=filelist[i].split("|")[2];
-//			if(fileDate.equals(todayDate))
-//			{
-//				String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+filelist[i];
-//				//Log.e(DataConstants.TAG, );
-//				list.add(path);
-//			}
-//		}
-//		return list;
-//	}
+
 	private void requestTodayRecommenderInfo(String url) {
-		final FootprintInfo fpInfo;
+		//final FootprintInfo fpInfo;
 		RequestQueue requestQueue = Volley.newRequestQueue(this);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
 				new Response.Listener<JSONObject>() {
@@ -274,12 +160,12 @@ public class TodayRecommenderActivity extends Activity{
 //							
 //						}
 						//db.close();
-						if(!hasDownloadTodayRecPic())
-						{
-							TodatRecDownloadTask task=new TodatRecDownloadTask(todayRecList);
-							task.execute((String[]) imgIds.toArray(new String[imgIds.size()]));
-						}
-						else
+//						if(!hasDownloadTodayRecPic())
+//						{
+//							TodatRecDownloadTask task=new TodatRecDownloadTask(todayRecList);
+//							task.execute((String[]) imgIds.toArray(new String[imgIds.size()]));
+//						}
+//						else
 						{
 							setPageViewAdapter(todayRecList);
 						}
@@ -493,7 +379,25 @@ public class TodayRecommenderActivity extends Activity{
 			@Override
 			public Object instantiateItem(View container, int position) {
 				// TODO Auto-generated method stub
+				Log.e(DataConstants.TAG, "instantiateItem "+position);
 				((ViewPager)container).addView(recViews.get(position));
+				TodayRecommenderInfo recInfo=todayRecList.get(position);
+				View view=recViews.get(position);
+				ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+				Log.e(DataConstants.TAG, "recInfo.getImgId() =="+recInfo.getImgId());
+				if(recInfo.getPicFileName().equals(""))
+				{
+					Log.e(DataConstants.TAG, "getpicname ==");
+					DownloadPicTask picTask=new DownloadPicTask(img,recInfo);
+					picTask.execute(recInfo.getImgId());
+				}
+				else
+				{
+					String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+recInfo.getPicFileName();
+					//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
+					//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+					Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
+				}
 				return recViews.get(position);
 			}
 			
@@ -515,5 +419,201 @@ public class TodayRecommenderActivity extends Activity{
 				((ViewPager)container).removeView(recViews.get(position));
 			}
 		});
+		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				// TODO Auto-generated method stub
+				TodayRecommenderInfo recInfo=todayRecList.get(position);
+				recIndex.setText((position+1)+"");
+				recContent.setText(recInfo.getRemark());
+//				View view=recViews.get(position);
+//				ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+//				if(recInfo.getPicFileName().equals(""))
+//				{
+//					DownloadPicTask picTask=new DownloadPicTask(img,recInfo);
+//					picTask.execute(recInfo.getImgId());
+//				}
+//				else
+//				{
+//					String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+recInfo.getPicFileName();
+//					//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
+//					//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+//					Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
+//				}
+
+				final int  index=position;
+				boolean collected=recInfo.isIfCollected();
+				if(!collected)
+				{
+					collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_note));
+					collect.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							todayRecList.get(index).setIfCollected(true);
+							collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_cancel));
+							SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+							DataConstants.dbHelper.updateTodayRecommenderRecord(getApplicationContext(), db, getResources().getString(R.string.dbcol_rec_if_collect), "1", todayRecList.get(index).getId());
+							
+							String fileName=todayRecList.get(index).getPicFileName();
+							String srcPath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
+							String subject=todayRecList.get(index).getSubject();
+							String targetPath=FileDataHandler.APP_DIR_PATH+"/";
+							String tableName = null;
+							if(subject.contains(getResources().getString(R.string.english)))
+							{
+								targetPath+=getResources().getString(R.string.dir_english);
+								tableName=getResources().getString(R.string.db_english_table);
+							}
+							else if(subject.equals(getResources().getString(R.string.politics)))
+							{
+								targetPath+=getResources().getString(R.string.dir_politics);
+								tableName=getResources().getString(R.string.db_politics_table);
+							}
+							if(subject.contains(getResources().getString(R.string.math)))
+							{
+								targetPath+=getResources().getString(R.string.dir_math);
+								tableName=getResources().getString(R.string.db_math_table);
+							}
+							if(tableName!=null)
+							{
+								targetPath+="/"+fileName;
+								Log.e(DataConstants.TAG, "subject"+subject+": "+srcPath+" to "+targetPath);
+								FileDataHandler.copyFile(srcPath, targetPath);
+								String timeInfo=fileName.split("\\|")[2];
+								String time=fileName.split("\\|")[1]+"|"+timeInfo;
+								Log.e(DataConstants.TAG,"insert time "+time);
+								CourseRecordInfo cri=new CourseRecordInfo(fileName, "", todayRecList.get(index).getRemark(), DateUtil.getTodayDateString(), time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), 0, 0, 1);
+								DataConstants.dbHelper.insertCourseRecord(getApplicationContext(), db, tableName, cri);
+								db.close();
+								Toast.makeText(getApplicationContext(), getResources().getString(R.string.collect_success), Toast.LENGTH_LONG).show();
+							}
+						}
+					});
+				}
+				else
+				{
+					
+					collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_cancel));
+					collect.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View arg0) {
+							todayRecList.get(index).setIfCollected(false);
+							collect.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.collect_note));
+						}
+					});
+					
+					
+				}
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
+	
+	public class DownloadPicTask extends AsyncTask<String, Integer,String> {
+
+//		String path;
+//		Context context;
+		ImageView img;
+		TodayRecommenderInfo recInfo;
+		public DownloadPicTask(ImageView img, TodayRecommenderInfo recInfo) {
+			super();
+			this.img = img;
+			this.recInfo = recInfo;
+		}
+
+		@Override
+		protected String doInBackground(String... param) {
+			// TODO Auto-generated method stub
+			String urlStr=DataConstants.DOWNLOAD_URL+param[0];
+			Log.e(DataConstants.TAG, urlStr);
+			 OutputStream output=null;
+			 InputStream input=null;
+			 String fileName=null;
+			 String filePath=null;
+			try {  
+	            /* 
+	             * 通过URL取得HttpURLConnection 
+	             * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置 
+	             * <uses-permission android:name="android.permission.INTERNET" /> 
+	             */  
+	            URL url=new URL(urlStr);  
+	            HttpURLConnection conn=(HttpURLConnection)url.openConnection(); 
+	            conn.setRequestProperty("Accept-Encoding", "identity"); 
+	            //取得inputStream，并进行读取  
+	            input=conn.getInputStream(); 
+	            //downloadedNames[i]=fileName;
+	            //Log.e(DataConstants.TAG,"download filename:"+fileName);
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
+				String time = sdf.format(new Date());
+				// i as index
+				fileName = UserConfigs.getAccount() + "|" + time + ".jpg";
+				recInfo.setPicFileName(fileName);
+				
+				filePath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
+				//Log.e(DataConstants.TAG, "todayrec "+path);
+				//filePaths.add(path);
+	            File file=new File(filePath);
+	            file.createNewFile();
+	            output=new FileOutputStream(file);
+	            byte[] buffer=new byte[4*1024];  
+//	            while(input.read(buffer)!=-1){  
+//	                output.write(buffer);  
+//	            }  
+	            int temp;
+	            while ((temp = input.read(buffer)) != -1) 
+	            {
+	                output.write(buffer, 0, temp);
+	            }
+	            	output.flush();  
+		        } catch (MalformedURLException e) {  
+		            e.printStackTrace();  
+		        } catch (IOException e) {  
+		            e.printStackTrace();  
+		        }  finally{  
+	            try {  
+	            	if(output!=null)
+	                output.close(); 
+	            	if(input!=null)
+	                input.close();
+	               // System.out.println("success");  
+	            } catch (IOException e) {  
+	                //System.out.println("fail");  
+	                e.printStackTrace();  
+	            }  
+	        }
+			SQLiteDatabase db=DataConstants.dbHelper.getReadableDatabase();
+			DataConstants.dbHelper.insertTodayRecommenderInfoRecord(getApplicationContext(), db, recInfo);
+			db.close();
+			return fileName;
+		}
+
+		@Override
+		protected void onPostExecute(String result) 
+		{
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+
+			String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+result;
+			Log.e(DataConstants.TAG, "post img:"+path);
+			//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
+			//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+			Picasso.with(TodayRecommenderActivity.this).load(new File(path)).skipMemoryCache().into(img);
+		}
+	}
+	
 }

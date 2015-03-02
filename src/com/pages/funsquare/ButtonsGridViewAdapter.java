@@ -3,6 +3,7 @@ package com.pages.funsquare;
 import java.util.List;
 
 import com.app.ydd.R;
+import com.data.util.DisplayUtil;
 import com.pages.funsquare.contact.ContactActivity;
 import com.pages.funsquare.essence.EssenseActivity;
 import com.pages.funsquare.person.PersonActivity;
@@ -84,7 +85,7 @@ public class ButtonsGridViewAdapter extends BaseAdapter {
 		holder.tv.setText(names.get(position));
 		if (names.get(position).equals(
 				context.getResources().getString(R.string.essence))) {
-			holder.img.setImageResource(R.drawable.function_essence);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_essence));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.square))) {
 			holder.img.setImageResource(R.drawable.function_square);

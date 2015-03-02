@@ -7,18 +7,35 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
+import com.data.util.GloableData;
+import com.data.util.NetWorkUtil;
 import com.data.util.SysCall;
+import com.data.util.UploadInfoUtil;
 import com.pages.funsquare.ButtonsGridViewAdapter;
 import com.pages.notes.camera.CameraActivity;
 import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.notes.todayrec.TodayRecommenderActivity;
+import com.pages.notes.todayrec.TodayRecommenderInfo;
+import com.pages.notes.todayrec.TodayRecommenderActivity.TodatRecDownloadTask;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 import com.view.util.AutoScrollTextView;
@@ -60,6 +77,10 @@ public class NoteFragment  extends Fragment{
 		rootView = inflater.inflate(R.layout.fragment_notes, container, false);
 		initFootprint();
 		initNoteView(rootView);
+		if(NetWorkUtil.isConnected(getActivity()))
+		{
+			//requestTodayFootprintInfo(getTodayFootprintURL());
+		}
 		return rootView;
 	}
 	public void initNoteView(View v) {
@@ -128,8 +149,11 @@ public class NoteFragment  extends Fragment{
 				String date = sdf.format(calendar.getTime());
 				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 				DataConstants.dbHelper.updateFootprintRecord(getActivity(), db, getResources().getString(R.string.dbcol_diary), editDiary.getText().toString(), date);
+				FootprintInfo fpInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
 				db.close();
 				diary.setText(editDiary.getText().toString());
+				String url=UploadInfoUtil.getUploadDiaryURL(fpInfo.getId(), fpInfo.getDiary(), date);
+				UploadInfoUtil.uploadDiary(getActivity(), url);
 			}
 		});
 		ImageView todayRec = (ImageView) v.findViewById(R.id.today_rec);
@@ -332,6 +356,81 @@ public class NoteFragment  extends Fragment{
 			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
 		}
 	}
-	
+	private void requestTodayFootprintInfo(String url) {
+		//final FootprintInfo fpInfo;
+		//RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "TodayFootprint response=" + response);
+						parseTodayFootprint(response);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+						// if (progressDialog.isShowing()
+						// && progressDialog != null) {
+						// progressDialog.dismiss();
+						// }
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+		// return fpInfo;
+	}
+	public  String getTodayFootprintURL() {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MFootprint");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+		pair = new BasicNameValuePair("appid", "nju");
+		params.add(pair);
+		pair = new BasicNameValuePair("userid", UserConfigs.getId());
+		params.add(pair);
+		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
+		params.add(pair);
+		
+		//pair = new BasicNameValuePair("date", date);
+		//params.add(pair);
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
 
+		}
+		Log.e(DataConstants.TAG, "TodayFootprint:" + resultURL);
+		return resultURL;
+	}
+	private FootprintInfo parseTodayFootprint(JSONObject json)
+	{
+		//List<TodayRecommenderInfo> list=new ArrayList<TodayRecommenderInfo>();
+		FootprintInfo info=null;
+		try {
+			JSONObject data = json.getJSONObject("data");
+			JSONArray fpLists = data.getJSONArray("index_");
+			for(int i=0;i<fpLists.length();i++)
+			{
+				JSONObject obj=fpLists.getJSONObject(i);
+				String content=obj.getString("content_");
+				String diary=obj.getString("diary_");
+				String remark=obj.getString("remark_");
+				String type=obj.getString("type_");
+				String displayName=obj.getString("displayName_");
+				String subject=obj.getString("subject_");
+				String isAd=obj.getString("isAd_");
+				boolean ifAd= isAd.equals("1")?true:false;
+				//info=new FootprintInfo(id, imgid, remark, subject, type, displayName, ifAd,DateUtil.getTodayDateString(),false,"");
+				
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return info;
+	}
 }

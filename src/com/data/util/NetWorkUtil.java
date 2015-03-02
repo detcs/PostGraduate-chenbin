@@ -7,6 +7,12 @@ import android.widget.Toast;
 
 public class NetWorkUtil {
 
+	public static boolean isConnected(Context context)
+	{
+		if(isNetworkConnected(context) || isWifiConnected(context))
+			return true;
+		return false;
+	}
 	public static boolean isNetworkConnected(Context context) { 
 		if (context != null) 
 		{ 
@@ -38,4 +44,5 @@ public class NetWorkUtil {
 	{
 		Toast.makeText(context, "no network", Toast.LENGTH_LONG).show();
 	}
+	
 }

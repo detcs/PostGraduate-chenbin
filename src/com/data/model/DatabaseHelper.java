@@ -154,6 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
 	         
+	    	int id=result.getInt(0);
 	        String coverPicPath=result.getString(1); 
 	        String coverSongFile=result.getString(2);
 	        String coverSongName=result.getString(3);
@@ -165,7 +166,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String days=result.getString(9);
 	        String daysleft=result.getString(10);
 	        fpInfo=new FootprintInfo(coverPicPath,coverSongFile,coverSongName,coverSinger,footprintPic,coverTwoPic,diary,date,encourage,days,daysleft,context.getResources().getString(R.string.upload_no)); 
-	       // Log.e(DataConstants.TAG,"db:query "+id+","+name);
+	        fpInfo.setId(id+"");
+	        // Log.e(DataConstants.TAG,"db:query "+id+","+name);
 	        result.moveToNext(); 
 	      } 
 	      result.close();

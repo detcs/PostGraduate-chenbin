@@ -2,6 +2,7 @@ package com.pages.notes.footprint;
 
 public class FootprintInfo {
 
+	String id;
 	String coverPicName;
 	//String coverSongPath;
 	String coverSongFileName;
@@ -34,6 +35,15 @@ public class FootprintInfo {
 		this.daysLeft = daysLeft;
 		this.ifUpload = ifUpload;
 	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getCoverPicName() {
 		return coverPicName;
 	}
