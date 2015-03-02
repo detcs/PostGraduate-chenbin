@@ -154,6 +154,8 @@
     <string name="save">保存</string>
     <string name="delete">删除</string>
     <string name="transfer_to">转移到</string>
+    <string name="ensure_change_course_name">确定修改课程名？</string>
+    <string name="note_still_exsit">原有笔记仍会存在</string>
     <!-- today rec -->
     <string name="collect_success">收藏成功</string>
     <!-- one date photos of all course-->
