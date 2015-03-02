@@ -92,9 +92,7 @@ public class PhotoBrowseActivity extends Activity{
 		PageName fromPage=(PageName) bundle.get("from_page");
 		String tableName=bundle.getString("table_name");
 		db = DataConstants.dbHelper.getReadableDatabase();
-		initTitleView();
-		initBottomView();
-		initRemarkEditView();
+		
 		photoInfos=new ArrayList<PhotoNameTableInfo>();
 		//textUtils=new ArrayList<TextContentShowUtil>();
 		PhotoNameTableInfo photoInfo=null;
@@ -137,16 +135,9 @@ public class PhotoBrowseActivity extends Activity{
 				}
 			}
 		}
-		ImageView firstUseBg=(ImageView) findViewById(R.id.footprint_first_use_bg);
-		if(photoInfos.size()==0)
-		{
+		
 			
-			Picasso.with(getApplicationContext()).load(R.drawable.footprint_first_use).into(firstUseBg);
-			firstUseBg.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			firstUseBg.setVisibility(View.INVISIBLE);
+			//firstUseBg.setVisibility(View.INVISIBLE);
 			contents = new ArrayList<View>();
 			images = new ArrayList<DragImageView>();
 			
@@ -267,7 +258,10 @@ public class PhotoBrowseActivity extends Activity{
 					
 				}
 			});
-		}
+			initTitleView();
+			initBottomView();
+			initRemarkEditView();
+			viewPager.setCurrentItem(0);
 	}
 	private void initTitleView()
 	{
@@ -325,8 +319,10 @@ public class PhotoBrowseActivity extends Activity{
 	}
 	private void initBottomView()
 	{
-		ImageView textBg=(ImageView) findViewById(R.id.gradual_text_bg);
-		Picasso.with(getApplicationContext()).load(R.drawable.gradual_text_bg).into(textBg);
+		FrameLayout bottomFrame=(FrameLayout) findViewById(R.id.browse_bottom_frame);
+		bottomFrame.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_text_bg));
+		//ImageView textBg=(ImageView) findViewById(R.id.gradual_text_bg);
+		//Picasso.with(getApplicationContext()).load(R.drawable.gradual_text_bg).into(textBg);
 		
 		//bottom=(LinearLayout) findViewById(R.id.bottom_text_layout);
 		
@@ -354,9 +350,11 @@ public class PhotoBrowseActivity extends Activity{
 		remarkContent=(TextView)findViewById(R.id.text_remark_content);
 		TextView extendBtn=(TextView)findViewById(R.id.extends_img);
 		remarkContent.setTypeface(DataConstants.typeFZLT);
-		//CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(this, db, tableName, photoNames.get(index));
-		//String text=cri.getRemark();
-		//remarkContent.setText(text);
+		String tableName=photoInfos.get(currentIndex).getTableName();
+		String photoName=photoInfos.get(currentIndex).getPhotoName();
+		CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(this, db, tableName, photoName);
+		String text=cri.getRemark();
+		remarkContent.setText(text);
 		remarkContent.setMovementMethod(ScrollingMovementMethod.getInstance()); 
 		//remarkContext.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa一一一一一一一一一一一一一一一一一一一一一一一一一一一一一");
 		extendBtn.setOnClickListener(new OnClickListener() {

@@ -357,20 +357,7 @@ public class DragImageView extends ImageView {
 	public void setBumpHeight(int i) {
 		this.bumpHeight = i;
 	}
-	private void clickImage()
-	{
-		//Log.e(DataConstants.TAG, "click img");
-		RelativeLayout top=(RelativeLayout) mActivity.findViewById(R.id.browse_top);
-		LinearLayout bottom=(LinearLayout) mActivity.findViewById(R.id.browse_bottom);
-		if(top.getVisibility()==View.INVISIBLE)
-			top.setVisibility(View.VISIBLE);
-		else if(top.getVisibility()==View.VISIBLE)
-			top.setVisibility(View.INVISIBLE);
-		if(bottom.getVisibility()==View.INVISIBLE)
-			bottom.setVisibility(View.VISIBLE);
-		else if(bottom.getVisibility()==View.VISIBLE)
-			bottom.setVisibility(View.INVISIBLE);
-	}
+	
 	private void doubleClick() {
 		if (this.getWidth() == DataConstants.screenWidth) {
 			// �Ŵ�����
@@ -589,6 +576,26 @@ public class DragImageView extends ImageView {
 		// TODO Auto-generated method stub
 		parentlayout=content;
 	}
+	//chenbin
+		private void clickImage()
+		{
+			//Log.e(DataConstants.TAG, "click img");
+			RelativeLayout top=(RelativeLayout) mActivity.findViewById(R.id.browse_top);
+			LinearLayout bottom=(LinearLayout) mActivity.findViewById(R.id.browse_bottom);
+			LinearLayout bg=(LinearLayout) mActivity.findViewById(R.id.browse_bg);
+			if(top.getVisibility()==View.INVISIBLE)
+				top.setVisibility(View.VISIBLE);
+			else if(top.getVisibility()==View.VISIBLE)
+				top.setVisibility(View.INVISIBLE);
+			if(bottom.getVisibility()==View.INVISIBLE)
+				bottom.setVisibility(View.VISIBLE);
+			else if(bottom.getVisibility()==View.VISIBLE)
+				bottom.setVisibility(View.INVISIBLE);
+			if(bg.getAlpha()==255)
+				bg.setAlpha(0.2f);
+			else 
+				bg.setAlpha(255);
+		}
 	Runnable runnable=new Runnable() {  
 	    @Override  
 	    public void run() {  

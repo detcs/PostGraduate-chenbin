@@ -134,11 +134,11 @@ public class NotesClassAdapter extends BaseAdapter{
 	    else if(courseTableNames.get(position).equals(context.getResources().getString(R.string.db_profess2_table)))
 	    {
 	    	Picasso.with(context).load(R.drawable.course_profess2).into(holder.img);
-	    	className=CourseClassName.ProfesTwo;
+	    	className=CourseClassName.ProfessTwo;
 	    }
 	    
-	    LinearLayout.LayoutParams lp2 = new LayoutParams(100, LayoutParams.MATCH_PARENT);
-        holder.editNameLayout.setLayoutParams(lp2);
+	   LinearLayout.LayoutParams lp2 = new LayoutParams(100, LayoutParams.MATCH_PARENT);
+       holder.editNameLayout.setLayoutParams(lp2);
         holder.editNameLayout.setOnClickListener(new EditCourseClassNameListener(name, className));
 	    convertView.setOnTouchListener(new OnTouchListener() {
 			

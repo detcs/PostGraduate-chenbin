@@ -12,6 +12,7 @@ import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 import com.data.util.PhotoNamePathUtil;
 import com.pages.notes.ReviewFragment;
 
@@ -82,7 +83,10 @@ public class ReviewChooseFragment extends Fragment{
 		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);	
 		timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates);
 		exerciseTimeLine.setAdapter(timeLineAdapter);
+		reviewEbbin=(Button)rootView.findViewById(R.id.ebbinghaus_review);
+		reviewEbbin.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
 		reviewReverse=(Button)rootView.findViewById(R.id.reverse_review);
+		reviewReverse.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
 		reviewReverse.setOnClickListener(new OnClickListener() {
 			
 			@Override

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewDebug.FlagToString;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.app.ydd.R;
@@ -94,6 +95,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    }
 	    // Bind the data efficiently with the holder.
 	    //Log.e(DataConstants.TAG,"pos:"+position+" path:"+ imgPaths.get(position));
+	    Log.e(DataConstants.TAG,"convertView.getWidth"+convertView.getWidth());
 	    int width=(DataConstants.screenWidth-10)/4;
 	   // Log.e(DataConstants.TAG,"chooseState:"+chooseState);
 //	    if(chooseState)
@@ -101,6 +103,8 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //	    else
 //	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
 	    //Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
+	    FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(width,width);
+	   // holder.img.setLayoutParams(param);
 	   Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
 	   if(holder.flag==1)
 	    	{

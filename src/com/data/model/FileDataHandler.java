@@ -22,7 +22,7 @@ public class FileDataHandler {
 	public static String COVER_PIC_DIR_PATH=null;
 	public static String FOOTPRINT_PIC_DIR_PATH=null;
 	public static String COVER_NOTE_PIC_DIR_PATH=null;
-
+	public static String TODAY_REC_PIC_DIR_PATH=null;
 	public static void init(Context context)
 	{
 		if(sdCardExist())
@@ -33,13 +33,62 @@ public class FileDataHandler {
 			COVER_SONG_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_song);
 			FOOTPRINT_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_footprint_pic);
 			COVER_NOTE_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_cover_note_pic);
+			TODAY_REC_PIC_DIR_PATH=APP_DIR_PATH+"/"+context.getResources().getString(R.string.dir_today_rec_pic);
 		}
 	}
 	public static boolean sdCardExist()
 	{
 		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);   //判断sd卡是否存在 
 	}
+	public static void copyFile(String srcFilePath,String targetFilePath)
+	{
+		//Log.e(DataConstants.TAG,"transfer:"+srcFilePath+" "+targetFilePath);
+		File srcFile=new File(srcFilePath);
+		File targetFile=new File(targetFilePath);
+//		try {
+//			targetFile.createNewFile();
+//			String content=read(srcFilePath);
+//			save(targetFilePath, content);
+//			
+//			//srcFile.delete();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			Log.e(DataConstants.TAG,e.toString());
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			Log.e(DataConstants.TAG,e.toString());
+//			e.printStackTrace();
+//		}
+		try {
+
+			FileInputStream fosfrom = new FileInputStream(srcFile);
+
+			FileOutputStream fosto = new FileOutputStream(targetFile);
+
+			byte bt[] = new byte[1024];
+
+			int c;
+
+			while ((c = fosfrom.read(bt)) > 0) {
+
+			fosto.write(bt, 0, c); //将内容写到新文件当中
+
+			}
+
+			fosfrom.close();
+
+			fosto.close();
+			//srcFile.delete();
+			} catch (Exception ex) {
+
+			//Log.e("readfile", ex.getMessage());
+
+		}
+
 	
+		
+	}
 	public static void transferFile(String srcFilePath,String targetFilePath)
 	{
 		//Log.e(DataConstants.TAG,"transfer:"+srcFilePath+" "+targetFilePath);

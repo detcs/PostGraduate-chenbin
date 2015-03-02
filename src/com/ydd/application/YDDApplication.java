@@ -54,6 +54,9 @@ public class YDDApplication extends Application {
 			dir = new File(FileDataHandler.COVER_NOTE_PIC_DIR_PATH);
 			if (!dir.exists())
 				dir.mkdir();
+			dir = new File(FileDataHandler.TODAY_REC_PIC_DIR_PATH);
+			if (!dir.exists())
+				dir.mkdir();
 		}
 
 	}
@@ -77,6 +80,7 @@ public class YDDApplication extends Application {
 		// getResources().getString(R.string.db_footprint_table)))
 		DataConstants.dbHelper.createFootprintTable(getApplicationContext(), db);
 		DataConstants.dbHelper.createSearchRecordsTable(getApplicationContext(), db);
+		DataConstants.dbHelper.createTodayRecommenderTable(getApplicationContext(), db);		
 		db.close();
 	}
 	private void initDBandDirMap()

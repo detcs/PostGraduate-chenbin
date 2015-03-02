@@ -11,6 +11,8 @@ import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
+import com.data.util.DisplayUtil;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,7 +29,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
@@ -45,12 +49,14 @@ public class FootPrintActivity extends FragmentActivity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_footprint);
+		RelativeLayout titleLayout=(RelativeLayout) findViewById(R.id.footprint_title);
+		titleLayout.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.register_title));
 		//tableName=getIntent().getStringExtra("tableName");
 		dates=new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = sdf.format(calendar.getTime());
-		//dates.add(date);
+		dates.add(date);
 		Log.e(DataConstants.TAG, "startday "+UserConfigs.getStartDay());
 		int gapDays=getDateGapDays(UserConfigs.getStartDay(), date);
 		for(int i=0;i<gapDays;i++)
@@ -63,49 +69,60 @@ public class FootPrintActivity extends FragmentActivity{
 		{
 			Log.e(DataConstants.TAG,d);
 		}
-		mTabWidget=(TabWidget)findViewById(R.id.tabWidget);
-		tabScrollView=(HorizontalScrollView) findViewById(R.id.tab_scrollview);
-		viewPager=(ViewPager)findViewById(R.id.footprint_viewpager);
-		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-		
-		List<Fragment> fraList=new ArrayList<Fragment>();
-		View tabView;
-		TextView tv=null;
-		
-		tabTvList=new ArrayList<TextView>();
-		int gapDay=0;
-		for(int i=0;i<dates.size();i++)
+		ImageView firstUseBg=(ImageView) findViewById(R.id.footprint_first_use_bg);
+		if(dates.size()==0)
 		{
-			tabView=LayoutInflater.from(this).inflate(R.layout.view_footprint_tab, null);
-			tv=(TextView) tabView.findViewById(R.id.tab_tv);
-			tv.setWidth(tabWidth);
-			tv.setTextColor(Color.parseColor("#333333"));
-			tv.setTypeface(DataConstants.typeFZLT);
-			//Log.e(DataConstants.TAG, dates.get(i)+" -- "+DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1));
-			if(dates.get(i).equals(DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1)))
-			{
-				tv.setText(getResources().getString(R.string.yesyterday));
-			}
-			else
-			{
-				gapDay=DateUtil.getDateGapDays(UserConfigs.getStartDay(), dates.get(i));
-				tv.setText(getResources().getString(R.string.footprint_my)
-						+" "+gapDay+" "
-						+getResources().getString(R.string.footprint_day));
-			}
-			tabTvList.add(tv);
-			mTabWidget.addView(tabView);
-			tv.setOnClickListener(new TabClickListener(i));
-			FootPrintFragment fpFrag=new FootPrintFragment();
-			Bundle b=new Bundle();
-			b.putString("footprint_date", dates.get(i));
-			fpFrag.setArguments(b);
-			fraList.add(fpFrag);
+			Log.e(DataConstants.TAG, "datessize==0");
+			Picasso.with(getApplicationContext()).load(R.drawable.footprint_first_use).resize(400, 600).into(firstUseBg);
+			firstUseBg.setVisibility(View.VISIBLE);
 		}
-		viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fraList));
-		viewPager.setOnPageChangeListener(mPageChangeListener);
-		viewPager.setCurrentItem(0);
-		mTabWidget.setCurrentTab(0);
+		else
+		{
+			firstUseBg.setVisibility(View.INVISIBLE);
+			mTabWidget=(TabWidget)findViewById(R.id.tabWidget);
+			tabScrollView=(HorizontalScrollView) findViewById(R.id.tab_scrollview);
+			viewPager=(ViewPager)findViewById(R.id.footprint_viewpager);
+			SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+			
+			List<Fragment> fraList=new ArrayList<Fragment>();
+			View tabView;
+			TextView tv=null;
+			
+			tabTvList=new ArrayList<TextView>();
+			int gapDay=0;
+			for(int i=0;i<dates.size();i++)
+			{
+				tabView=LayoutInflater.from(this).inflate(R.layout.view_footprint_tab, null);
+				tv=(TextView) tabView.findViewById(R.id.tab_tv);
+				tv.setWidth(tabWidth);
+				tv.setTextColor(Color.parseColor("#333333"));
+				tv.setTypeface(DataConstants.typeFZLT);
+				//Log.e(DataConstants.TAG, dates.get(i)+" -- "+DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1));
+				if(dates.get(i).equals(DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), 1)))
+				{
+					tv.setText(getResources().getString(R.string.yesyterday));
+				}
+				else
+				{
+					gapDay=DateUtil.getDateGapDays(UserConfigs.getStartDay(), dates.get(i));
+					tv.setText(getResources().getString(R.string.footprint_my)
+							+" "+gapDay+" "
+							+getResources().getString(R.string.footprint_day));
+				}
+				tabTvList.add(tv);
+				mTabWidget.addView(tabView);
+				tv.setOnClickListener(new TabClickListener(i));
+				FootPrintFragment fpFrag=new FootPrintFragment();
+				Bundle b=new Bundle();
+				b.putString("footprint_date", dates.get(i));
+				fpFrag.setArguments(b);
+				fraList.add(fpFrag);
+			}
+			viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fraList));
+			viewPager.setOnPageChangeListener(mPageChangeListener);
+			viewPager.setCurrentItem(0);
+			mTabWidget.setCurrentTab(0);
+		}
 	}
 	class TabClickListener implements OnClickListener
 	{

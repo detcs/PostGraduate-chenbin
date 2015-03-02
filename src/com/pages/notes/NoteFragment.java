@@ -164,6 +164,7 @@ public class NoteFragment  extends Fragment{
 				// TODO Auto-generated method stub
 				editDiaryLayout.setVisibility(View.VISIBLE);
 				SysCall.bumpSoftInput(editDiary, getActivity());
+				editDiary.setText(diary.getText().toString());
 			}
 		});
 		Button takePhoto = (Button) v.findViewById(R.id.take_photo);

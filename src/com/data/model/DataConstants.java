@@ -26,7 +26,7 @@ public class DataConstants {
 	public static Typeface typeFZLT; 
 	public static Typeface typeAvenir; 
 	public static enum PageName{NoteSpec,NoteReview,NoteFootprint,NoteReviewChoose};
-	public static enum CourseClassName{English,Politics,Math,ProfessOne,ProfesTwo};
+	public static enum CourseClassName{English,Politics,Math,ProfessOne,ProfessTwo};
 	public static final String MUSIC_SERVICE="com.data.model.MusicService";
 	
 	//system

@@ -51,16 +51,19 @@
         </RelativeLayout>
         <!-- bottom -->
         <FrameLayout
+            android:id="@+id/browse_bottom_frame"
             android:layout_width="match_parent"
 		   	android:layout_height="wrap_content"
 		   	android:layout_gravity="bottom"
             >
+        <!-- 
         	<ImageView
         	    android:id="@+id/gradual_text_bg"
         	    android:layout_width="match_parent"
         	    android:layout_height="wrap_content"
         	    android:layout_gravity="bottom"
         	    />
+        	     -->
 		    <LinearLayout 
 		        android:id="@+id/browse_bottom"
 		        android:layout_width="match_parent"
@@ -226,11 +229,5 @@
         	android:background="@drawable/delete_long_btn"
             />
         </LinearLayout>
-        <!-- first use -->
-        <ImageView 
-            android:id="@+id/footprint_first_use_bg"
-            android:layout_width="match_parent"
-        	android:layout_height="match_parent"
-        	android:visibility="invisible"
-            />
+        
 </FrameLayout>

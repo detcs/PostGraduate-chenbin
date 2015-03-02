@@ -3,6 +3,7 @@ package com.pages.notes.footprint;
 import com.app.ydd.R;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.UserConfigs;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class FootPrintFragment extends Fragment{
 		date_month_year.setTypeface(DataConstants.typeFZLT);
 		dayReviewInfo=(TextView) rootView.findViewById(R.id.day_review_info);
 		dayReviewInfo.setTypeface(DataConstants.typeFZLT);
-		int clockNum=0;
+		int clockNum=UserConfigs.getClockDays();;
 		int reviewNum= DataConstants.dbHelper.queryAllCoursesReviewedCountOnDate(getActivity(), db, date);
 		int appendNum=DataConstants.dbHelper.queryAllCourseRecordsCountOnDate(getActivity(), db, date);
 		dayReviewInfo.setText(getResources().getString(R.string.clocked)+clockNum+getResources().getString(R.string.day)+","

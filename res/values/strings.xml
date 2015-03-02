@@ -41,6 +41,16 @@
     <string name="db_profess1_table">professOneTable</string>
     <string name="db_profess2_table">professTwoTable</string>
     <string name="db_footprint_table">footprintTable</string>
+    <string name="db_today_recommender_table">todayRecommenderTable</string>
+    <string name="dbcol_rec_id">dbRecId</string>
+    <string name="dbcol_rec_img_id">dbRecImgId</string>
+    <string name="dbcol_rec_remark">dbRecRemark</string>
+    <string name="dbcol_rec_subject">dbRecSubject</string>
+    <string name="dbcol_rec_type">dbRecType</string>
+    <string name="dbcol_rec_display_name">dbRecDisplayName</string>
+    <string name="dbcol_rec_is_ad">dbRecIsAd</string>
+    <string name="dbcol_rec_if_collect">dbRecIfCollect</string>
+    <string name="dbcol_rec_pic_name">dbRecPicName</string>
     <string name="dbcol_cover_pic">dbCoverPic</string>
     <string name="dbcol_cover_note_pic">dbCoverNotePic</string>
     <string name="dbcol_cover_song_file">dbCoverSongFile</string>
@@ -62,6 +72,7 @@
     <string name="dir_cover_song">coverSong</string>
     <string name="dir_cover_pic">coverPic</string>
     <string name="dir_cover_note_pic">coverNotePic</string>
+    <string name="dir_today_rec_pic">todayRecPic</string>
     <string name="dir_footprint_pic">footprintPic</string>
     <string name="dir_english">EnglishDir</string>
     <string name="dir_politics">PoliticsDir</string>
@@ -143,7 +154,8 @@
     <string name="save">保存</string>
     <string name="delete">删除</string>
     <string name="transfer_to">转移到</string>
-    
+    <!-- today rec -->
+    <string name="collect_success">收藏成功</string>
     <!-- one date photos of all course-->
     <string name="jump_tag_footprint">jumpTagFootprint</string>
     <!-- three days of one course -->

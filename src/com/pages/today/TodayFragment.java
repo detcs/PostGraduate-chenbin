@@ -123,16 +123,16 @@ public class TodayFragment extends Fragment {
 				{
 					String laterDate=null;
 					FootprintInfo laterFootPrintInfo=null;
-					for(int i=1;i<10;i++)
-					{
-						laterDate=DateUtil.getLaterDateStringAfter(date, i);
-						laterFootPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, laterDate);
-						if(laterFootPrintInfo==null)
-						{
-							Log.e(DataConstants.TAG, "laterFootPrintInfo==null");
-							requestFirstPageJasonInfo(getFirstPageURL(laterDate),laterDate,false);
-						}
-					}
+//					for(int i=1;i<10;i++)
+//					{
+//						laterDate=DateUtil.getLaterDateStringAfter(date, i);
+//						laterFootPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, laterDate);
+//						if(laterFootPrintInfo==null)
+//						{
+//							Log.e(DataConstants.TAG, "laterFootPrintInfo==null");
+//							requestFirstPageJasonInfo(getFirstPageURL(laterDate),laterDate,false);
+//						}
+//					}
 					
 				}
 			}

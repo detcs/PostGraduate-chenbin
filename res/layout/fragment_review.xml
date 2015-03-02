@@ -29,8 +29,9 @@
 		    <ImageView
 		            android:id="@+id/review_img"
 			        android:layout_width="match_parent"
-			    	android:layout_height="300dp"
+			    	android:layout_height="match_parent"
 			    	android:scaleType="fitXY"
+			    	android:layout_marginBottom="200dp"
 		        />
 		</LinearLayout>
 		<LinearLayout

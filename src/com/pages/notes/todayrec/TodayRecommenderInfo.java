@@ -9,8 +9,11 @@ public class TodayRecommenderInfo {
 	String type;
 	String displayName;
 	boolean isAd;
+	String date;
+	boolean ifCollected;
+	String picFileName;
 	public TodayRecommenderInfo(String id, String imgId, String remark,
-			String subject, String type, String displayName, boolean isAd) {
+			String subject, String type, String displayName, boolean isAd,String date,boolean ifCollected,String fileName) {
 		super();
 		this.id = id;
 		this.imgId = imgId;
@@ -19,7 +22,35 @@ public class TodayRecommenderInfo {
 		this.type = type;
 		this.displayName = displayName;
 		this.isAd = isAd;
+		this.date=date;
+		this.ifCollected=ifCollected;
+		this.picFileName=fileName;
 	}
+	
+	public String getPicFileName() {
+		return picFileName;
+	}
+
+	public void setPicFileName(String picFileName) {
+		this.picFileName = picFileName;
+	}
+
+	public boolean isIfCollected() {
+		return ifCollected;
+	}
+
+	public void setIfCollected(boolean ifCollected) {
+		this.ifCollected = ifCollected;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	public String getId() {
 		return id;
 	}

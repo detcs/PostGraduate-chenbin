@@ -14,6 +14,7 @@ import com.data.model.DataConstants;
 import com.data.model.DataConstants.PageName;
 import com.data.model.FileDataHandler;
 import com.data.model.ImportanceFlagOnClickListener;
+import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
@@ -63,8 +64,8 @@ public class ReviewFragment extends Fragment{
 		rootView = inflater.inflate(R.layout.fragment_review, container, false);
 		leftBtn=(TextView)rootView.findViewById(R.id.master);
 		rightBtn=(TextView)rootView.findViewById(R.id.unmaster);
-		leftBtn.setBackgroundResource(R.drawable.master);
-		rightBtn.setBackgroundResource(R.drawable.nomaster);
+		leftBtn.setBackground(DisplayUtil.drawableTransfer(getActivity(),R.drawable.master));
+		rightBtn.setBackground(DisplayUtil.drawableTransfer(getActivity(),R.drawable.nomaster));
 		reviewImg=(ImageView)rootView.findViewById(R.id.review_img);
 		progressBar=(ProgressBar) rootView.findViewById(R.id.progress_horizontal);
 		Bundle bundle=getArguments();
@@ -151,7 +152,7 @@ public class ReviewFragment extends Fragment{
 			// TODO Auto-generated method stub
 		
 				//rootView.startAnimation(animation);
-				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_master_state), masterState, photoName);
+				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_master_state), masterState, photoNames.get(index));
 				index++;
 				titleCenter.setText(getResources().getString(R.string.reverse_review)+" ("+(index+1)+"/"+totalNum+" )");
 				progressBar.setProgress(progressBar.getProgress()+1);
@@ -185,7 +186,7 @@ public class ReviewFragment extends Fragment{
 	private void initTitleView()
 	{
 		RelativeLayout title=(RelativeLayout) getActivity().findViewById(R.id.title);
-		title.setBackgroundResource(R.drawable.gradual_title_bg);
+		title.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.gradual_title_bg));
 		TextView right=(TextView)getActivity().findViewById(R.id.right_btn);
 		right.setVisibility(View.INVISIBLE);
 		ImageView left=(ImageView) getActivity().findViewById(R.id.exercise_left_btn);

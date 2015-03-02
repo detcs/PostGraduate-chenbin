@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import com.app.ydd.R;
 import com.pages.notes.footprint.FootprintInfo;
+import com.pages.notes.todayrec.TodayRecommenderInfo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -70,6 +71,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
         Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
+    }
+    public static void createTodayRecommenderTable( Context context,SQLiteDatabase db)
+    {
+    	String sql = "create table if not exists "+context.getResources().getString(R.string.db_today_recommender_table)
+    			+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+    			+context.getResources().getString(R.string.dbcol_rec_id)+" TEXT not null , "
+    			+context.getResources().getString(R.string.dbcol_rec_img_id)+" TEXT not null , "
+    			+context.getResources().getString(R.string.dbcol_rec_remark)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_subject)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_type)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_display_name)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_is_ad)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_if_collect)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_rec_pic_name)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
+        Log.e(DataConstants.TAG, "sql:"+sql);
+    	db.execSQL(sql);
+    }
+    public static void insertTodayRecommenderInfoRecord(Context context,SQLiteDatabase db,TodayRecommenderInfo recInfo)
+    {
+    	Log.e(DataConstants.TAG,"insertTodayRecommenderInfoRecord "+ recInfo);
+    	ContentValues cv=new ContentValues();
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_id), recInfo.getId());
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_img_id), recInfo.getImgId());
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_remark), recInfo.getRemark());
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_subject), recInfo.getSubject());
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_type), recInfo.getType());
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_display_name), recInfo.getDisplayName());
+    	String ad=recInfo.isAd()==true?"1":"0";
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_is_ad), ad);
+    	String collect=recInfo.isIfCollected()==true?"1":"0";
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_if_collect),collect );
+    	cv.put(context.getResources().getString(R.string.dbcol_rec_pic_name),recInfo.getPicFileName());
+    	cv.put(context.getResources().getString(R.string.dbcol_date), recInfo.getDate());
+    	
+    	long rowid=db.insert(context.getResources().getString(R.string.db_today_recommender_table), null, cv);
+    	Log.e(DataConstants.TAG,"insert TodayRecommender rowid:"+rowid);
+    }
+    public static List<TodayRecommenderInfo> queryTodayRecommenderInfoOnDate(Context context,SQLiteDatabase db,String date)
+    {
+    	List<TodayRecommenderInfo> recInfos=new ArrayList<TodayRecommenderInfo>();
+    	TodayRecommenderInfo recInfo=null;
+    	Cursor result=db.rawQuery("SELECT * FROM "+context.getResources().getString(R.string.db_today_recommender_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"'",null); 
+	    result.moveToFirst(); 
+	    while (!result.isAfterLast()) { 
+	         
+	    	String id=result.getString(1);
+	        String imgId=result.getString(2); 
+	        String remark=result.getString(3);
+	        String subject=result.getString(4);
+	        String type=result.getString(5);
+	        String displayName=result.getString(6);
+	        String isAd=result.getString(7);
+	        String isCollect=result.getString(8);
+	        //String diary=result.getString(7);
+	        boolean ad=isAd.equals("1")?true:false;
+	        boolean collect=isCollect.equals("1")?true:false;
+	        String picname=result.getString(9);
+	        recInfo=new TodayRecommenderInfo(id,imgId,remark,subject,type,displayName,ad,date,collect,picname); 
+	       // Log.e(DataConstants.TAG,"db:query "+id+","+name);
+	        recInfos.add(recInfo);
+	        result.moveToNext(); 
+	      } 
+	      result.close();
+	     // Log.e(DataConstants.TAG,"db:query FootPrintInfo:"+"SELECT * FROM "+context.getResources().getString(R.string.db_footprint_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"=' "+date+"'"+(fpInfo==null));
+	      return recInfos;
+    }
+    public static void updateTodayRecommenderRecord(Context context,SQLiteDatabase db,String updateCol,String updateValue,String id)
+    {
+    	Log.e(DataConstants.TAG, "update rec "+updateCol+"="+updateValue+" at "+id);
+    	ContentValues cv=new ContentValues();
+       	cv.put(updateCol, updateValue);
+    	String whereClause =context.getResources().getString(R.string.dbcol_rec_id)+ "=?";//修改条件
+    	String[] whereArgs = { id };//修改条件的参数
+    	db.update(context.getResources().getString(R.string.db_today_recommender_table),cv,whereClause,whereArgs);//执行修改
     }
     public static FootprintInfo queryFootPrintInfo(Context context,SQLiteDatabase db,String date)
     {
@@ -224,7 +300,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
        	cv.put(updateCol, updateValue);
     	String whereClause =context.getResources().getString(R.string.dbcol_photo_name)+ "=?";//修改条件
     	String[] whereArgs = { photoName };//修改条件的参数
-    	db.update(tableName,cv,whereClause,whereArgs);//执行修改
+    	int res=db.update(tableName,cv,whereClause,whereArgs);//执行修改
+    	//Log.e(DataConstants.TAG,res);
     }
     public static void updateCourseRecordOnIntColByPhotoName(Context context,SQLiteDatabase db,String tableName,String photoName,String updateCol,int updateValue)
     {
@@ -288,7 +365,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
     	if(tableExist==false)
     		return 0;
-    	
+    	Log.e(DataConstants.TAG, tableName+" "+"SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
+    	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
+    	+"' and "+
+   		context.getResources().getString(R.string.dbcol_date)+"= '"+date+"'");
     	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
     	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
     	+"' and "+
@@ -303,6 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        result.moveToNext(); 
 	      } 
 	      result.close();
+	      Log.e(DataConstants.TAG,"review count:"+count);
 	      return count;
     }
     public static int queryCourseRecordsCountOnDate(Context context,SQLiteDatabase db,String tableName,String date)

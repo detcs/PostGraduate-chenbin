@@ -3,17 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
      >
-     <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="#000000"
-         android:alpha="0.5"
-         />
+   
     <android.support.v4.view.ViewPager
         android:id="@+id/today_rec_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
     </android.support.v4.view.ViewPager>
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="#000000"
+         android:alpha="0.5"
+         />
     <!--  
 		<ImageView
 		      android:id="@+id/todayrec_img"
@@ -62,13 +63,15 @@
            <FrameLayout
             android:layout_width="match_parent"
 		   	android:layout_height="wrap_content"
+		   	android:layout_gravity="bottom"
             >
 	        	<ImageView
+	        	    android:id="@+id/gradual_text_bg_img"
 	        	    android:layout_width="match_parent"
 	        	    android:layout_height="wrap_content"
 	        	    android:maxHeight="60dp"
-	        	    android:adjustViewBounds="true"
-	        	    android:background="@drawable/gradual_text_bg"
+	        	    android:scaleType="fitXY"
+	        	    android:layout_gravity="bottom"
 	        	    />
 	          <LinearLayout
 			      android:id="@+id/todayrec_bottom"
@@ -99,9 +102,10 @@
 		                  android:layout_width="wrap_content"
 		          		  android:layout_height="wrap_content"
 		          		  android:text="1"
-		          		  android:layout_marginRight="8dp"
+		          		  android:layout_marginRight="10dp"
 		          		  android:textColor="#ffffff"
 		          		  android:textSize="18sp"
+		          		  android:layout_marginBottom="6dp"
 		                  />
 		              <TextView 
 		                  android:id="@+id/rec_num"

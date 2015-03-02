@@ -35,7 +35,7 @@ public class CourseNameEditActivity extends Activity{
 	List<String> names;
 	int defaultTextColor=Color.parseColor("#333333");
 	int choosedTextColor=Color.parseColor("#ffffff");
-	enum Courses{English,Math,Politics};
+	//enum Courses{English,Math,Politics};
 	CourseClassName currentCourseClass;
 	CourseSettingInfo info;
 	
@@ -55,9 +55,23 @@ public class CourseNameEditActivity extends Activity{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				if(currentCourseClass==CourseClassName.English)
+				{
 					info.storeEnglish();
+				}
 				else if(currentCourseClass==CourseClassName.Math)
+				{
 					info.storeMath();
+				}
+				else if(currentCourseClass==CourseClassName.ProfessOne)
+				{
+					info.storeProfessOne();
+				}
+				else if(currentCourseClass==CourseClassName.ProfessTwo)
+				{
+					info.storeProfessTwo();
+				}
+				DialogChangeCourseName dialog= new DialogChangeCourseName(CourseNameEditActivity.this);
+				dialog.show();
 			}
 		});
 		

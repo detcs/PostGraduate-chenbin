@@ -29,7 +29,7 @@ public class FunctionsSquareFragment extends Fragment{
 		ImageView bg=(ImageView) rootView.findViewById(R.id.funcs_bg_img);
 		BitmapFactory.Options opt=new BitmapFactory.Options();
 		//opt.inJustDecodeBounds=true;
-		opt.inSampleSize=8;
+		opt.inSampleSize=10;
 		Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.today_background, opt);
 		//Log.e(DataConstants.TAG,"null?"+(bitmap==null));
 		bitmap=DisplayUtil.doBlur(bitmap, 10, false);
