@@ -10,6 +10,7 @@ import com.data.model.DatabaseHelper;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.GloableData;
+import com.data.util.ImageUtil;
 
 import android.app.Application;
 import android.content.Context;
@@ -34,6 +35,7 @@ public class YDDApplication extends Application {
 		initScreenParam();
 		initTypeface();
 		GloableData.initRequestQueue(getApplicationContext());
+		ImageUtil.init(getApplicationContext());
 	}
 
 	private void initAppDIr() {

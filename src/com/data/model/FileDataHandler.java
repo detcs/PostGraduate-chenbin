@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
 public class FileDataHandler {
@@ -230,4 +231,43 @@ public class FileDataHandler {
 		
 		
 	}
+	public static String getBase64ImageStr(String imgFilePath) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理  
+		/*
+		byte[] data = null;  
+		Log.i("com.market","begin base64");
+		// 读取图片字节数组  
+		try {  
+		InputStream in = new FileInputStream(imgFilePath);  
+		data = new byte[in.available()];  
+		in.read(data);  
+		in.close();  
+		} catch (IOException e) {  
+		e.printStackTrace();  
+		}  
+		  
+		// 对字节数组Base64编码  
+		String res = Base64.encodeToString(data, Base64.DEFAULT); 
+		Log.i("com.market","base len:"+res);
+		return res;// 返回Base64编码过的字节数组字符串  
+		*/
+		  File  file = new File(imgFilePath);
+		  byte[] buffer=null;
+	        FileInputStream inputFile;
+			try {
+				inputFile = new FileInputStream(file);
+				  buffer = new byte[(int)file.length()];
+			        inputFile.read(buffer);
+			        inputFile.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	       
+//	        return new android.util.Base64;
+			Log.i(DataConstants.TAG,"base len:"+android.util.Base64.encodeToString(buffer, Base64.DEFAULT).length());
+	        return android.util.Base64.encodeToString(buffer, Base64.DEFAULT);
+		}  
 }

@@ -35,7 +35,6 @@ import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.notes.todayrec.TodayRecommenderActivity;
 import com.pages.notes.todayrec.TodayRecommenderInfo;
-import com.pages.notes.todayrec.TodayRecommenderActivity.TodatRecDownloadTask;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
 import com.view.util.AutoScrollTextView;
@@ -208,13 +207,13 @@ public class NoteFragment  extends Fragment{
 		courseNamelist = (ListView) v.findViewById(R.id.course_list);
 		final List<String> courseTableNames=new ArrayList<String>();
 		final List<String> names = new ArrayList<String>();
-		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
+		names.add(UserConfigs.getCourseEnglishName());
 		courseTableNames.add(getResources().getString(R.string.db_english_table));
 		names.add(getResources().getString(R.string.politics));
 		courseTableNames.add(getResources().getString(R.string.db_politics_table));
 		if(UserConfigs.getCourseMathName()!=null)
 		{
-			names.add(getResources().getString(R.string.math)+UserConfigs.getCourseMathName());
+			names.add(UserConfigs.getCourseMathName());
 			courseTableNames.add(getResources().getString(R.string.db_math_table));
 		}
 		names.add(UserConfigs.getCourseProfessOneName());
@@ -339,13 +338,13 @@ public class NoteFragment  extends Fragment{
 	{
 		courseTableNames=new ArrayList<String>();
 		names = new ArrayList<String>();
-		names.add(getResources().getString(R.string.english)+UserConfigs.getCourseEnglishName());
+		names.add(UserConfigs.getCourseEnglishName());
 		courseTableNames.add(getResources().getString(R.string.db_english_table));
 		names.add(getResources().getString(R.string.politics));
 		courseTableNames.add(getResources().getString(R.string.db_politics_table));
 		if(UserConfigs.getCourseMathName()!=null)
 		{
-			names.add(getResources().getString(R.string.math)+UserConfigs.getCourseMathName());
+			names.add(UserConfigs.getCourseMathName());
 			courseTableNames.add(getResources().getString(R.string.db_math_table));
 		}
 		names.add(UserConfigs.getCourseProfessOneName());

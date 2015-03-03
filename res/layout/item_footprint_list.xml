@@ -15,9 +15,12 @@
 	    />
 	<com.pages.notes.timeline.NoScrollGridView
 	    android:id="@+id/footprint_grid"
-	    android:layout_width="wrap_content"
+	    android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:numColumns="4"
+    	android:stretchMode="columnWidth"
+	    android:horizontalSpacing="4dp"
+	    android:verticalSpacing="6dp"
 	    />
 
 </LinearLayout>

@@ -451,6 +451,29 @@ public class LoginActivity extends Activity{
 			UserConfigs.storeAccount(data.getString("account_"));
 			UserConfigs.storeVerify(data.getString("verify_"));
 			UserConfigs.storeId(data.getString("id_"));
+			int startDay=data.getInt("startDay_");
+			String email=data.getString("email_");
+			String englishName=data.getString("subjectEng_");
+			String politicName=data.getString("subjectPolity_");
+			String mathName=data.getString("subjectMath_");
+			String professOneName=data.getString("subjectMajor1_");
+			String professTwoName=data.getString("subjectMajor2_");
+			Log.e(DataConstants.TAG, "login "+startDay);
+			
+			if(startDay>0)//not new user
+			{
+				UserConfigs.storeIsFirstTakePhoto("no");
+				UserConfigs.storeCourseEnglishName(englishName);
+				UserConfigs.storeCoursePoliticsName(politicName);
+				if(!mathName.equals("null"))
+					UserConfigs.storeCourseMathName(mathName);
+				UserConfigs.storeCourseProfessOneName(professOneName);
+				if(!professTwoName.equals("null"))
+					UserConfigs.storeCourseProfessTwoName(professTwoName);
+				if(!email.equals("null"))
+					UserConfigs.storeEmail(email);
+			}
+			
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

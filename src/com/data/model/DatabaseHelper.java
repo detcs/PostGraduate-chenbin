@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
     	List<TodayRecommenderInfo> recInfos=new ArrayList<TodayRecommenderInfo>();
     	TodayRecommenderInfo recInfo=null;
-    	Cursor result=db.rawQuery("SELECT * FROM "+context.getResources().getString(R.string.db_today_recommender_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"'",null); 
+    	Cursor result=db.rawQuery("SELECT * FROM "+context.getResources().getString(R.string.db_today_recommender_table)+" where "+context.getResources().getString(R.string.dbcol_date)+"='"+date+"' ORDER BY "+context.getResources().getString(R.string.dbcol_rec_pic_name)+" DESC",null); 
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
 	         
@@ -242,10 +242,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static CourseRecordInfo queryUnbackUpSubject(Context context,SQLiteDatabase db,String tableName)
     {
     	CourseRecordInfo cri=null;
-    	Cursor result=db.rawQuery("SELECT * FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_ifupload)+"= 0 order by _id desc",null); 
+    	Cursor result=db.rawQuery("SELECT * FROM "+tableName+" where "+context.getResources().getString(R.string.dbcol_ifupload)+"= '"+context.getResources().getString(R.string.upload_no)+"' order by _id desc",null); 
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
-	         
+	    	int id=result.getInt(0); 
 	        String photoName=result.getString(1); 
 	        String photobase64=result.getString(2);
 	        String remark=result.getString(3);
@@ -258,6 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String  ifUpload=result.getString(9);
 	        
 	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender);
+	       cri.setDbId(id);
 	       break; 
 	      } 
 	      result.close();
@@ -270,7 +271,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    result.moveToFirst(); 
 	    while (!result.isAfterLast()) { 
 	         
-	        String id=result.getString(0); 
+	        int id=result.getInt(0); 
 	        String photoname=result.getString(1); 
 	        String photobase64=result.getString(2); 
 	        String remark=result.getString(3);
@@ -283,6 +284,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String  ifUpload=result.getString(9);
 	        
 	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender);
+	        cri.setDbId(id);
 	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+cri);
 	        result.moveToNext(); 
 	      } 

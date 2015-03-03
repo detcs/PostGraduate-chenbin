@@ -204,10 +204,13 @@ public class UserConfigs
 	
 	public static List<String> getCourseNames()
 	{	List<String> names=new ArrayList<String>();
-		names.add(context.getResources().getString(R.string.english)+getCourseEnglishName());
-		names.add(context.getResources().getString(R.string.politics));
+		//names.add(context.getResources().getString(R.string.english)+getCourseEnglishName());
+		//names.add(context.getResources().getString(R.string.politics));
+		names.add(getCourseEnglishName());
+		names.add(getCoursePoliticsName());
 		if(getCourseMathName()!=null)
-			names.add(context.getResources().getString(R.string.math)+getCourseMathName());
+			//names.add(context.getResources().getString(R.string.math)+getCourseMathName());
+			names.add(getCourseMathName());
 		names.add(getCourseProfessOneName());
 		if(getCourseProfessTwoName()!=null)
 			names.add(getCourseProfessTwoName());
@@ -217,10 +220,10 @@ public class UserConfigs
 	public static HashMap<String,String> getCourseNameAndTableMap()
 	{	
 		HashMap<String,String> map=new HashMap<String,String>();
-		map.put(context.getResources().getString(R.string.english)+getCourseEnglishName(),context.getResources().getString(R.string.db_english_table));
-		map.put(context.getResources().getString(R.string.politics),context.getResources().getString(R.string.db_politics_table));
+		map.put(getCourseEnglishName(),context.getResources().getString(R.string.db_english_table));
+		map.put(getCoursePoliticsName(),context.getResources().getString(R.string.db_politics_table));
 		if(getCourseMathName()!=null)
-			map.put(context.getResources().getString(R.string.math)+getCourseMathName(),context.getResources().getString(R.string.db_math_table));
+			map.put(getCourseMathName(),context.getResources().getString(R.string.db_math_table));
 		map.put(getCourseProfessOneName(),context.getResources().getString(R.string.db_profess1_table));
 		if(getCourseProfessTwoName()!=null)
 			map.put(getCourseProfessTwoName(),context.getResources().getString(R.string.db_profess2_table));

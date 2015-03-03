@@ -40,5 +40,6 @@ public class DataConstants {
 	//server
 	public static final String SERVER_URL="http://114.215.196.179:8080/gs/mobile";
 	public static final String DOWNLOAD_URL="http://114.215.196.179:8080/gs/download.do?id=";
+	//public static final String UPLOAD_URL="http://114.215.196.179:8080/gs/download.do?id=";
 	
 }

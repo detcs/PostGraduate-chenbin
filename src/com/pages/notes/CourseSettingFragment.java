@@ -68,7 +68,7 @@ public class CourseSettingFragment extends Fragment {
 		//english1.setBackgroundResource(R.drawable.choose_english);
 		setButtonChooseState(english1Bg,english1, true,Courses.English);
 		setButtonChooseState(english2Bg,english2, false,Courses.English);
-		info.setEnglish("1");
+		info.setEnglish(getResources().getString(R.string.english1));
 		//english2.setTextColor(defaultTextColor);
 		english1.setOnClickListener(new OnClickListener() {
 			
@@ -79,7 +79,7 @@ public class CourseSettingFragment extends Fragment {
 				setButtonChooseState(english1Bg,english1, true,Courses.English);
 				setButtonChooseState(english2Bg,english2, false,Courses.English);
 				//english1.setTextColor()
-				info.setEnglish("1");
+				info.setEnglish(getResources().getString(R.string.english1));
 			}
 		});
 		english2.setOnClickListener(new OnClickListener() {
@@ -89,7 +89,7 @@ public class CourseSettingFragment extends Fragment {
 				// TODO Auto-generated method stub
 				setButtonChooseState(english1Bg,english1, false,Courses.English);
 				setButtonChooseState(english2Bg,english2, true,Courses.English);
-				info.setEnglish("2");
+				info.setEnglish(getResources().getString(R.string.english2));
 			}
 		});
 		
@@ -106,7 +106,7 @@ public class CourseSettingFragment extends Fragment {
 		setButtonChooseState(math2Bg,math2, false,Courses.Math);
 		setButtonChooseState(math3Bg,math3, false,Courses.Math);
 		setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
-		info.setMath("1");
+		info.setMath(getResources().getString(R.string.math1));
 		math1.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -117,7 +117,7 @@ public class CourseSettingFragment extends Fragment {
 				setButtonChooseState(math2Bg,math2, false,Courses.Math);
 				setButtonChooseState(math3Bg,math3, false,Courses.Math);
 				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
-				info.setMath("1");
+				info.setMath(getResources().getString(R.string.math1));
 			}
 		});
 		math2.setOnClickListener(new OnClickListener() {
@@ -129,7 +129,7 @@ public class CourseSettingFragment extends Fragment {
 				setButtonChooseState(math2Bg,math2, true,Courses.Math);
 				setButtonChooseState(math3Bg,math3, false,Courses.Math);
 				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
-				info.setMath("2");
+				info.setMath(getResources().getString(R.string.math2));
 			}
 		});
 		math3.setOnClickListener(new OnClickListener() {
@@ -141,7 +141,7 @@ public class CourseSettingFragment extends Fragment {
 				setButtonChooseState(math2Bg,math2,  false,Courses.Math);
 				setButtonChooseState(math3Bg,math3,true,Courses.Math);
 				setButtonChooseState(mathNoBg,mathNo, false,Courses.Math);
-				info.setMath("3");
+				info.setMath(getResources().getString(R.string.math3));
 			}
 		});
 		mathNo.setOnClickListener(new OnClickListener() {
@@ -159,7 +159,7 @@ public class CourseSettingFragment extends Fragment {
 		politics=(TextView)rootView.findViewById(R.id.politics);
 	//	politicBg=(LinearLayout)rootView.findViewById(R.id.politics_bg);
 		setButtonChooseState(politicBg,politics, true,Courses.Politics);
-		info.setPolitics("politics");
+		info.setPolitics(getResources().getString(R.string.politics));
 //		politics.setOnClickListener(new OnClickListener() {
 //			
 //			@Override

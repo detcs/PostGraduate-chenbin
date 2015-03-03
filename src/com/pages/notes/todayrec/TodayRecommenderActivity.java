@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,12 +33,19 @@ import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
 import com.data.util.DownloadUrlInfo;
+import com.data.util.GloableData;
+import com.data.util.ImageUtil;
+import com.data.util.NetWorkUtil;
+import com.data.util.UploadInfoUtil;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.pages.notes.footprint.FootprintInfo;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -51,6 +59,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -144,7 +153,7 @@ public class TodayRecommenderActivity extends Activity{
 
 	private void requestTodayRecommenderInfo(String url) {
 		//final FootprintInfo fpInfo;
-		RequestQueue requestQueue = Volley.newRequestQueue(this);
+		//RequestQueue requestQueue = Volley.newRequestQueue(this);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
 				new Response.Listener<JSONObject>() {
 					@Override
@@ -153,19 +162,6 @@ public class TodayRecommenderActivity extends Activity{
 						todayRecList=parseTodayRecommender(response);
 						List<String> imgIds=new ArrayList<String>();
 						
-						
-//						for(TodayRecommenderInfo info:todayRecList)
-//						{
-//							imgIds.add(info.getImgId());
-//							
-//						}
-						//db.close();
-//						if(!hasDownloadTodayRecPic())
-//						{
-//							TodatRecDownloadTask task=new TodatRecDownloadTask(todayRecList);
-//							task.execute((String[]) imgIds.toArray(new String[imgIds.size()]));
-//						}
-//						else
 						{
 							setPageViewAdapter(todayRecList);
 						}
@@ -184,7 +180,7 @@ public class TodayRecommenderActivity extends Activity{
 						// }
 					}
 				});
-		requestQueue.add(jsonObjectRequest);
+		GloableData.requestQueue.add(jsonObjectRequest);
 		// return fpInfo;
 	}
 
@@ -239,98 +235,8 @@ public class TodayRecommenderActivity extends Activity{
 		}
 		return list;
 	}
-	public class TodatRecDownloadTask extends AsyncTask<String, Integer, List<TodayRecommenderInfo>>
-	{
- 
-		List<TodayRecommenderInfo> recInfos;
-		
-		
-		public TodatRecDownloadTask(List<TodayRecommenderInfo> recInfos) {
-			super();
-			this.recInfos = recInfos;
-		}
-
-		@Override
-		protected List<TodayRecommenderInfo> doInBackground(String... param) {
-			// TODO Auto-generated method stub
-			String urlStr=null;//DataConstants.DOWNLOAD_URL+id;  
-			//Log.e(DataConstants.TAG,"cover_bgpic "+urlStr);
-			List<String> filePaths=new ArrayList<String>();
-			SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-			for(int i=0;i<recInfos.size();i++)
-			{
-				urlStr=DataConstants.DOWNLOAD_URL+recInfos.get(i).getImgId();
-				 OutputStream output=null;
-				 InputStream input=null;
-				 String fileName=null;
-				 String path=null;
-				try {  
-		            /* 
-		             * 通过URL取得HttpURLConnection 
-		             * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置 
-		             * <uses-permission android:name="android.permission.INTERNET" /> 
-		             */  
-		            URL url=new URL(urlStr);  
-		            HttpURLConnection conn=(HttpURLConnection)url.openConnection(); 
-		            conn.setRequestProperty("Accept-Encoding", "identity"); 
-		            //取得inputStream，并进行读取  
-		            input=conn.getInputStream(); 
-		           // String nameInfo=conn.getHeaderField("Content-disposition");
-		            //fileName=nameInfo.split("=")[1];
-		            //downloadedNames[i]=fileName;
-		            //Log.e(DataConstants.TAG,"download filename:"+fileName);
-		            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
-					String time = sdf.format(new Date());
-					// i as index
-					fileName = UserConfigs.getAccount() + "|" + time + ".jpg";
-					recInfos.get(i).setPicFileName(fileName);
-					DataConstants.dbHelper.insertTodayRecommenderInfoRecord(getApplicationContext(), db, recInfos.get(i));
-					path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
-					//Log.e(DataConstants.TAG, "todayrec "+path);
-					filePaths.add(path);
-		            File file=new File(path);
-		            file.createNewFile();
-		            output=new FileOutputStream(file);
-		            byte[] buffer=new byte[4*1024];  
-		//            while(input.read(buffer)!=-1){  
-		//                output.write(buffer);  
-		//            }  
-		            int temp;
-		            while ((temp = input.read(buffer)) != -1) 
-		            {
-		                output.write(buffer, 0, temp);
-		            }
-		            	output.flush();  
-			        } catch (MalformedURLException e) {  
-			            e.printStackTrace();  
-			        } catch (IOException e) {  
-			            e.printStackTrace();  
-			        }  finally{  
-		            try {  
-		            	if(output!=null)
-		                output.close(); 
-		            	if(input!=null)
-		                input.close();
-		               // System.out.println("success");  
-		            } catch (IOException e) {  
-		                //System.out.println("fail");  
-		                e.printStackTrace();  
-		            }  
-		        }
-				
-			}
-			db.close();
-			return recInfos;
-		}
-
-		@Override
-		protected void onPostExecute(List<TodayRecommenderInfo> result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			setPageViewAdapter(result);
-		}
-		
-	}
+	
+	
 	private void setPageViewAdapter(List<TodayRecommenderInfo> infos)
 	{
 		recNum.setText("/"+infos.size()+"");
@@ -341,7 +247,7 @@ public class TodayRecommenderActivity extends Activity{
 			ImageView img=(ImageView) view.findViewById(R.id.rec_img);
 			String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+info.getPicFileName();
 			Log.e(DataConstants.TAG, "info.getPicFileName():"+info.getPicFileName());
-			Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
+			//Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
 			//img.setImageResource(R.drawable.note_thumb);
 			recViews.add(view);
 		}
@@ -381,22 +287,78 @@ public class TodayRecommenderActivity extends Activity{
 				// TODO Auto-generated method stub
 				Log.e(DataConstants.TAG, "instantiateItem "+position);
 				((ViewPager)container).addView(recViews.get(position));
-				TodayRecommenderInfo recInfo=todayRecList.get(position);
+				final TodayRecommenderInfo recInfo=todayRecList.get(position);
+			 	//final int index=position;
 				View view=recViews.get(position);
 				ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+				final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
 				Log.e(DataConstants.TAG, "recInfo.getImgId() =="+recInfo.getImgId());
 				if(recInfo.getPicFileName().equals(""))
 				{
 					Log.e(DataConstants.TAG, "getpicname ==");
-					DownloadPicTask picTask=new DownloadPicTask(img,recInfo);
-					picTask.execute(recInfo.getImgId());
+					String uri=DataConstants.DOWNLOAD_URL+recInfo.getImgId();
+					ImageUtil.imageLoader.displayImage(uri, img, new SimpleImageLoadingListener()
+					{
+
+						@Override
+						public void onLoadingCancelled(String imageUri,
+								View view) {
+							// TODO Auto-generated method stub
+							super.onLoadingCancelled(imageUri, view);
+						}
+
+						@Override
+						public void onLoadingComplete(String imageUri,
+								View view, Bitmap loadedImage) {
+							// TODO Auto-generated method stub
+							super.onLoadingComplete(imageUri, view, loadedImage);
+							spinner.setVisibility(View.INVISIBLE); 
+							Log.e(DataConstants.TAG, "loading complete");
+							 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
+							String time = sdf.format(new Date());
+								// i as index
+							String fileName = UserConfigs.getAccount() + "|" + time + "|"+recInfo.getId()+".jpg";
+							//todayRecList.get(index).setPicFileName(fileName);
+							recInfo.setPicFileName(fileName);
+							String	filePath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
+
+							try {
+								FileDataHandler.saveBitmap(loadedImage, filePath);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							SQLiteDatabase db=DataConstants.dbHelper.getReadableDatabase();
+							DataConstants.dbHelper.insertTodayRecommenderInfoRecord(getApplicationContext(), db, recInfo);
+							db.close();
+						}
+
+						@Override
+						public void onLoadingFailed(String imageUri, View view,
+								FailReason failReason) {
+							// TODO Auto-generated method stub
+							super.onLoadingFailed(imageUri, view, failReason);
+						}
+
+						@Override
+						public void onLoadingStarted(String imageUri, View view) {
+							// TODO Auto-generated method stub
+							super.onLoadingStarted(imageUri, view);
+							Log.e(DataConstants.TAG, "loading start");
+							spinner.setVisibility(View.VISIBLE); 
+						}
+						
+					});
+					//DownloadPicTask picTask=new DownloadPicTask(img,recInfo);
+					//picTask.execute(recInfo.getImgId());
 				}
 				else
 				{
 					String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+recInfo.getPicFileName();
+					ImageUtil.imageLoader.displayImage(ImageUtil.filePre+path, img);
 					//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
 					//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
-					Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
+					//Picasso.with(TodayRecommenderActivity.this).load(new File(path)).into(img);
 				}
 				return recViews.get(position);
 			}
@@ -487,6 +449,14 @@ public class TodayRecommenderActivity extends Activity{
 								Log.e(DataConstants.TAG,"insert time "+time);
 								CourseRecordInfo cri=new CourseRecordInfo(fileName, "", todayRecList.get(index).getRemark(), DateUtil.getTodayDateString(), time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), 0, 0, 1);
 								DataConstants.dbHelper.insertCourseRecord(getApplicationContext(), db, tableName, cri);
+								if(NetWorkUtil.isWifiConnected(TodayRecommenderActivity.this))
+								{
+									CourseRecordInfo criWithID=DataConstants.dbHelper.queryCourseRecordByPhotoName(TodayRecommenderActivity.this, db, tableName, fileName);	
+									//Log.e(DataConstants.TAG, "to64 "+photoPath);
+									String photoPath=targetPath;
+									String imgBase64=FileDataHandler.getBase64ImageStr(photoPath);
+									UploadInfoUtil.uploadImg(imgBase64,TodayRecommenderActivity.this, criWithID, tableName);
+								}
 								db.close();
 								Toast.makeText(getApplicationContext(), getResources().getString(R.string.collect_success), Toast.LENGTH_LONG).show();
 							}
@@ -523,97 +493,98 @@ public class TodayRecommenderActivity extends Activity{
 			}
 		});
 	}
-	
-	public class DownloadPicTask extends AsyncTask<String, Integer,String> {
 
-//		String path;
-//		Context context;
-		ImageView img;
-		TodayRecommenderInfo recInfo;
-		public DownloadPicTask(ImageView img, TodayRecommenderInfo recInfo) {
-			super();
-			this.img = img;
-			this.recInfo = recInfo;
-		}
 
-		@Override
-		protected String doInBackground(String... param) {
-			// TODO Auto-generated method stub
-			String urlStr=DataConstants.DOWNLOAD_URL+param[0];
-			Log.e(DataConstants.TAG, urlStr);
-			 OutputStream output=null;
-			 InputStream input=null;
-			 String fileName=null;
-			 String filePath=null;
-			try {  
-	            /* 
-	             * 通过URL取得HttpURLConnection 
-	             * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置 
-	             * <uses-permission android:name="android.permission.INTERNET" /> 
-	             */  
-	            URL url=new URL(urlStr);  
-	            HttpURLConnection conn=(HttpURLConnection)url.openConnection(); 
-	            conn.setRequestProperty("Accept-Encoding", "identity"); 
-	            //取得inputStream，并进行读取  
-	            input=conn.getInputStream(); 
-	            //downloadedNames[i]=fileName;
-	            //Log.e(DataConstants.TAG,"download filename:"+fileName);
-	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
-				String time = sdf.format(new Date());
-				// i as index
-				fileName = UserConfigs.getAccount() + "|" + time + ".jpg";
-				recInfo.setPicFileName(fileName);
-				
-				filePath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
-				//Log.e(DataConstants.TAG, "todayrec "+path);
-				//filePaths.add(path);
-	            File file=new File(filePath);
-	            file.createNewFile();
-	            output=new FileOutputStream(file);
-	            byte[] buffer=new byte[4*1024];  
-//	            while(input.read(buffer)!=-1){  
-//	                output.write(buffer);  
+//	public class DownloadPicTask extends AsyncTask<String, Integer,String> {
+//
+////		String path;
+////		Context context;
+//		ImageView img;
+//		TodayRecommenderInfo recInfo;
+//		public DownloadPicTask(ImageView img, TodayRecommenderInfo recInfo) {
+//			super();
+//			this.img = img;
+//			this.recInfo = recInfo;
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... param) {
+//			// TODO Auto-generated method stub
+//			String urlStr=DataConstants.DOWNLOAD_URL+param[0];
+//			Log.e(DataConstants.TAG, urlStr);
+//			 OutputStream output=null;
+//			 InputStream input=null;
+//			 String fileName=null;
+//			 String filePath=null;
+//			try {  
+//	            /* 
+//	             * 通过URL取得HttpURLConnection 
+//	             * 要网络连接成功，需在AndroidMainfest.xml中进行权限配置 
+//	             * <uses-permission android:name="android.permission.INTERNET" /> 
+//	             */  
+//	            URL url=new URL(urlStr);  
+//	            HttpURLConnection conn=(HttpURLConnection)url.openConnection(); 
+//	            conn.setRequestProperty("Accept-Encoding", "identity"); 
+//	            //取得inputStream，并进行读取  
+//	            input=conn.getInputStream(); 
+//	            //downloadedNames[i]=fileName;
+//	            //Log.e(DataConstants.TAG,"download filename:"+fileName);
+//	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
+//				String time = sdf.format(new Date());
+//				// i as index
+//				fileName = UserConfigs.getAccount() + "|" + time + ".jpg";
+//				recInfo.setPicFileName(fileName);
+//				
+//				filePath=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+fileName;
+//				//Log.e(DataConstants.TAG, "todayrec "+path);
+//				//filePaths.add(path);
+//	            File file=new File(filePath);
+//	            file.createNewFile();
+//	            output=new FileOutputStream(file);
+//	            byte[] buffer=new byte[4*1024];  
+////	            while(input.read(buffer)!=-1){  
+////	                output.write(buffer);  
+////	            }  
+//	            int temp;
+//	            while ((temp = input.read(buffer)) != -1) 
+//	            {
+//	                output.write(buffer, 0, temp);
+//	            }
+//	            	output.flush();  
+//		        } catch (MalformedURLException e) {  
+//		            e.printStackTrace();  
+//		        } catch (IOException e) {  
+//		            e.printStackTrace();  
+//		        }  finally{  
+//	            try {  
+//	            	if(output!=null)
+//	                output.close(); 
+//	            	if(input!=null)
+//	                input.close();
+//	               // System.out.println("success");  
+//	            } catch (IOException e) {  
+//	                //System.out.println("fail");  
+//	                e.printStackTrace();  
 //	            }  
-	            int temp;
-	            while ((temp = input.read(buffer)) != -1) 
-	            {
-	                output.write(buffer, 0, temp);
-	            }
-	            	output.flush();  
-		        } catch (MalformedURLException e) {  
-		            e.printStackTrace();  
-		        } catch (IOException e) {  
-		            e.printStackTrace();  
-		        }  finally{  
-	            try {  
-	            	if(output!=null)
-	                output.close(); 
-	            	if(input!=null)
-	                input.close();
-	               // System.out.println("success");  
-	            } catch (IOException e) {  
-	                //System.out.println("fail");  
-	                e.printStackTrace();  
-	            }  
-	        }
-			SQLiteDatabase db=DataConstants.dbHelper.getReadableDatabase();
-			DataConstants.dbHelper.insertTodayRecommenderInfoRecord(getApplicationContext(), db, recInfo);
-			db.close();
-			return fileName;
-		}
-
-		@Override
-		protected void onPostExecute(String result) 
-		{
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-
-			String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+result;
-			Log.e(DataConstants.TAG, "post img:"+path);
-			//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
-			//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
-			Picasso.with(TodayRecommenderActivity.this).load(new File(path)).skipMemoryCache().into(img);
-		}
-	}
+//	        }
+//			SQLiteDatabase db=DataConstants.dbHelper.getReadableDatabase();
+//			DataConstants.dbHelper.insertTodayRecommenderInfoRecord(getApplicationContext(), db, recInfo);
+//			db.close();
+//			return fileName;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String result) 
+//		{
+//			// TODO Auto-generated method stub
+//			super.onPostExecute(result);
+//
+//			String path=FileDataHandler.TODAY_REC_PIC_DIR_PATH+"/"+result;
+//			Log.e(DataConstants.TAG, "post img:"+path);
+//			//View view=LayoutInflater.from(TodayRecommenderActivity.this).inflate(R.layout.view_today_rec, null);
+//			//ImageView img=(ImageView) view.findViewById(R.id.rec_img);
+//			Picasso.with(TodayRecommenderActivity.this).load(new File(path)).skipMemoryCache().into(img);
+//		}
+//	}
 	
 }

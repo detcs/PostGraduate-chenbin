@@ -58,9 +58,9 @@ public class TodayFragment extends Fragment {
 	MediaPlayer mp;
 	View rootView;
 	ImageView todayBgImg;
-	TextView musicName;
-	TextView singerName;
-	private RoundProgressBar mRoundProgressBar;
+	//TextView musicName;
+	//TextView singerName;
+	//private RoundProgressBar mRoundProgressBar;
 	int progress=0;
 	Activity mActivity; 
 	SQLiteDatabase db ;
@@ -95,14 +95,14 @@ public class TodayFragment extends Fragment {
 		useDays.setTextSize(useDaysSize);
 		
 
-		mRoundProgressBar=(RoundProgressBar)v.findViewById(R.id.roundProgressBar);
+		//mRoundProgressBar=(RoundProgressBar)v.findViewById(R.id.roundProgressBar);
 		//mp = MediaPlayer.create(getActivity(), R.raw.song);
-		final ImageView play = (ImageView) v.findViewById(R.id.music_play);
-		play.setImageResource(R.drawable.music_play);
-		musicName = (TextView) v.findViewById(R.id.music_name);
-		musicName.setTypeface(DataConstants.typeFZLT);
-		singerName=(TextView) v.findViewById(R.id.singer_name);
-		singerName.setTypeface(DataConstants.typeFZLT);
+		//final ImageView play = (ImageView) v.findViewById(R.id.music_play);
+		//play.setImageResource(R.drawable.music_play);
+		//musicName = (TextView) v.findViewById(R.id.music_name);
+		//musicName.setTypeface(DataConstants.typeFZLT);
+		//singerName=(TextView) v.findViewById(R.id.singer_name);
+		//singerName.setTypeface(DataConstants.typeFZLT);
 		db= DataConstants.dbHelper.getReadableDatabase();
 		FootprintInfo footPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
 		if(footPrintInfo!=null)
@@ -112,7 +112,7 @@ public class TodayFragment extends Fragment {
 		}
 		else
 		{
-			if(!NetWorkUtil.isNetworkConnected(getActivity()) && !NetWorkUtil.isWifiConnected(getActivity()))
+			if(!NetWorkUtil.isConnected(getActivity()))
 			{
 				NetWorkUtil.showNoNetwork(getActivity());
 			}
@@ -137,7 +137,7 @@ public class TodayFragment extends Fragment {
 				}
 			}
 		}
-		
+		/*
 		play.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -183,18 +183,18 @@ public class TodayFragment extends Fragment {
 						}
 						}).start();
 					}
-					*/
+					
 				}
 				
 			
 		});
-
+		 */
 		// mp.start();
 	}
 	public void setFirstpageView(FootprintInfo info)
 	{
-		musicName.setText(info.getCoverSongName());
-		singerName.setText(info.getCoverSingerName());
+		//musicName.setText(info.getCoverSongName());
+		//singerName.setText(info.getCoverSingerName());
 		String bgPath=FileDataHandler.COVER_PIC_DIR_PATH+"/"+info.getCoverPicName();
 		Picasso.with(getActivity()).load(new File(bgPath)).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
 		TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);

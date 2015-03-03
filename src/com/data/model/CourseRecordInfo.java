@@ -1,7 +1,7 @@
 package com.data.model;
 
 public class CourseRecordInfo {
-	
+	private int dbId;
 	private String photoName;
 	private String photobase64;
 	private String remark;
@@ -29,6 +29,14 @@ public class CourseRecordInfo {
 		this.ifRecommender = ifRecommender;
 	}
 	
+	public int getDbId() {
+		return dbId;
+	}
+
+	public void setDbId(int dbId) {
+		this.dbId = dbId;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

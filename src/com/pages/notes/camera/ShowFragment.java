@@ -16,7 +16,10 @@ import com.data.model.DatabaseHelper;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.DisplayUtil;
+import com.data.util.NetWorkUtil;
 import com.data.util.SysCall;
+import com.data.util.UploadInfoUtil;
+import com.data.util.UploadInfoUtil.UploadPictureTask;
 import com.view.util.VerticalTextView;
 
 import android.annotation.SuppressLint;
@@ -436,7 +439,7 @@ public class ShowFragment extends Fragment {
 	}
 	// *******************save util*******************
 
-	public void saveMyBitmap(Bitmap bitmap,String path) throws IOException {
+	public String saveMyBitmap(Bitmap bitmap,String path) throws IOException {
 		File f = new File(path);
 		f.createNewFile();
 		FileOutputStream fOut = null;
@@ -456,6 +459,8 @@ public class ShowFragment extends Fragment {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//String base64=FileDataHandler.getBase64ImageStr(path);
+		return null;
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -517,7 +522,7 @@ public class ShowFragment extends Fragment {
 				blurBitmap=DisplayUtil.doBlur(blurBitmap, 10, false);
 				saveMyBitmap(blurBitmap,storePath + "/" + DataConstants.blured+photoName);
 				savePhotoRecordToDataBase(tableName, photoName, "photobase64",
-						finalRemarks, date, time, 0);
+						finalRemarks, date, time, 0,storePath + "/" + photoName);
 				blurBitmap.recycle();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -528,15 +533,24 @@ public class ShowFragment extends Fragment {
 
 	private void savePhotoRecordToDataBase(String tableName, String photoName,
 			String photobase64, String remark, String date, String time,
-			int flag) {
+			int flag,String photoPath) {
 		DatabaseHelper dbHelper = DataConstants.dbHelper;
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		CourseRecordInfo cri = new CourseRecordInfo(photoName, photobase64,
 				remark, date, time, getResources().getString(
 						R.string.state_unknow), getResources().getString(
 						R.string.upload_no), flag, 0, 0);
-		DatabaseHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-		DatabaseHelper.queryShowRecords(db, tableName);
+		dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
+		//DatabaseHelper.queryShowRecords(db, tableName);
+		if(NetWorkUtil.isWifiConnected(getActivity()))
+		{
+			CourseRecordInfo criWithID=dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoName);	
+			Log.e(DataConstants.TAG, "to64 "+photoPath);
+			String imgBase64=FileDataHandler.getBase64ImageStr(photoPath);
+			UploadInfoUtil.uploadImg(imgBase64,getActivity(), criWithID, tableName);
+			//new UploadInfoUtil.UploadPictureTask(imgBase64).execute(DataConstants.SERVER_URL);
+			//UploadInfoUtil.uploadQuesImg(getActivity(), criWithID, tableName, imgBase64);
+		}
 		db.close();
 	}
 }

@@ -41,13 +41,21 @@ public class DialogChangeCourseName {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SysCall.error("update");
+				//SysCall.error("update");
 				dialog.dismiss();
 			}
 		});
 	}
 
+	public void setConfirmListener(OnClickListener listener)
+	{
+		saveView.setOnClickListener(listener);
+	}
 	public void show() {
 		dialog.show();
 	}
+	public void cancel() {
+		dialog.dismiss();
+	}
+	
 }

@@ -104,7 +104,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
 	    //Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
 	    FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(width,width);
-	   // holder.img.setLayoutParams(param);
+	   //holder.img.setLayoutParams(param);
 	   Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
 	   if(holder.flag==1)
 	    	{
