@@ -539,13 +539,13 @@ public class ShowFragment extends Fragment {
 		CourseRecordInfo cri = new CourseRecordInfo(photoName, photobase64,
 				remark, date, time, getResources().getString(
 						R.string.state_unknow), getResources().getString(
-						R.string.upload_no), flag, 0, 0);
+						R.string.upload_no), flag, 0, 0,0);
 		dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
 		//DatabaseHelper.queryShowRecords(db, tableName);
 		if(NetWorkUtil.isWifiConnected(getActivity()))
 		{
 			CourseRecordInfo criWithID=dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoName);	
-			Log.e(DataConstants.TAG, "to64 "+photoPath);
+			//Log.e(DataConstants.TAG, "to64 "+photoPath);
 			String imgBase64=FileDataHandler.getBase64ImageStr(photoPath);
 			UploadInfoUtil.uploadImg(imgBase64,getActivity(), criWithID, tableName);
 			//new UploadInfoUtil.UploadPictureTask(imgBase64).execute(DataConstants.SERVER_URL);

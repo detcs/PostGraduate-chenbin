@@ -240,8 +240,7 @@ public class CourseSettingFragment extends Fragment {
 				dir.mkdir();
 				
 			}
-			dbHelper.createCourseTable(getActivity(),db, getResources().getString(R.string.db_profess1_table));
-			if(info.getMath()!=null)
+						if(info.getMath()!=null)
 			{
 				dir=new File(dirPath+"/"+getResources().getString(R.string.dir_math));
 				if(!dir.exists())
@@ -249,7 +248,7 @@ public class CourseSettingFragment extends Fragment {
 					dir.mkdir();
 					
 				}
-				dbHelper.createCourseTable(getActivity(),db, getResources().getString(R.string.db_math_table));
+				
 			}
 			if(info.getProfess2()!=null)
 			{
@@ -259,10 +258,9 @@ public class CourseSettingFragment extends Fragment {
 					dir.mkdir();
 					
 				}
-				dbHelper.createCourseTable(getActivity(),db, getResources().getString(R.string.db_profess2_table));
+				
 			}
-			dbHelper.createCourseTable(getActivity(),db, getResources().getString(R.string.db_english_table));
-			dbHelper.createCourseTable(getActivity(),db, getResources().getString(R.string.db_politics_table));
+			
 			db.close();
 		}   
 	}

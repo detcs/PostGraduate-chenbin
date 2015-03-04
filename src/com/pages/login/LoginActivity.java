@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DateUtil;
 import com.data.util.GloableData;
 import com.data.util.NetWorkUtil;
 import com.app.ydd.R;
@@ -462,6 +463,9 @@ public class LoginActivity extends Activity{
 			
 			if(startDay>0)//not new user
 			{
+				String startDate=DateUtil.getAgoDateStringBefore(DateUtil.getTodayDateString(), startDay);
+				Log.e(DataConstants.TAG,"login "+startDay+" startdate "+ startDate);
+				UserConfigs.storeStartDay(startDate);
 				UserConfigs.storeIsFirstTakePhoto("no");
 				UserConfigs.storeCourseEnglishName(englishName);
 				UserConfigs.storeCoursePoliticsName(politicName);

@@ -447,7 +447,7 @@ public class TodayRecommenderActivity extends Activity{
 								String timeInfo=fileName.split("\\|")[2];
 								String time=fileName.split("\\|")[1]+"|"+timeInfo;
 								Log.e(DataConstants.TAG,"insert time "+time);
-								CourseRecordInfo cri=new CourseRecordInfo(fileName, "", todayRecList.get(index).getRemark(), DateUtil.getTodayDateString(), time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), 0, 0, 1);
+								CourseRecordInfo cri=new CourseRecordInfo(fileName, "", todayRecList.get(index).getRemark(), DateUtil.getTodayDateString(), time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_no), 0, 0, 1,0);
 								DataConstants.dbHelper.insertCourseRecord(getApplicationContext(), db, tableName, cri);
 								if(NetWorkUtil.isWifiConnected(TodayRecommenderActivity.this))
 								{

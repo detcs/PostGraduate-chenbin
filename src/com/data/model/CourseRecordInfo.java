@@ -12,10 +12,11 @@ public class CourseRecordInfo {
 	private int flag;
 	private int ifDeleted;
 	private int ifRecommender;
+	private int ifRemote;//if from remote,photoName=imgId
 	
 	public CourseRecordInfo(String photoName, String photobase64,
 			String remark, String date, String time, String masterState,
-			String ifUpload, int flag, int ifDeleted, int ifRecommender) {
+			String ifUpload, int flag, int ifDeleted, int ifRecommender,int ifRemote) {
 		super();
 		this.photoName = photoName;
 		this.photobase64 = photobase64;
@@ -27,8 +28,17 @@ public class CourseRecordInfo {
 		this.flag = flag;
 		this.ifDeleted = ifDeleted;
 		this.ifRecommender = ifRecommender;
+		this.ifRemote=ifRemote;
 	}
 	
+	public int getIfRemote() {
+		return ifRemote;
+	}
+
+	public void setIfRemote(int ifRemote) {
+		this.ifRemote = ifRemote;
+	}
+
 	public int getDbId() {
 		return dbId;
 	}

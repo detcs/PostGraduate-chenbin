@@ -89,11 +89,13 @@ public class FootPrintFragment extends Fragment{
 			diary.setText(fpInfo.getDiary());
 			ImageUtil.imageLoader.displayImage(ImageUtil.filePre+FileDataHandler.FOOTPRINT_PIC_DIR_PATH+"/"+fpInfo.getFootprintPicName(), bgImg);
 		}
+		
 		else
 		*/
 		{
 			Log.e(DataConstants.TAG, "queryFootPrintInfo==null");
 			requestFootprintInfo(getFootprintURL(date));
+			requestQuesInfo(getQuesURL(date));
 		}
 		appendNote=(TextView) rootView.findViewById(R.id.append_note);
 		appendNote.setTypeface(DataConstants.typeFZLT);
@@ -113,6 +115,70 @@ public class FootPrintFragment extends Fragment{
 		db.close();
 		return rootView;
 	}
+	private String getQuesURL(String date) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MQuesList");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+		pair = new BasicNameValuePair("appid", "nju");
+		params.add(pair);
+		pair = new BasicNameValuePair("userid", UserConfigs.getId());
+		params.add(pair);
+		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
+		params.add(pair);
+		pair = new BasicNameValuePair("date", date);
+		params.add(pair);
+		//pair = new BasicNameValuePair("date", date);
+		//params.add(pair);
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
+
+		}
+		Log.e(DataConstants.TAG, "ques url:" + resultURL);
+		return resultURL;
+	}
+	private void requestQuesInfo(String url) {
+		//final FootprintInfo fpInfo;
+		
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "ques response=" + response);
+						int errorCode;
+						try {
+							errorCode = response.getInt("errorCode");
+							if(errorCode==0)
+							{
+								
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						//Picasso.with(getApplicationContext()).load(DataConstants.DOWNLOAD_URL+todayRecList.get(0).getImgId()).into(recImg);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+						// if (progressDialog.isShowing()
+						// && progressDialog != null) {
+						// progressDialog.dismiss();
+						// }
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+		// return fpInfo;
+	}
+	
 	private void requestFootprintInfo(String url) {
 		//final FootprintInfo fpInfo;
 		

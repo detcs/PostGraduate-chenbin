@@ -49,8 +49,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_master_state)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_if_remote)+" INTEGER,"
     			+context.getResources().getString(R.string.dbcol_time)+" TEXT not null );";          
-        Log.e(DataConstants.TAG, "sql:"+sql);
+       // Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
     public static void createFootprintTable( Context context,SQLiteDatabase db)
@@ -69,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_daysleft)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
-        Log.e(DataConstants.TAG, "sql:"+sql);
+        //Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
     public static void createTodayRecommenderTable( Context context,SQLiteDatabase db)
@@ -86,7 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_rec_if_collect)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_rec_pic_name)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
-        Log.e(DataConstants.TAG, "sql:"+sql);
+       // Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
     public static void insertTodayRecommenderInfoRecord(Context context,SQLiteDatabase db,TodayRecommenderInfo recInfo)
@@ -217,6 +218,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_ifupload), cri.getIfUpload());
     	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
     	cv.put(context.getResources().getString(R.string.dbcol_if_recommender), cri.getIfRecommender());
+    	cv.put(context.getResources().getString(R.string.dbcol_if_remote), cri.getIfRemote());
     	long rowid=db.insert(tableName, null, cv);
     	Log.e(DataConstants.TAG,cri.getDate()+" "+"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
     }
@@ -253,11 +255,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        int  ifDeleted=result.getInt(6);
 	        int  ifRecommender=result.getInt(5);
 	        String date=result.getString(7);
-	        String time=result.getString(10);
+	        String time=result.getString(11);
 	        String masterState=result.getString(8);
 	        String  ifUpload=result.getString(9);
-	        
-	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender);
+	        int ifRemote=result.getInt(10);
+	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender,ifRemote);
 	       cri.setDbId(id);
 	       break; 
 	      } 
@@ -279,11 +281,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        int  ifDeleted=result.getInt(6);
 	        int  ifRecommender=result.getInt(5);
 	        String date=result.getString(7);
-	        String time=result.getString(10);
+	        String time=result.getString(11);
 	        String masterState=result.getString(8);
 	        String  ifUpload=result.getString(9);
-	        
-	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender);
+	        int ifRemote=result.getInt(10);
+	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender,ifRemote);
 	        cri.setDbId(id);
 	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+cri);
 	        result.moveToNext(); 
@@ -486,7 +488,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
     			+context.getResources().getString(R.string.dbcol_search_word)+" TEXT not null , "
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
-        Log.e(DataConstants.TAG, "sql:"+sql);
+        //Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
     }
     public static void insertSearchRecord(Context context,SQLiteDatabase db,String word,String date)

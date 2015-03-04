@@ -182,7 +182,9 @@ public class UploadInfoUtil {
 		pair = new BasicNameValuePair("type",type);
 		params.add(pair);
 		String createDate=cri.getDate();
-		pair = new BasicNameValuePair("createTime",createDate);
+		String[] time=cri.getTime().split("\\|");
+		String createTime=time[0]+" "+time[1];
+		pair = new BasicNameValuePair("createTime",createTime);
 		params.add(pair);
 		pair = new BasicNameValuePair("subject",subject);
 		params.add(pair);

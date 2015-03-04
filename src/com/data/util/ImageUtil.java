@@ -11,11 +11,11 @@ public class ImageUtil {
 
 	public static String filePre="file://";
 	public static  ImageLoader imageLoader ; 
-	
+	public static  DisplayImageOptions options;
 	public static void init(Context context)
 	{
 		imageLoader = ImageLoader.getInstance(); 
-		DisplayImageOptions options=new DisplayImageOptions.Builder()
+		options=new DisplayImageOptions.Builder()
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
 		.showImageOnLoading(R.drawable.note_thumb)

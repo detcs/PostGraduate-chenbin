@@ -7,6 +7,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts.Data;
 import android.app.Fragment;
@@ -27,7 +29,9 @@ import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.DataConstants.PageName;
 import com.data.util.DisplayUtil;
+import com.data.util.ImageUtil;
 import com.data.util.PhotoNamePathUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
 import com.pages.notes.SingleNoteFragment;
@@ -97,6 +101,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    //Log.e(DataConstants.TAG,"pos:"+position+" path:"+ imgPaths.get(position));
 	    Log.e(DataConstants.TAG,"convertView.getWidth"+convertView.getWidth());
 	    int width=(DataConstants.screenWidth-10)/4;
+	    
 	   // Log.e(DataConstants.TAG,"chooseState:"+chooseState);
 //	    if(chooseState)
 //	    	holder.chooseFlag.setVisibility(View.VISIBLE);
@@ -104,12 +109,23 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
 	    //Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
 	    FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(width,width);
-	   //holder.img.setLayoutParams(param);
-	   Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
+	    holder.img.setLayoutParams(param);
+	   //Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
+	   BitmapFactory.Options opt=new BitmapFactory.Options();
+	   opt.outHeight=width;
+	   opt.outWidth=width;
+	    DisplayImageOptions opts=new DisplayImageOptions.Builder()
+		.cacheInMemory(true)
+		.cacheOnDisk(true)
+		.showImageOnLoading(R.drawable.note_thumb)
+		.decodingOptions(opt)
+		.build();
+	    ImageUtil.imageLoader.displayImage(ImageUtil.filePre+imgPaths.get(position), holder.img,opts);
 	   if(holder.flag==1)
 	    	{
 				holder.importanceFlag.setVisibility(View.VISIBLE);
-				Picasso.with(context).load(R.drawable.importance).into(holder.importanceFlag); 
+				holder.importanceFlag.setImageDrawable(DisplayUtil.drawableTransfer(context, R.drawable.importance));
+				//Picasso.with(context).load(R.drawable.importance).into(holder.importanceFlag); 
 			}
 	  
 	   if(chooseState)

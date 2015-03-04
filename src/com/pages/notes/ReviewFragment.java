@@ -178,9 +178,9 @@ public class ReviewFragment extends Fragment{
 		db = DataConstants.dbHelper.getReadableDatabase();
 	}
 	@Override
-	public void onPause() {
+	public void onStop() {
 		// TODO Auto-generated method stub
-		super.onPause();
+		super.onStop();
 		db.close();
 	}
 	private void initTitleView()
@@ -340,7 +340,7 @@ public class ReviewFragment extends Fragment{
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Calendar calendar = Calendar.getInstance();
 				String date = sdf.format(calendar.getTime());
-				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+				//SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(getActivity(), db, tableName,getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoNames.get(index));
 				remarkContext.setText(editRemark.getText().toString());
 				//db.close();

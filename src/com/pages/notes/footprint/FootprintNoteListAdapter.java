@@ -96,12 +96,7 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-//		if(photoPaths.size()==0)
-//		{
-//			convertView.setVisibility(View.INVISIBLE);
-//			AbsListView.LayoutParams params=new  AbsListView.LayoutParams(0,0);
-//			convertView.setLayoutParams(params);
-//		}
+
 		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,false,tableNames.get(position),PageName.NoteFootprint);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    return convertView;

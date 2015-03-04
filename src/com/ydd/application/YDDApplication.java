@@ -82,7 +82,12 @@ public class YDDApplication extends Application {
 		// getResources().getString(R.string.db_footprint_table)))
 		DataConstants.dbHelper.createFootprintTable(getApplicationContext(), db);
 		DataConstants.dbHelper.createSearchRecordsTable(getApplicationContext(), db);
-		DataConstants.dbHelper.createTodayRecommenderTable(getApplicationContext(), db);		
+		DataConstants.dbHelper.createTodayRecommenderTable(getApplicationContext(), db);	
+		DataConstants.dbHelper.createCourseTable(getApplicationContext(),db, getResources().getString(R.string.db_profess1_table));
+		DataConstants.dbHelper.createCourseTable(getApplicationContext(),db, getResources().getString(R.string.db_math_table));
+		DataConstants.dbHelper.createCourseTable(getApplicationContext(),db, getResources().getString(R.string.db_profess2_table));
+		DataConstants.dbHelper.createCourseTable(getApplicationContext(),db, getResources().getString(R.string.db_english_table));
+		DataConstants.dbHelper.createCourseTable(getApplicationContext(),db, getResources().getString(R.string.db_politics_table));
 		db.close();
 	}
 	private void initDBandDirMap()
