@@ -16,6 +16,7 @@ import com.data.model.DatabaseHelper;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.DisplayUtil;
+import com.data.util.ImageUtil;
 import com.data.util.NetWorkUtil;
 import com.data.util.SysCall;
 import com.data.util.UploadInfoUtil;
@@ -536,7 +537,7 @@ public class ShowFragment extends Fragment {
 			int flag,String photoPath) {
 		DatabaseHelper dbHelper = DataConstants.dbHelper;
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		CourseRecordInfo cri = new CourseRecordInfo(photoName, photobase64,
+		CourseRecordInfo cri = new CourseRecordInfo(photoName,ImageUtil.filePre+photoPath,tableName, photobase64,
 				remark, date, time, getResources().getString(
 						R.string.state_unknow), getResources().getString(
 						R.string.upload_no), flag, 0, 0,0);

@@ -65,10 +65,10 @@ public class FootPrintActivity extends FragmentActivity{
 			String tempDate=sdf.format(calendar.getTime());
 			dates.add(tempDate);
 		}
-		for(String d:dates)
-		{
-			Log.e(DataConstants.TAG,d);
-		}
+//		for(String d:dates)
+//		{
+//			Log.e(DataConstants.TAG,d);
+//		}
 		ImageView firstUseBg=(ImageView) findViewById(R.id.footprint_first_use_bg);
 		if(dates.size()==0)
 		{
@@ -118,6 +118,7 @@ public class FootPrintActivity extends FragmentActivity{
 				fpFrag.setArguments(b);
 				fraList.add(fpFrag);
 			}
+			Log.e(DataConstants.TAG, "tab childs "+mTabWidget.getChildCount());
 			viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fraList));
 			viewPager.setOnPageChangeListener(mPageChangeListener);
 			viewPager.setCurrentItem(0);
@@ -137,6 +138,8 @@ public class FootPrintActivity extends FragmentActivity{
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
+			Log.e(DataConstants.TAG, "tab index:"+index+" "+(viewPager==null));
+			mTabWidget.setCurrentTab(index);
 			viewPager.setCurrentItem(index);
 			setSelectedTabColor(index);
 			

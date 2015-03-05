@@ -3,7 +3,9 @@ package com.pages.notes;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
+import com.data.util.UploadInfoUtil;
 import com.squareup.picasso.Picasso;
 
 import android.os.Bundle;
@@ -27,10 +29,17 @@ public class TaskCompleteFragment extends Fragment{
 	TextView insistLearning;
 	TextView clockDays;
 	TextView goClock;
+	int type;
+	String subject;
+	String date;
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		initTitleView();
 		View rootView = inflater.inflate(R.layout.fragment_task_complete, container, false);
 		int countClock=UserConfigs.getClockDays();
+		Bundle bundle=getArguments();
+		type=bundle.getInt("subject_type");
+		subject=bundle.getString("subject");
+		date=bundle.getString("clock_date");
 		clockDays=(TextView) rootView.findViewById(R.id.insist_clock_days);
 		clockDays.setText(countClock+getResources().getString(R.string.day));
 		goClock=(TextView)rootView.findViewById(R.id.goto_clock_btn);
@@ -39,8 +48,9 @@ public class TaskCompleteFragment extends Fragment{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				goClock.setBackgroundResource(R.drawable.clock_click);
+				goClock.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.clock_click));
 				UserConfigs.storeClockDay();
+				UploadInfoUtil.uploadClock(getActivity(), UploadInfoUtil.getUploadClockURL(type, subject, date));
 				getActivity().finish();
 				//Picasso.with(getActivity()).load(R.drawable.clock_click).into(goClock);
 			}

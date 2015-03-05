@@ -2,10 +2,12 @@ package com.pages.notes.timeline;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
 import com.app.ydd.R;
+import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.DataConstants.PageName;
@@ -37,14 +39,16 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	String tableName;
 	PhotoShowGridAdapter photoShowAdapter;
 	boolean chooseState;
-	
- 	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates) {
+	//List<CourseRecordInfo> photoInfos;
+	HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap;
+ 	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates,HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap) {
 		super();
 		//this.paths = paths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.dates=dates;
 		this.tableName=tableName;
+		this.dateAndPhotoInfosMap=dateAndPhotoInfosMap;
 	}
 
  	public void setDates(List<String> dates)
@@ -94,7 +98,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		 for(String name:photoNames)
 			photoPaths.add(dirPath+"/"+name);
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,chooseState,tableName,PageName.NoteReviewChoose);
+		photoShowAdapter=new PhotoShowGridAdapter(context,tableName,dateAndPhotoInfosMap.get(dates.get(position)),chooseState,PageName.NoteReviewChoose);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    holder.day.setText(dates.get(position));
 	    holder.day.setTypeface(DataConstants.typeFZLT);

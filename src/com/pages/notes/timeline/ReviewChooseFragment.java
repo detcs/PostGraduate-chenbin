@@ -14,6 +14,7 @@ import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.DisplayUtil;
 import com.data.util.PhotoNamePathUtil;
+import com.data.util.UploadInfoUtil;
 import com.pages.notes.ReviewFragment;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -62,7 +63,7 @@ public class ReviewChooseFragment extends Fragment{
 	TextView titleCenter;
 	ExerciseTimeLineAdapter timeLineAdapter;
 	boolean chooseState=false;
-	static List<String> choosedPhotoPaths;
+	static List<CourseRecordInfo> choosedRecords;
 	String targetTransferCourse;
 	@Override
 	public View onCreateView(final LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
@@ -72,16 +73,29 @@ public class ReviewChooseFragment extends Fragment{
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
 		final List<String> dates=new ArrayList<String>();
+		HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap=new HashMap<String, List<CourseRecordInfo>>();
 		for(String date:dateSet)
+		{
 			dates.add(date);
-		//Log.e(DataConstants.TAG, dates.get(0)+"--"+dates.get(1));
-		Collections.reverse(dates);
-		//Log.e(DataConstants.TAG, dates.get(0)+"--"+dates.get(1));
+			List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(getActivity(), db, tableName, date);
+			if(photoNames.size()>0)
+			{
+				List<CourseRecordInfo> infos=new ArrayList<CourseRecordInfo>();
+				for(String photoName:photoNames)
+				{
+					CourseRecordInfo cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoName);
+					infos.add(cri);
+				}
+				dateAndPhotoInfosMap.put(date, infos);
+			}
+		}
 		db.close();
+		Collections.reverse(dates);
 		bgLayout=(LinearLayout) rootView.findViewById(R.id.reviewchoose_bg);
 		layout=(RelativeLayout)rootView.findViewById(R.id.reviewchoose_layout);
 		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);	
-		timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates);
+	
+		timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates,dateAndPhotoInfosMap);
 		exerciseTimeLine.setAdapter(timeLineAdapter);
 		reviewEbbin=(Button)rootView.findViewById(R.id.ebbinghaus_review);
 		reviewEbbin.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
@@ -142,7 +156,7 @@ public class ReviewChooseFragment extends Fragment{
 				if(choose.getText().toString().equals(getResources().getString(R.string.choose)))
 				{
 					chooseState=true;
-					choosedPhotoPaths=new ArrayList<String>();
+					choosedRecords=new ArrayList<CourseRecordInfo>();
 					timeLineAdapter.updateChooseState(chooseState);
 					choose.setText(getResources().getString(R.string.cancel));
 					transferDelLayout.setVisibility(View.VISIBLE);
@@ -242,17 +256,18 @@ public class ReviewChooseFragment extends Fragment{
 				String photoname=null;
 				CourseRecordInfo cri=null;
 				String targetTable=courseNameTableMap.get(targetTransferCourse);
-				for(String path:choosedPhotoPaths)
+				for(CourseRecordInfo choosedRecord:choosedRecords)
 				{
-					String[] info=path.split("/");
-					int len=info.length;
-					photoname=info[len-1];
+					
+					photoname=choosedRecord.getPhotoName();
 					cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
 					Log.e(DataConstants.TAG,cri.toString());
 					DataConstants.dbHelper.deleteCourseRecordByPhotoName(getActivity(), db, tableName, photoname);
+					cri.setTableName(targetTable);
 					DataConstants.dbHelper.insertCourseRecord(getActivity(), db, targetTable, cri);
-					FileDataHandler.transferFile(path,FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(targetTable)+"/"+photoname);
-					
+					//FileDataHandler.transferFile(path,FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(targetTable)+"/"+photoname);
+					//UploadInfoUtil.upl
+					UploadInfoUtil.uploadQues(getActivity(), cri, targetTable, cri.getPhotoName());
 				}
 				TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
 				final List<String> dates=new ArrayList<String>();
@@ -295,12 +310,12 @@ public class ReviewChooseFragment extends Fragment{
 				// TODO Auto-generated method stub
 				SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 				String photoname=null;
-				for(String path:choosedPhotoPaths)
+				for(CourseRecordInfo cr:choosedRecords)
 				{
 //					String[] info=path.split("/");
 //					int len=info.length;
 //					photoname=info[len-1];
-					photoname=PhotoNamePathUtil.pathToPhotoName(path);
+					photoname=cr.getPhotoName();//PhotoNamePathUtil.pathToPhotoName(path);
 					DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(getActivity(), db, tableName, photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
 				}
 				db.close();

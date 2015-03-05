@@ -6,15 +6,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import com.app.ydd.R;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
 import com.data.model.FileDataHandler;
 import com.data.model.ImportanceFlagOnClickListener;
 import com.data.util.DisplayUtil;
+import com.data.util.ImageUtil;
 import com.data.util.SysCall;
 import com.pages.viewpager.MainActivity;
 import com.squareup.picasso.Picasso;
@@ -57,6 +60,7 @@ public class ReviewFragment extends Fragment{
 	
 	SQLiteDatabase db;
 	String tableName;
+	String date;
 	int index=0;
 	int totalNum=0;
 	@Override
@@ -78,7 +82,7 @@ public class ReviewFragment extends Fragment{
 		else
 		{
 			initTitleView();
-			String date=bundle.getString("date");
+			date=bundle.getString("date");
 			tableName=getArguments().getString("course_table_name");
 			db = DataConstants.dbHelper.getReadableDatabase();
 			
@@ -106,15 +110,20 @@ public class ReviewFragment extends Fragment{
 				photoNames.addAll(dates);
 			}
 			List<String> photoPaths=new ArrayList<String>();
-			String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableName);
+			//String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableName);
 			reviewImgPaths=new ArrayList<String>();
 			for(String name:photoNames)
-				reviewImgPaths.add(dirPath+"/"+name);
+			{
+				CourseRecordInfo cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, name);
+				//reviewImgPaths.add(dirPath+"/"+name);
+				reviewImgPaths.add(cri.getPhotoPath());
+			}
 			totalNum=reviewImgPaths.size();
 			progressBar.setMax(totalNum);
 			progressBar.setProgress(1);
 			titleCenter.setText(getResources().getString(R.string.reverse_review)+" ("+(index+1)+"/"+totalNum+" )");
-			Picasso.with(getActivity()).load(new File(reviewImgPaths.get(0))).into(reviewImg);
+			//Picasso.with(getActivity()).load(new File(reviewImgPaths.get(0))).into(reviewImg);
+			ImageUtil.imageLoader.displayImage(reviewImgPaths.get(0), reviewImg);
 			leftBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_master)));
 			rightBtn.setOnClickListener(new CourseMasterListener(photoNames.get(index), tableName, getResources().getString(R.string.state_unmaster)));
 			
@@ -126,9 +135,29 @@ public class ReviewFragment extends Fragment{
 	private void jumpToCompleteFragment()
 	{
 		Fragment fragment=new TaskCompleteFragment();
-//		Bundle bundle = new Bundle();  
-//        bundle.putString("type", "");  
-//        fragment.setArguments(bundle);
+		HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
+		String course=null;
+		for(String key:map.keySet())
+		{
+			if(map.get(key).equals(tableName))
+				course=key;
+		}
+		int type=0;
+		if(tableName.equals(getResources().getString(R.string.db_english_table)))
+			type=1;
+		else if(tableName.equals(getResources().getString(R.string.db_politics_table)))
+			type=2;
+		else if(tableName.equals(getResources().getString(R.string.db_math_table)))
+			type=3;
+		else if(tableName.equals(getResources().getString(R.string.db_profess1_table)))
+			type=4;
+		else if(tableName.equals(getResources().getString(R.string.db_profess2_table)))
+			type=5;
+		Bundle bundle = new Bundle();  		
+        bundle.putInt("subject_type", type);
+        bundle.putString("subject", course);
+        bundle.putString("clock_date", date);
+        fragment.setArguments(bundle);
 		FragmentManager fm=getActivity().getFragmentManager();
 		FragmentTransaction trans = fm.beginTransaction();  
 		trans.replace(R.id.exercise_frame, fragment);
@@ -158,11 +187,13 @@ public class ReviewFragment extends Fragment{
 				progressBar.setProgress(progressBar.getProgress()+1);
 				if(index==reviewImgPaths.size())
 				{
+					
 					jumpToCompleteFragment();
 				}
 				else
 				{
-					Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).into(reviewImg);
+					ImageUtil.imageLoader.displayImage(reviewImgPaths.get(index), reviewImg);
+					//Picasso.with(getActivity()).load(new File(reviewImgPaths.get(index))).into(reviewImg);
 					initNoteEditView();
 				}
 				

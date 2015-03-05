@@ -16,9 +16,13 @@ import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
+import com.data.util.ImageUtil;
 import com.data.util.PhotoNamePathUtil;
 import com.data.util.PhotoNameTableInfo;
 import com.data.util.SysCall;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
 import com.view.util.BitmapUtil;
@@ -67,12 +71,14 @@ public class PhotoBrowseActivity extends Activity{
 	int windowHeight=DataConstants.screenHeight;
 	int stateHeight=20;
 	//ArrayList<String> paths;
-	ArrayList<PhotoNameTableInfo> photoInfos;
+	//ArrayList<PhotoNameTableInfo> photoInfos;
+	List<CourseRecordInfo> courseInfos;
 	//ArrayList<TextContentShowUtil> textUtils;
 	//TextContentShowUtil textUtil;
 	int currentIndex=0;
 	SQLiteDatabase db=null;
-	
+	DragImageView dragImageView;
+	View content;
 	//text
 	TextView remarkContent; 
 	//edit 
@@ -87,80 +93,25 @@ public class PhotoBrowseActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo_browse);
 		Bundle bundle=getIntent().getBundleExtra("photo_show_bundle");
-		String date=bundle.getString("date");
-		String tag=bundle.getString("jump_tag");
+//		String date=bundle.getString("date");
+//		String tag=bundle.getString("jump_tag");
 		PageName fromPage=(PageName) bundle.get("from_page");
-		String tableName=bundle.getString("table_name");
+//		String tableName=bundle.getString("table_name");
 		db = DataConstants.dbHelper.getReadableDatabase();
 		
-		photoInfos=new ArrayList<PhotoNameTableInfo>();
-		//textUtils=new ArrayList<TextContentShowUtil>();
+		courseInfos=(List<CourseRecordInfo>) getIntent().getSerializableExtra("courseInfos");
 		PhotoNameTableInfo photoInfo=null;
-		//if(tag.equals(getResources().getString(R.string.jump_tag_footprint)))// current date all course
-		if(fromPage==PageName.NoteFootprint)
-		{
-			HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
-			
-			for(String course:map.keySet())
-			{
-				
-				String table=map.get(course);
-				List<String> result=DataConstants.dbHelper.queryPhotoNamesAtDate(getApplicationContext(), db, table, date);
-				String dir=DataConstants.TABLE_DIR_MAP.get(table);
-				String path;
-				for(String name:result)
-				{
-					path=FileDataHandler.APP_DIR_PATH+"/"+dir+"/"+name;
-					//paths.add(path);
-					photoInfo=new PhotoNameTableInfo(name, table, path);
-					photoInfos.add(photoInfo);
-				}
-			}
-		}
-		else if(fromPage==PageName.NoteReviewChoose)// three days current course
-		{
-			String agoDate="";
-			for(int i=0;i<3;i++)
-			{
-				agoDate=DateUtil.getAgoDateStringBefore(date, i);
-				List<String> result=DataConstants.dbHelper.queryPhotoNamesAtDate(getApplicationContext(), db, tableName, agoDate);
-				String dir=DataConstants.TABLE_DIR_MAP.get(tableName);
-				String path;
-				for(String name:result)
-				{
-					path=FileDataHandler.APP_DIR_PATH+"/"+dir+"/"+name;
-					//paths.add(path);
-					photoInfo=new PhotoNameTableInfo(name, tableName, path);
-					photoInfos.add(photoInfo);
-				}
-			}
-		}
-		
-			
-			//firstUseBg.setVisibility(View.INVISIBLE);
 			contents = new ArrayList<View>();
 			images = new ArrayList<DragImageView>();
-			
-			
-			View content;
-			DragImageView dragImageView;
 			Bitmap bmp=null;
 			BitmapFactory.Options opt=new BitmapFactory.Options();
 			opt.inSampleSize=4;
 			//Bitmap bmp = BitmapUtil.ReadBitmapById(this, R.drawable.today_background,windowWidth, windowHeight);
-			for (int i = 0; i < photoInfos.size(); i++) {
+			for (int i = 0; i < courseInfos.size(); i++) {
 				content = LayoutInflater.from(this).inflate(R.layout.content_layout, null);
-	
 				dragImageView = (DragImageView) content.findViewById(R.id.div_main);
-				bmp=BitmapFactory.decodeFile(photoInfos.get(i).getPath(), opt);
-				dragImageView.setImageBitmap(bmp);
-				dragImageView.setmActivity(this);// ע��Activity.
-				dragImageView.setLayout(content);
-				dragImageView.setBumpHeight(300);
-				dragImageView.setScreen_H(windowHeight-stateHeight);
-				dragImageView.setScreen_W(windowWidth);
-				images.add(dragImageView);
 				contents.add(content);
+				
 			}
 			
 			viewPager=(ViewPager) findViewById(R.id.browse_viewpager);
@@ -172,7 +123,7 @@ public class PhotoBrowseActivity extends Activity{
 					// TODO Auto-generated method stub
 					return arg0 == arg1;
 				}
-	
+				
 				@Override
 				public int getCount() {
 					// TODO Auto-generated method stub
@@ -194,6 +145,49 @@ public class PhotoBrowseActivity extends Activity{
 				@Override
 				public Object instantiateItem(View container, int position) {
 					((ViewPager)container).addView(contents.get(position));
+					View view=contents.get(position);
+					final DragImageView img=(DragImageView) view.findViewById(R.id.div_main);
+					BitmapFactory.Options opt=new BitmapFactory.Options();
+					opt.inSampleSize=8;
+					DisplayImageOptions opts=new DisplayImageOptions.Builder()
+					.cacheInMemory(true)
+					.cacheOnDisk(true)
+					.showImageOnLoading(R.drawable.note_thumb)
+					.decodingOptions(opt)
+					.build();
+					ImageUtil.imageLoader.loadImage(courseInfos.get(position).getPhotoPath(), opts,new ImageLoadingListener() {
+						
+						@Override
+						public void onLoadingStarted(String arg0, View arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
+							// TODO Auto-generated method stub
+							//bmp=BitmapFactory.decodeFile(courseInfos.get(i).getPhotoPath(), opt);
+							img.setImageBitmap(bitmap);
+							img.setmActivity(PhotoBrowseActivity.this);// ע��Activity.
+							img.setLayout(content);
+							img.setBumpHeight(300);
+							img.setScreen_H(windowHeight-stateHeight);
+							img.setScreen_W(windowWidth);
+							
+						}
+						
+						@Override
+						public void onLoadingCancelled(String arg0, View arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
 					return contents.get(position);
 				}
 	
@@ -229,11 +223,11 @@ public class PhotoBrowseActivity extends Activity{
 					// TODO Auto-generated method stub
 					currentIndex=arg0;
 					
-					String blurPath=FileDataHandler.photoPathToBlurPath(photoInfos.get(currentIndex).getPath());
+					String blurPath=FileDataHandler.photoPathToBlurPath(courseInfos.get(currentIndex).getPhotoPath());
 					File blurFile=new File(blurPath);
 					if(blurFile.exists())
 						Picasso.with(getApplicationContext()).load(blurFile).into(flurImg);
-					CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getApplicationContext(), db, photoInfos.get(currentIndex).getTableName(), photoInfos.get(currentIndex).getPhotoName());
+					CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(getApplicationContext(), db, courseInfos.get(currentIndex).getTableName(), courseInfos.get(currentIndex).getPhotoName());
 					String text=cri.getRemark();
 					remarkContent.setText(text);
 					//textUtil.setTextContent(text, true);
@@ -243,7 +237,7 @@ public class PhotoBrowseActivity extends Activity{
 					else
 						Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
 					boolean currentFlag=cri.getFlag()==1?true:false;
-					importantImg.setOnClickListener(new ImportanceFlagOnClickListener(photoInfos.get(currentIndex).getPhotoName(),photoInfos.get(currentIndex).getTableName(), PhotoBrowseActivity.this,importantImg,currentFlag,PageName.NoteSpec));
+					importantImg.setOnClickListener(new ImportanceFlagOnClickListener(courseInfos.get(currentIndex).getPhotoName(),courseInfos.get(currentIndex).getTableName(), PhotoBrowseActivity.this,importantImg,currentFlag,PageName.NoteSpec));
 				}
 				
 				@Override
@@ -295,8 +289,8 @@ public class PhotoBrowseActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				String photoname=photoInfos.get(currentIndex).getPhotoName();
-				DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(PhotoBrowseActivity.this, db,photoInfos.get(currentIndex).getTableName(), photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
+				String photoname=courseInfos.get(currentIndex).getPhotoName();
+				DataConstants.dbHelper.updateCourseRecordOnIntColByPhotoName(PhotoBrowseActivity.this, db,courseInfos.get(currentIndex).getTableName(), photoname, getResources().getString(R.string.dbcol_photo_delete), 1);
 				contents.remove(currentIndex);
 				pageAdapter.notifyDataSetChanged();
 				viewPager.setCurrentItem(currentIndex);
@@ -350,8 +344,8 @@ public class PhotoBrowseActivity extends Activity{
 		remarkContent=(TextView)findViewById(R.id.text_remark_content);
 		TextView extendBtn=(TextView)findViewById(R.id.extends_img);
 		remarkContent.setTypeface(DataConstants.typeFZLT);
-		String tableName=photoInfos.get(currentIndex).getTableName();
-		String photoName=photoInfos.get(currentIndex).getPhotoName();
+		String tableName=courseInfos.get(currentIndex).getTableName();
+		String photoName=courseInfos.get(currentIndex).getPhotoName();
 		CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(this, db, tableName, photoName);
 		String text=cri.getRemark();
 		remarkContent.setText(text);
@@ -422,7 +416,7 @@ public class PhotoBrowseActivity extends Activity{
 				Calendar calendar = Calendar.getInstance();
 				String date = sdf.format(calendar.getTime());
 				//SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(PhotoBrowseActivity.this, db, photoInfos.get(currentIndex).getTableName(),getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), photoInfos.get(currentIndex).getPhotoName());
+				DataConstants.dbHelper.updateCourseRecordOnStringColByPhotoName(PhotoBrowseActivity.this, db, courseInfos.get(currentIndex).getTableName(),getResources().getString(R.string.dbcol_remark), editRemark.getText().toString(), courseInfos.get(currentIndex).getPhotoName());
 				//textUtils.get(currentIndex)
 				//textUtil.setTextContent(editRemark.getText().toString(),true);
 				remarkContent.setText(editRemark.getText().toString());

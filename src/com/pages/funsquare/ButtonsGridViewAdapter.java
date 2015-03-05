@@ -88,22 +88,22 @@ public class ButtonsGridViewAdapter extends BaseAdapter {
 			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_essence));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.square))) {
-			holder.img.setImageResource(R.drawable.function_square);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_square));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.backup))) {
-			holder.img.setImageResource(R.drawable.function_backup);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_backup));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.personal_center))) {
-			holder.img.setImageResource(R.drawable.function_person_center);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_person_center));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.vip))) {
-			holder.img.setImageResource(R.drawable.function_vip);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_vip));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.print))) {
-			holder.img.setImageResource(R.drawable.function_print);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_print));
 		} else if (names.get(position).equals(
 				context.getResources().getString(R.string.contact_us))) {
-			holder.img.setImageResource(R.drawable.function_contact);
+			holder.img.setBackground(DisplayUtil.drawableTransfer(context, R.drawable.function_contact));
 		}
 
 		if (names.get(position).equals(

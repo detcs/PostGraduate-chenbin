@@ -424,5 +424,51 @@ public class UploadInfoUtil {
 		Log.e(DataConstants.TAG, "Upload course:" + resultURL);
 		return resultURL;
 	}
-	
+	public static String getUploadClockURL(int type,String subject,String date) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MSign");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+		pair = new BasicNameValuePair("appid", "nju");
+		params.add(pair);
+		pair = new BasicNameValuePair("userid", UserConfigs.getId());
+		params.add(pair);
+		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
+		params.add(pair);
+		pair = new BasicNameValuePair("subject",subject);
+		params.add(pair);
+		pair = new BasicNameValuePair("date", date);
+		params.add(pair);
+		pair = new BasicNameValuePair("type", type+"");
+		params.add(pair);
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
+
+		}
+		Log.e(DataConstants.TAG, "Upload clock:" + resultURL);
+		return resultURL;
+	}
+	public static void uploadClock(Context context,String url)
+	{
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				Log.e(DataConstants.TAG, "upload clock response=" + response);
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError arg0) {
+				// tv_1.setText(arg0.toString());
+				Log.i(DataConstants.TAG,
+						"sorry,Error" + arg0.toString());
+			
+			}
+		});
+		GloableData.requestQueue.add(jsonObjectRequest);
+	}
 }

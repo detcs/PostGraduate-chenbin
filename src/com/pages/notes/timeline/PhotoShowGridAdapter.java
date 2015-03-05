@@ -1,8 +1,16 @@
 package com.pages.notes.timeline;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,49 +32,63 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.app.ydd.R;
+import com.data.model.CourseRecordAndPathInfo;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.FileDataHandler;
+import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
+import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
+import com.data.util.GloableData;
 import com.data.util.ImageUtil;
+import com.data.util.NetWorkUtil;
 import com.data.util.PhotoNamePathUtil;
+import com.data.util.PhotoNameTableInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
 import com.pages.notes.SingleNoteFragment;
+import com.pages.notes.footprint.FootprintNoteListAdapter;
 import com.pages.notes.footprint.PhotoBrowseActivity;
 import com.squareup.picasso.Picasso;
 
 public class PhotoShowGridAdapter extends BaseAdapter
 {
 
-	List<String> imgPaths;
+	//List<String> imgPaths;
 	Context context;
 	LayoutInflater mInflater;
 	boolean chooseState=false;
+	//List<CourseRecordInfo> courseInfos;
+	List<CourseRecordInfo> photoInfos;
 	String tableName;
 	PageName fromPage;
-	public PhotoShowGridAdapter(Context context,List<String> imgPaths,boolean chooseState,String tableName,PageName fromPage) {
+	public PhotoShowGridAdapter(Context context,String tableName,List<CourseRecordInfo> photoInfos,boolean chooseState,PageName fromPage) {
 		super();
-		this.imgPaths = imgPaths;
+		//this.imgPaths = imgPaths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.chooseState=chooseState;
 		this.tableName=tableName;
+		this.photoInfos=photoInfos;
 		this.fromPage=fromPage;
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return imgPaths.size();
+		return photoInfos.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return imgPaths.get(arg0);
+		return photoInfos.get(arg0);
 	}
 
 	@Override
@@ -87,7 +109,8 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	        holder.chooseFlag=(ImageView) convertView.findViewById(R.id.choose_flag); 
 	        holder.importanceFlag=(ImageView) convertView.findViewById(R.id.importance_flag); 
 	        SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-	 	    CourseRecordInfo cri= DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, PhotoNamePathUtil.pathToPhotoName(imgPaths.get(position)));
+	 	    CourseRecordInfo cri=photoInfos.get(position);
+	 	    		// DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, PhotoNamePathUtil.pathToPhotoName(imgPaths.get(position)));
 	        if(cri.getFlag()==1)
 	        	holder.flag=1;
 	        else
@@ -99,7 +122,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    }
 	    // Bind the data efficiently with the holder.
 	    //Log.e(DataConstants.TAG,"pos:"+position+" path:"+ imgPaths.get(position));
-	    Log.e(DataConstants.TAG,"convertView.getWidth"+convertView.getWidth());
+	    //Log.e(DataConstants.TAG,"convertView.getWidth"+convertView.getWidth());
 	    int width=(DataConstants.screenWidth-10)/4;
 	    
 	   // Log.e(DataConstants.TAG,"chooseState:"+chooseState);
@@ -120,7 +143,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		.showImageOnLoading(R.drawable.note_thumb)
 		.decodingOptions(opt)
 		.build();
-	    ImageUtil.imageLoader.displayImage(ImageUtil.filePre+imgPaths.get(position), holder.img,opts);
+	    ImageUtil.imageLoader.displayImage(photoInfos.get(position).getPhotoPath(), holder.img,opts);
 	   if(holder.flag==1)
 	    	{
 				holder.importanceFlag.setVisibility(View.VISIBLE);
@@ -136,7 +159,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //				Picasso.with(context).load(R.drawable.importance).into(holder.chooseFlag); 
 //			}
 	    	holder.img.setEnabled(true);
-	    	holder.img.setOnClickListener(new ChooseStateButtonClickListener(imgPaths.get(position), holder));
+	    	holder.img.setOnClickListener(new ChooseStateButtonClickListener(photoInfos.get(position), holder));
 	    }
 	    else
 	    {   
@@ -150,7 +173,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    		if(holder.chooseFlag.getVisibility()==View.VISIBLE)
 	    			holder.chooseFlag.setVisibility(View.INVISIBLE);
 	    	}
-	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(imgPaths.get(position)));
+	    	holder.img.setOnClickListener(new CheckSingleNoteClickListener(photoInfos.get(position)));
 	    }
 		
 	    return convertView; 
@@ -166,28 +189,32 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	class CheckSingleNoteClickListener implements OnClickListener
 	{
 
-		String path;
+		CourseRecordInfo cri;
 		
-		public CheckSingleNoteClickListener(String path) {
+		
+		public CheckSingleNoteClickListener(CourseRecordInfo cri) {
 			super();
-			this.path = path;
+			this.cri = cri;
 		}
+
+	
 
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			jumpToReview(path);
+			jumpToReview(cri);
 		}
 		
 	}
 	class ChooseStateButtonClickListener implements OnClickListener
 	{
 
-		String path;
+		CourseRecordInfo record;
+		//String path;
 		GridViewHolder holder;
-		public ChooseStateButtonClickListener(String path,GridViewHolder holder) {
+		public ChooseStateButtonClickListener(CourseRecordInfo cri,GridViewHolder holder) {
 			super();
-			this.path = path;
+			this.record=cri;
 			this.holder=holder;
 		}
 
@@ -197,8 +224,8 @@ public class PhotoShowGridAdapter extends BaseAdapter
 			if(holder.chooseFlag.getVisibility()==View.INVISIBLE)
 			{
 				holder.chooseFlag.setVisibility(View.VISIBLE);
-				ReviewChooseFragment.choosedPhotoPaths.add(path);
-				Log.e(DataConstants.TAG, "choose add "+ReviewChooseFragment.choosedPhotoPaths.size());
+				ReviewChooseFragment.choosedRecords.add(record);
+				//Log.e(DataConstants.TAG, "choose add "+ReviewChooseFragment.choosedPhotoPaths.size());
 				
 			}
 			else
@@ -206,49 +233,242 @@ public class PhotoShowGridAdapter extends BaseAdapter
 				
 				{
 					holder.chooseFlag.setVisibility(View.INVISIBLE);
-					ReviewChooseFragment.choosedPhotoPaths.remove(path);
+					ReviewChooseFragment.choosedRecords.remove(record);
 				}
 					
 				
-				Log.e(DataConstants.TAG, "choose remove "+ReviewChooseFragment.choosedPhotoPaths.size());
+				//Log.e(DataConstants.TAG, "choose remove "+ReviewChooseFragment.choosedPhotoPaths.size());
 				
 			}
 		}
 		
 	}
-	public void jumpToReview(String path)
+	public void jumpToReview(CourseRecordInfo cri)
 	{
-		/*
-		Fragment fragment=new SingleNoteFragment();
-		Bundle bundle = new Bundle();  
-        bundle.putString("type", "");
-        bundle.putString("single_path", path);
-        bundle.putString("single_tablename",tableName);
-       // Log.e(DataConstants.TAG,"send singlepath:"+path);
-       // bundle.putString("course_table_name", tableName);
-        fragment.setArguments(bundle);
-		FragmentManager fm=((ExerciseActivity)context).getFragmentManager();
-		FragmentTransaction trans = fm.beginTransaction();  
-		trans.replace(R.id.exercise_frame, fragment);
-		trans.addToBackStack(null);
-		trans.commit();
-		*/
+		//String[] info=path.split("/");
+		String date=cri.getDate();
+//		List<CourseRecordInfo> courseInfos=new ArrayList<CourseRecordInfo>();
+//		//List<PhotoNameTableInfo> photoInfos=new ArrayList<PhotoNameTableInfo>();
+//		//textUtils=new ArrayList<TextContentShowUtil>();
+//		//PhotoNameTableInfo photoInfo=null;
+//		CourseRecordInfo courseInfo=null;
+//		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+//		if(fromPage==PageName.NoteFootprint)
+//		{
+//			HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
+//			
+//			for(String course:map.keySet())
+//			{
+//				
+//				String table=map.get(course);
+//				List<String> result=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, table, date);
+//				String dir=DataConstants.TABLE_DIR_MAP.get(table);
+//				String path;
+//				for(String name:result)
+//				{
+//					path=FileDataHandler.APP_DIR_PATH+"/"+dir+"/"+name;
+//					//paths.add(path);
+//					photoInfo=new PhotoNameTableInfo(name, table, path);
+//					photoInfos.add(photoInfo);
+//				}
+//			}
+//		}
+//		else if(fromPage==PageName.NoteReviewChoose)// three days current course
+//		{
+//			String agoDate="";
+//			for(int i=0;i<3;i++)
+//			{
+//				agoDate=DateUtil.getAgoDateStringBefore(date, i);
+//				List<String> result=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, tableName, agoDate);
+//				String dir=DataConstants.TABLE_DIR_MAP.get(tableName);
+//				String path;
+//				if(result.size()>0)
+//				{
+//					for(String name:result)
+//					{
+//						courseInfo=DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, name);
+//						courseInfos.add(courseInfo);
+//					}
+//				}
+//				else
+//				{
+//					//net work request
+//					if(NetWorkUtil.isConnected(context))
+//					{
+//						requestQuesInfo(getQuesURL(date));
+//					}
+//				}
+//			}
+//		}
 
-		String[] info=path.split("/");
-		String date=info[info.length-1].split("\\|")[1];
-		Log.e(DataConstants.TAG, "jump "+info[info.length-1]+" "+date);
+//		db.close();
+		//Log.e(DataConstants.TAG, "jump "+info[info.length-1]+" "+date);
 		Intent intent=new Intent();
 		intent.setClass(context, PhotoBrowseActivity.class);
 		Bundle bundle=new Bundle();
-		bundle.putString("jump_tag", context.getResources().getString(R.string.jump_tag_footprint));
+		//bundle.putString("jump_tag", context.getResources().getString(R.string.jump_tag_footprint));
 		bundle.putSerializable("from_page", fromPage);
 		bundle.putString("date",date);
-		bundle.putString("table_name",tableName);
 		intent.putExtra("photo_show_bundle", bundle);
-		//intent.putStringArrayListExtra(, (ArrayList<String>)imgPaths);
+		//bundle.putString("table_name",tableName);
+		intent.putExtra("courseInfos", (Serializable)photoInfos);
+		//intent.putParcelableArrayListExtra(name, value)
 		context.startActivity(intent);
 	
 	}
+//
+//	private void requestQuesInfo(String url) {
+//		//final FootprintInfo fpInfo;
+//		
+//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+//				new Response.Listener<JSONObject>() {
+//					@Override
+//					public void onResponse(JSONObject response) {
+//						Log.e(DataConstants.TAG, "ques response=" + response);
+//						int errorCode;
+//						try {
+//							errorCode = response.getInt("errorCode");
+//							if(errorCode==0)
+//							{
+//								HashMap<String, List<CourseRecordInfo>> courseAndReocrdsMap=parseQuesInfo(response);
+//								List<String> usedCourseNames=new ArrayList<String>();
+//								List<String> courseNames=UserConfigs.getCourseNames();
+//								HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
+//								List<String> tableNames=new ArrayList<String>();
+//								
+//							}
+//						} catch (JSONException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//						
+//						//Picasso.with(getApplicationContext()).load(DataConstants.DOWNLOAD_URL+todayRecList.get(0).getImgId()).into(recImg);
+//					}
+//				}, new Response.ErrorListener() {
+//					@Override
+//					public void onErrorResponse(VolleyError arg0) {
+//						// tv_1.setText(arg0.toString());
+//						Log.i(DataConstants.TAG,
+//								"sorry,Error" + arg0.toString());
+//						// if (progressDialog.isShowing()
+//						// && progressDialog != null) {
+//						// progressDialog.dismiss();
+//						// }
+//					}
+//				});
+//		GloableData.requestQueue.add(jsonObjectRequest);
+//		// return fpInfo;
+//	}
+//	private String getQuesURL(String date) {
+//		List<NameValuePair> params = new ArrayList<NameValuePair>();
+//		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MQuesList");
+//		params.add(pair);
+//		pair = new BasicNameValuePair("device", "android");
+//		params.add(pair);
+//		pair = new BasicNameValuePair("deviceid", "1");
+//		params.add(pair);
+//		pair = new BasicNameValuePair("appid", "nju");
+//		params.add(pair);
+//		pair = new BasicNameValuePair("userid", UserConfigs.getId());
+//		params.add(pair);
+//		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
+//		params.add(pair);
+//		pair = new BasicNameValuePair("date", date);
+//		params.add(pair);
+//		//pair = new BasicNameValuePair("date", date);
+//		//params.add(pair);
+//		String resultURL = DataConstants.SERVER_URL + "?";
+//		for (NameValuePair nvp : params) {
+//			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
+//
+//		}
+//		Log.e(DataConstants.TAG, "ques url:" + resultURL);
+//		return resultURL;
+//	}
+//	private HashMap<String, List<CourseRecordInfo>> parseQuesInfo(JSONObject json)
+//	{
+//		HashMap<String, List<CourseRecordInfo>> courseAndRecordsMap=new HashMap<String, List<CourseRecordInfo>>();
+//		
+//		CourseRecordInfo cri = null;
+//		List<CourseRecordInfo> englishRecords=new ArrayList<CourseRecordInfo>();
+//		List<CourseRecordInfo> politicRecords=new ArrayList<CourseRecordInfo>();
+//		List<CourseRecordInfo> mathRecords=new ArrayList<CourseRecordInfo>();
+//		List<CourseRecordInfo> professOneRecords=new ArrayList<CourseRecordInfo>();
+//		List<CourseRecordInfo> professTwoRecords=new ArrayList<CourseRecordInfo>();
+//		 SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+//		try {
+//			JSONObject data = json.getJSONObject("data");
+//			JSONArray list = data.getJSONArray("list_");
+//			
+//			for(int i=0;i<list.length();i++)
+//			{
+//				JSONObject obj=list.getJSONObject(i);
+//				//String id=obj.getString("id_");
+//				int type=obj.getInt("type_");
+//				int isImportant=obj.getInt("isHighlight_");
+//				int isRecommender=obj.getInt("isRecommend_");
+//				String subject=obj.getString("subject_");
+//				String remark=obj.getString("remark_");
+//				String createTime=obj.getString("createTime_");
+//				String imgId=obj.getString("img_");
+//				
+//				String date=createTime.split(" ")[0];
+//				String time=createTime.split(" ")[1];
+//				time=date+"|"+time;
+//				String tableName=null;
+//				switch (type) {
+//				case 1:
+//					tableName=context.getResources().getString(R.string.db_english_table);
+//					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, context.getResources().getString(R.string.state_unknow), context.getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
+//					englishRecords.add(cri);
+//					 DataConstants.dbHelper.insertCourseRecord(context. db, tableName, cri);
+//					break;
+//				case 2:
+//					tableName=context.getResources().getString(R.string.db_politics_table);
+//					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, context.getResources().getString(R.string.state_unknow), context.getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
+//					politicRecords.add(cri);
+//					 DataConstants.dbHelper.insertCourseRecord(context, db, tableName, cri);
+//					break;
+//				case 3:
+//					tableName=context.getResources().getString(R.string.db_math_table);
+//					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, context.getResources().getString(R.string.state_unknow), context.getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
+//					mathRecords.add(cri);
+//					 DataConstants.dbHelper.insertCourseRecord(context, db, tableName, cri);
+//					break;
+//				case 4:
+//					tableName=context.getResources().getString(R.string.db_profess1_table);
+//					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, context.getResources().getString(R.string.state_unknow), context.getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
+//					professOneRecords.add(cri);
+//					 DataConstants.dbHelper.insertCourseRecord(context, db, tableName, cri);
+//					break;
+//				case 5:
+//					tableName=context.getResources().getString(R.string.db_profess2_table);
+//					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, context.getResources().getString(R.string.state_unknow), context.getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
+//					professTwoRecords.add(cri);
+//					 DataConstants.dbHelper.insertCourseRecord(context, db, tableName, cri);
+//					break;
+//				}
+//				//Log.e(DataConstants.TAG, "parse:"+content+" "+days+" "+daysLeft+" "+footprintImgId+" "+diary+" "+reviewCount+" "+addCount);
+//								//infos.add(cri);
+//			}
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			Log.e(DataConstants.TAG, "JSONException "+e);
+//		}
+//		db.close();
+//		if(englishRecords.size()>0)
+//			courseAndRecordsMap.put(UserConfigs.getCourseEnglishName(), englishRecords);
+//		if(politicRecords.size()>0)
+//			courseAndRecordsMap.put(UserConfigs.getCoursePoliticsName(), politicRecords);
+//		if(mathRecords.size()>0)
+//			courseAndRecordsMap.put(UserConfigs.getCourseMathName(), mathRecords);
+//		if(professOneRecords.size()>0)
+//			courseAndRecordsMap.put(UserConfigs.getCourseProfessOneName(), professOneRecords);
+//		if(professTwoRecords.size()>0)
+//			courseAndRecordsMap.put(UserConfigs.getCourseProfessTwoName(), professTwoRecords);
+//		return courseAndRecordsMap;
+//	}
 }
 
 class GridViewHolder { 

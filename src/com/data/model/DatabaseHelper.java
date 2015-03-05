@@ -50,6 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_master_state)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_if_remote)+" INTEGER,"
+    			+context.getResources().getString(R.string.dbcol_photo_path)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_tablename)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_time)+" TEXT not null );";          
        // Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
@@ -219,6 +221,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_photo_delete), cri.getIfDeleted());
     	cv.put(context.getResources().getString(R.string.dbcol_if_recommender), cri.getIfRecommender());
     	cv.put(context.getResources().getString(R.string.dbcol_if_remote), cri.getIfRemote());
+    	cv.put(context.getResources().getString(R.string.dbcol_photo_path), cri.getPhotoPath());
+    	cv.put(context.getResources().getString(R.string.dbcol_tablename), cri.getTableName());
     	long rowid=db.insert(tableName, null, cv);
     	Log.e(DataConstants.TAG,cri.getDate()+" "+"insertCourseRecord "+tableName+":"+cri.toString()+" rowid:"+rowid);
     }
@@ -255,11 +259,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        int  ifDeleted=result.getInt(6);
 	        int  ifRecommender=result.getInt(5);
 	        String date=result.getString(7);
-	        String time=result.getString(11);
+	        String time=result.getString(13);
 	        String masterState=result.getString(8);
 	        String  ifUpload=result.getString(9);
 	        int ifRemote=result.getInt(10);
-	       cri=new CourseRecordInfo(photoName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender,ifRemote);
+	        String path=result.getString(11);
+	        String tablename=result.getString(12);
+	       cri=new CourseRecordInfo(photoName,path,tablename, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted, ifRecommender,ifRemote);
 	       cri.setDbId(id);
 	       break; 
 	      } 
@@ -281,13 +287,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        int  ifDeleted=result.getInt(6);
 	        int  ifRecommender=result.getInt(5);
 	        String date=result.getString(7);
-	        String time=result.getString(11);
+	        String time=result.getString(13);
 	        String masterState=result.getString(8);
 	        String  ifUpload=result.getString(9);
 	        int ifRemote=result.getInt(10);
-	        cri=new CourseRecordInfo(photoname, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender,ifRemote);
+	        String path=result.getString(11);
+	        cri=new CourseRecordInfo(photoname,path,tableName, photobase64, remark, date, time, masterState, ifUpload, flag, ifDeleted,ifRecommender,ifRemote);
 	        cri.setDbId(id);
-	        Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+cri);
+	       // Log.e(DataConstants.TAG,"db:queryCourseRecordByPhotoName "+cri);
 	        result.moveToNext(); 
 	      } 
 	      result.close();
@@ -371,10 +378,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	//Log.e(DataConstants.TAG,"tableExist " +tableExist);
     	if(tableExist==false)
     		return 0;
-    	Log.e(DataConstants.TAG, tableName+" "+"SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
-    	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
-    	+"' and "+
-   		context.getResources().getString(R.string.dbcol_date)+"= '"+date+"'");
+    	//Log.e(DataConstants.TAG, tableName+" "+"SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
+//    	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
+//    	+"' and "+
+//   		context.getResources().getString(R.string.dbcol_date)+"= '"+date+"'");
     	Cursor result=db.rawQuery("SELECT count(*) FROM "+tableName+" where dbPhotoDel = 0 and "+
     	context.getResources().getString(R.string.dbcol_master_state)+" != '"+context.getResources().getString(R.string.state_unknow)
     	+"' and "+
@@ -475,7 +482,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	         
 	        String name=result.getString(0); 
 	        names.add(name); 
-	        Log.e(DataConstants.TAG,"db:query photo name:"+name);
+	       // Log.e(DataConstants.TAG,"db:query photo name:"+name);
 	        result.moveToNext(); 
 	      } 
 	      result.close();

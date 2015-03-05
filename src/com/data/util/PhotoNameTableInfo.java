@@ -1,6 +1,8 @@
 package com.data.util;
 
-public class PhotoNameTableInfo {
+import java.io.Serializable;
+
+public class PhotoNameTableInfo implements Serializable{
 
 	String photoName;
 	String tableName;

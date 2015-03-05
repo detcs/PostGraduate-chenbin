@@ -36,6 +36,8 @@
     <string name="dbcol_flag">dbFlag</string>
     <string name="dbcol_if_recommender">dbIfRec</string>
     <string name="dbcol_if_remote">dbFromRemote</string>
+    <string name="dbcol_photo_path">dbPhotoPath</string>
+    <string name="dbcol_tablename">dbTableName</string>
     <string name="db_english_table">englishTable</string>
     <string name="db_math_table">mathTable</string>
     <string name="db_politics_table">politicsTable</string>

@@ -1,6 +1,8 @@
 package com.data.model;
 
-public class CourseRecordInfo {
+import java.io.Serializable;
+
+public class CourseRecordInfo implements Serializable{
 	private int dbId;
 	private String photoName;
 	private String photobase64;
@@ -13,8 +15,9 @@ public class CourseRecordInfo {
 	private int ifDeleted;
 	private int ifRecommender;
 	private int ifRemote;//if from remote,photoName=imgId
-	
-	public CourseRecordInfo(String photoName, String photobase64,
+	private String photoPath;//if from remote,path=url;else path= dir+photoName
+	private String tableName;
+	public CourseRecordInfo(String photoName,String path, String tableName,String photobase64,
 			String remark, String date, String time, String masterState,
 			String ifUpload, int flag, int ifDeleted, int ifRecommender,int ifRemote) {
 		super();
@@ -29,8 +32,26 @@ public class CourseRecordInfo {
 		this.ifDeleted = ifDeleted;
 		this.ifRecommender = ifRecommender;
 		this.ifRemote=ifRemote;
+		this.photoPath=path;
+		this.tableName=tableName;
 	}
 	
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
+
 	public int getIfRemote() {
 		return ifRemote;
 	}

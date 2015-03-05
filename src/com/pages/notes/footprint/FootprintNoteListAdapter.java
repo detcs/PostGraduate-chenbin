@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.app.ydd.R;
+import com.data.model.CourseRecordAndPathInfo;
+import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
+import com.data.util.PhotoNameTableInfo;
 import com.pages.notes.timeline.PhotoShowGridAdapter;
 
 import android.content.Context;
@@ -26,27 +29,34 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 
 	LayoutInflater mInflater;
 	String date;
+	//List<CourseRecordInfo> courseInfos;
+	HashMap<String, List<CourseRecordInfo>> courseAndPhotoInfoMap;
+	//List<CourseRecordAndPathInfo> photoAndPathInfos;
+	//List<String> courseNames;
 	List<String> courseNames;
 	List<String> tableNames;
 	Context context;
 	PhotoShowGridAdapter photoShowAdapter;
-	public FootprintNoteListAdapter(Context context,String date) {
+	public FootprintNoteListAdapter(Context context,String date,List<String> courseNames,List<String> tableNames,HashMap<String, List<CourseRecordInfo>> courseAndPhotoInfoMap) {
 		super();
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.date = date;
-		courseNames=UserConfigs.getCourseNames();
-		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+		this.tableNames=tableNames;
+		this.courseNames=courseNames;
+		this.courseAndPhotoInfoMap=courseAndPhotoInfoMap;
+		//courseNames=UserConfigs.getCourseNames();
+		//SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 				
 		HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
-		tableNames=new ArrayList<String>();
-		for(String course:courseNames)
-		{
-			String table=map.get(course);
-			List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, table, date);
-			if(photoNames.size()>0)
-				tableNames.add(table);
-		}
+//		tableNames=new ArrayList<String>();
+//		for(String course:courseNames)
+//		{
+//			String table=map.get(course);
+//			List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, table, date);
+//			if(photoNames.size()>0)
+//				tableNames.add(table);
+//		}
 //		for(int i=0;i<courseNames.size();i++)
 //		{
 //			tableNames.add(map.get(courseNames.get(i)));
@@ -57,13 +67,13 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return tableNames.size();
+		return courseNames.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return tableNames.get(arg0);
+		return courseNames.get(arg0);
 	}
 
 	@Override
@@ -89,15 +99,7 @@ public class FootprintNoteListAdapter extends BaseAdapter{
 	        holder = (ViewHolder) convertView.getTag(); 
 	    }
 	    holder.courseName.setText(courseNames.get(position));
-	    SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-		List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, tableNames.get(position), date);
-		List<String> photoPaths=new ArrayList<String>();
-		String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableNames.get(position));
-		 for(String name:photoNames)
-			photoPaths.add(dirPath+"/"+name);
-		db.close();
-
-		photoShowAdapter=new PhotoShowGridAdapter(context,photoPaths,false,tableNames.get(position),PageName.NoteFootprint);
+		photoShowAdapter=new PhotoShowGridAdapter(context,tableNames.get(position),courseAndPhotoInfoMap.get(courseNames.get(position)),false,PageName.NoteFootprint);
 	    holder.grid.setAdapter(photoShowAdapter);
 	    return convertView;
 	}
