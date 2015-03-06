@@ -230,12 +230,36 @@ public class UserConfigs
 		//Log.e(DataConstants.TAG,"names.size() "+names.size());
 		return map;
 	}
-	public static void storeClockDay()
+	public static HashMap<String,Integer> getTableAndCourseTypeMap()
+	{	
+		HashMap<String,Integer> map=new HashMap<String,Integer>();
+		map.put(context.getResources().getString(R.string.db_english_table),1);
+		map.put(context.getResources().getString(R.string.db_politics_table),2);
+		if(getCourseMathName()!=null)
+			map.put(context.getResources().getString(R.string.db_math_table),3);
+		map.put(context.getResources().getString(R.string.db_profess1_table),4);
+		if(getCourseProfessTwoName()!=null)
+			map.put(context.getResources().getString(R.string.db_profess2_table),5);
+		//Log.e(DataConstants.TAG,"names.size() "+names.size());
+		return map;
+	}
+	public static void storeLatestClockedDate(String date)
 	{
 		editor= sp.edit();//获取编辑器
-		int days=getClockDays();
-		days++;
-		Log.e(DataConstants.TAG, "days "+days);
+		editor.putString(context.getResources().getString(R.string.latest_clock_date),date);
+		editor.commit();//提交修改
+	}
+	public static String getLatestClockedDate()
+	{
+		return sp.getString(context.getResources().getString(R.string.latest_clock_date),null);
+	}
+
+	public static void storeClockDay(int days)
+	{
+		editor= sp.edit();//获取编辑器
+//		int days=getClockDays();
+//		days++;
+//		Log.e(DataConstants.TAG, "days "+days);
 		editor.putInt(context.getResources().getString(R.string.clock_days),days);
 		editor.commit();//提交修改
 	}

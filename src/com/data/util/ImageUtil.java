@@ -11,6 +11,7 @@ public class ImageUtil {
 
 	public static String filePre="file://";
 	public static  ImageLoader imageLoader ; 
+	//public static  ImageLoader imageLoaderWithoutCache ; 
 	public static  DisplayImageOptions options;
 	public static void init(Context context)
 	{
@@ -18,11 +19,12 @@ public class ImageUtil {
 		options=new DisplayImageOptions.Builder()
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
-		.showImageOnLoading(R.drawable.note_thumb)
+		//.showImageOnLoading(R.drawable.note_thumb)
 		.build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
         .defaultDisplayImageOptions(options)
         .build();
 		imageLoader.init(config);
+		
 	}
 }

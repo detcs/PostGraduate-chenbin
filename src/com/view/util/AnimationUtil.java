@@ -132,4 +132,15 @@ public class AnimationUtil {
 		mHiddenAction.setDuration(500);
 	    return mHiddenAction;
 	}
+	public static Animation loadingAnimation(Context context)
+	{
+		Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_loading_rotate);
+
+        animation.setRepeatCount(Animation.INFINITE);
+
+        animation.setRepeatMode(Animation.RESTART);
+
+       // view.startAnimation(animation)
+	    return animation;
+	}
 }

@@ -64,6 +64,7 @@
     <string name="dbcol_encourage">dbEncourage</string>
     <string name="dbcol_days">dbDays</string>
     <string name="dbcol_daysleft">dbDaysleft</string>
+    <string name="dbcol_clocked_days">dbClockedDays</string>
     <string name="dbcol_ifupload">dbIfUpload</string>
     <string name="dbcol_photo_delete">dbPhotoDel</string>
     <string name="upload_no">uploadNO</string>
@@ -103,6 +104,7 @@
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="complete">完成</string>
+    <string name="head_img">head.jpg</string>
     <!-- today -->
      <string name="clock_days">clockDays</string>
       <string name="start_day">startDay</string>
@@ -168,9 +170,11 @@
     <!-- clock complete -->
     <string name="clock">打卡</string>
     <string name="day">天</string>
+    <string name="latest_clock_date">lastestClockDate</string>
     <string name="task_complete">你已完成这门课程的复习</string>
     <string name="wonderful">非常棒</string>
     <string name="insist_learn">你已经坚持学习了</string>
+    
     <!-- footprint -->
     <string name="myfootprint">我的足迹</string>
     <string name="reviewchoose_fra_tag">reviewchooseFraTag</string>

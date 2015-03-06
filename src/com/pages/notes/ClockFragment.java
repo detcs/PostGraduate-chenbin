@@ -30,7 +30,7 @@ public class ClockFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				UserConfigs.storeClockDay();
+				//UserConfigs.storeClockDay();
 				FragmentManager fm=getActivity().getFragmentManager();
 //				Fragment f=fm.findFragmentByTag(getResources().getString(R.string.reviewchoose_fra_tag));
 //				Log.e(DataConstants.TAG,"f null "+(f==null));

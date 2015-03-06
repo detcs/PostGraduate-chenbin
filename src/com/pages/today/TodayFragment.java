@@ -280,7 +280,7 @@ public class TodayFragment extends Fragment {
 				// FileDataHandler.COVER_SONG_DIR_PATH+"/"+songName+".mp3");
 				// downloadHandler(DataConstants.DOWNLOAD_URL+imgId,
 				// FileDataHandler.COVER_PIC_DIR_PATH+"/"+imgId+".jpg");
-				fpInfo = new FootprintInfo("","songfile", songName,singer,"","covertwopic","diary", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no));
+				fpInfo = new FootprintInfo("","songfile", songName,singer,"","covertwopic","diary", date,encourage, days, daysLeft,getResources().getString(R.string.upload_no),"");
 				fileDownloadTask = new DownloadTask(getActivity(), date,fpInfo,TodayFragment.this,updateUI);
 				String[] fileIds={coverImgId,songId,footprintImgId,coverTwoImgId};
 				fileDownloadTask.execute(fileIds);

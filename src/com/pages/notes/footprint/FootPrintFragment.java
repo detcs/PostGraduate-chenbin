@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.protocol.RequestAddCookies;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ import com.data.util.DateUtil;
 import com.data.util.GloableData;
 import com.data.util.ImageUtil;
 import com.data.util.PhotoNameTableInfo;
+import com.data.util.RequestAndParseUtil;
 import com.pages.notes.todayrec.TodayRecommenderInfo;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -142,7 +144,7 @@ public class FootPrintFragment extends Fragment{
 		{
 			Log.e(DataConstants.TAG, "queryFootPrintInfo==null at "+date);
 			requestFootprintInfo(getFootprintURL(date),date);
-			requestQuesInfo(getQuesURL(date));
+			requestQuesInfo(RequestAndParseUtil.getQuesURL(date));
 		}
 		/*
 		if(appendNum>0)
@@ -160,32 +162,7 @@ public class FootPrintFragment extends Fragment{
 		
 		return rootView;
 	}
-	private String getQuesURL(String date) {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MQuesList");
-		params.add(pair);
-		pair = new BasicNameValuePair("device", "android");
-		params.add(pair);
-		pair = new BasicNameValuePair("deviceid", "1");
-		params.add(pair);
-		pair = new BasicNameValuePair("appid", "nju");
-		params.add(pair);
-		pair = new BasicNameValuePair("userid", UserConfigs.getId());
-		params.add(pair);
-		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
-		params.add(pair);
-		pair = new BasicNameValuePair("date", date);
-		params.add(pair);
-		//pair = new BasicNameValuePair("date", date);
-		//params.add(pair);
-		String resultURL = DataConstants.SERVER_URL + "?";
-		for (NameValuePair nvp : params) {
-			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
-
-		}
-		Log.e(DataConstants.TAG, "ques url:" + resultURL);
-		return resultURL;
-	}
+	
 	private void requestQuesInfo(String url) {
 		//final FootprintInfo fpInfo;
 		
@@ -199,7 +176,7 @@ public class FootPrintFragment extends Fragment{
 							errorCode = response.getInt("errorCode");
 							if(errorCode==0)
 							{
-								HashMap<String, List<CourseRecordInfo>> courseAndReocrdsMap=parseQuesInfo(response);
+								HashMap<String, List<CourseRecordInfo>> courseAndReocrdsMap=RequestAndParseUtil.parseQuesInfo(getActivity(),response);
 								List<String> usedCourseNames=new ArrayList<String>();
 								List<String> courseNames=UserConfigs.getCourseNames();
 								HashMap<String, String> map=UserConfigs.getCourseNameAndTableMap();
@@ -283,13 +260,12 @@ public class FootPrintFragment extends Fragment{
 								int clockNum=0;
 								String reviewNum=fpInfo.getReviewCount();
 								String appendNum=fpInfo.getAddCount();
-								dayReviewInfo.setText(getResources().getString(R.string.clocked)+clockNum+getResources().getString(R.string.day)+","
-										+getResources().getString(R.string.reviewed)+reviewNum+getResources().getString(R.string.piece)+","
+								dayReviewInfo.setText(getResources().getString(R.string.reviewed)+reviewNum+getResources().getString(R.string.piece)+","
 										+getResources().getString(R.string.appended)+appendNum+getResources().getString(R.string.piece));
 								
 								//insert footprint db
 								 SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-								 FootprintInfo info=new FootprintInfo("", "","","", fpInfo.getFootprintImgId(), "", fpInfo.getDiary(), date, "", fpInfo.getDays(),fpInfo.getDaysLeft(),getResources().getString(R.string.upload_yes));
+								 FootprintInfo info=new FootprintInfo("", "","","", fpInfo.getFootprintImgId(), "", fpInfo.getDiary(), date, "", fpInfo.getDays(),fpInfo.getDaysLeft(),getResources().getString(R.string.upload_yes),"");
 								 DataConstants.dbHelper.insertFootprintInfoRecord(getActivity(), db, info);
 								 db.close();
 							}
@@ -370,89 +346,32 @@ public class FootPrintFragment extends Fragment{
 		}
 		return fpInfo;
 	}
-	private HashMap<String, List<CourseRecordInfo>> parseQuesInfo(JSONObject json)
-	{
-		HashMap<String, List<CourseRecordInfo>> courseAndRecordsMap=new HashMap<String, List<CourseRecordInfo>>();
-		
-		CourseRecordInfo cri = null;
-		List<CourseRecordInfo> englishRecords=new ArrayList<CourseRecordInfo>();
-		List<CourseRecordInfo> politicRecords=new ArrayList<CourseRecordInfo>();
-		List<CourseRecordInfo> mathRecords=new ArrayList<CourseRecordInfo>();
-		List<CourseRecordInfo> professOneRecords=new ArrayList<CourseRecordInfo>();
-		List<CourseRecordInfo> professTwoRecords=new ArrayList<CourseRecordInfo>();
-		 SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-		try {
-			JSONObject data = json.getJSONObject("data");
-			JSONArray list = data.getJSONArray("list_");
-			
-			for(int i=0;i<list.length();i++)
-			{
-				JSONObject obj=list.getJSONObject(i);
-				//String id=obj.getString("id_");
-				int type=obj.getInt("type_");
-				int isImportant=obj.getInt("isHighlight_");
-				int isRecommender=obj.getInt("isRecommend_");
-				String subject=obj.getString("subject_");
-				String remark=obj.getString("remark_");
-				String createTime=obj.getString("createTime_");
-				String imgId=obj.getString("img_");
-				
-				String date=createTime.split(" ")[0];
-				String time=createTime.split(" ")[1];
-				time=date+"|"+time;
-				String tableName=null;
-				switch (type) {
-				case 1:
-					tableName=getResources().getString(R.string.db_english_table);
-					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
-					englishRecords.add(cri);
-					 DataConstants.dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-					break;
-				case 2:
-					tableName=getResources().getString(R.string.db_politics_table);
-					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
-					politicRecords.add(cri);
-					 DataConstants.dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-					break;
-				case 3:
-					tableName=getResources().getString(R.string.db_math_table);
-					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
-					mathRecords.add(cri);
-					 DataConstants.dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-					break;
-				case 4:
-					tableName=getResources().getString(R.string.db_profess1_table);
-					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
-					professOneRecords.add(cri);
-					 DataConstants.dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-					break;
-				case 5:
-					tableName=getResources().getString(R.string.db_profess2_table);
-					cri=new CourseRecordInfo(imgId, DataConstants.DOWNLOAD_URL+imgId, tableName, "", remark, date, time, getResources().getString(R.string.state_unknow), getResources().getString(R.string.upload_yes), isImportant, 0, isRecommender, 1);
-					professTwoRecords.add(cri);
-					 DataConstants.dbHelper.insertCourseRecord(getActivity(), db, tableName, cri);
-					break;
-				}
-				//Log.e(DataConstants.TAG, "parse:"+content+" "+days+" "+daysLeft+" "+footprintImgId+" "+diary+" "+reviewCount+" "+addCount);
-								//infos.add(cri);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.e(DataConstants.TAG, "JSONException "+e);
+	private String getClockedDaysURL(String date) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		BasicNameValuePair pair = new BasicNameValuePair("methodno", "MFootprint");
+		params.add(pair);
+		pair = new BasicNameValuePair("device", "android");
+		params.add(pair);
+		pair = new BasicNameValuePair("deviceid", "1");
+		params.add(pair);
+		pair = new BasicNameValuePair("appid", "nju");
+		params.add(pair);
+		pair = new BasicNameValuePair("userid", UserConfigs.getId());
+		params.add(pair);
+		pair = new BasicNameValuePair("verify", UserConfigs.getVerify());
+		params.add(pair);
+		pair = new BasicNameValuePair("date", date);
+		params.add(pair);
+		//pair = new BasicNameValuePair("date", date);
+		//params.add(pair);
+		String resultURL = DataConstants.SERVER_URL + "?";
+		for (NameValuePair nvp : params) {
+			resultURL += nvp.getName() + "=" + nvp.getValue() + "&";
+
 		}
-		db.close();
-		if(englishRecords.size()>0)
-			courseAndRecordsMap.put(UserConfigs.getCourseEnglishName(), englishRecords);
-		if(politicRecords.size()>0)
-			courseAndRecordsMap.put(UserConfigs.getCoursePoliticsName(), politicRecords);
-		if(mathRecords.size()>0)
-			courseAndRecordsMap.put(UserConfigs.getCourseMathName(), mathRecords);
-		if(professOneRecords.size()>0)
-			courseAndRecordsMap.put(UserConfigs.getCourseProfessOneName(), professOneRecords);
-		if(professTwoRecords.size()>0)
-			courseAndRecordsMap.put(UserConfigs.getCourseProfessTwoName(), professTwoRecords);
-		return courseAndRecordsMap;
+		Log.e(DataConstants.TAG, "footprint url:" + resultURL);
+		return resultURL;
 	}
+	
 	
 }

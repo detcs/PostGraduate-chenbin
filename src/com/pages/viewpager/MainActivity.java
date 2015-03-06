@@ -41,6 +41,7 @@ import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootPrintActivity;
 import com.pages.notes.footprint.FootprintInfo;
 import com.pages.today.TodayFragment;
+import com.view.util.FixedSpeedScroller;
 import com.view.util.ViewPagerScroller;
 
 import android.app.Activity;
@@ -83,13 +84,14 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
-	private com.mobovip.views.DirectionalViewPager viewPager;
+	 com.mobovip.views.DirectionalViewPager viewPager;
 	final ArrayList<Fragment> fragList = new ArrayList<Fragment>();
 	FragmentManager fm;
 	TodayFragment todayFragment;
 	NoteFragment noteFragment;
 	FunctionsSquareFragment funtionsSquareFragment;
 	Handler handler;
+	//FixedSpeedScroller mScroller=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -139,20 +141,26 @@ public class MainActivity extends FragmentActivity {
         viewPager.setCurrentItem(0);
         handler=new Handler();
        
-        handler.postDelayed(runnable, 3000);
+        handler.postDelayed(runnable, 2000);
 	}
 	private void controlViewPagerSpeed() {  
 		try {  
-		    Field mField;  
-		  
-		    mField = ViewPager.class.getDeclaredField("mScroller");  
-		    mField.setAccessible(true);  
-		  
-		    ViewPagerScroller mScroller = new ViewPagerScroller(  
-		        MainActivity.this,  
-		        new AccelerateInterpolator());  
-		    mScroller.setmDuration(2000); // 2000ms  
-		    mField.set(MainActivity.this, mScroller);  
+//		    Field mField;  
+//		  
+//		    mField = ViewPager.class.getDeclaredField("mScroller");  
+//		    mField.setAccessible(true);  
+//		  
+//		    mScroller = new FixedSpeedScroller(  
+//		    		viewPager.getContext(),  
+//		        new AccelerateInterpolator());  
+//		    mScroller.setmDuration(2000); // 2000ms  
+//		    mField.set(viewPager.getContext(), mScroller);  
+			Field mScroller = null;  
+            mScroller = com.mobovip.views.DirectionalViewPager.class.getDeclaredField("mScroller");  
+            Log.e(DataConstants.TAG, "filed "+mScroller.toString() );
+            mScroller.setAccessible(true);   
+            FixedSpeedScroller scroller = new FixedSpeedScroller( viewPager.getContext( ) ,new AccelerateInterpolator());  
+            mScroller.set( viewPager.getContext(), scroller);  
 		} catch (Exception e) {  
 		    e.printStackTrace();  
 		}  
@@ -165,8 +173,10 @@ public class MainActivity extends FragmentActivity {
 //	    	 ViewPagerScroller scroller = new ViewPagerScroller(MainActivity.this);
 //	         scroller.setScrollDuration(2000);
 //	         scroller.initViewPagerScroll(viewPager);//这个是设置切换过渡时间为2秒
-	    	controlViewPagerSpeed();
+	    	//controlViewPagerSpeed();
+	    	 viewPager.setScrollDuration(2000);
 	    	 viewPager.setCurrentItem(1);
+	    	 viewPager.setScrollDuration(100);
 //	    	 scroller = new ViewPagerScroller(MainActivity.this);
 //	         scroller.setScrollDuration(2000);
 //	         scroller.initViewPagerScroll(viewPager);//这个是设置切换过渡时间为2秒

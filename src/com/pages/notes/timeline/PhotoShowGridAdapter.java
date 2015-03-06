@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -50,6 +52,8 @@ import com.data.util.NetWorkUtil;
 import com.data.util.PhotoNamePathUtil;
 import com.data.util.PhotoNameTableInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
 import com.pages.notes.SingleNoteFragment;
@@ -76,6 +80,8 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		this.chooseState=chooseState;
 		this.tableName=tableName;
 		this.photoInfos=photoInfos;
+		if(photoInfos==null)
+			this.photoInfos=new ArrayList<CourseRecordInfo>();
 		this.fromPage=fromPage;
 	}
 
@@ -108,9 +114,9 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	        holder.img = (ImageView) convertView.findViewById(R.id.exercise_timeline_img); 
 	        holder.chooseFlag=(ImageView) convertView.findViewById(R.id.choose_flag); 
 	        holder.importanceFlag=(ImageView) convertView.findViewById(R.id.importance_flag); 
+	        holder.loading=(ProgressBar) convertView.findViewById(R.id.loading);
 	        SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
-	 	    CourseRecordInfo cri=photoInfos.get(position);
-	 	    		// DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, PhotoNamePathUtil.pathToPhotoName(imgPaths.get(position)));
+	 	    CourseRecordInfo cri=photoInfos.get(position);	 	    		
 	        if(cri.getFlag()==1)
 	        	holder.flag=1;
 	        else
@@ -120,20 +126,9 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    } else { 
 	        holder = (GridViewHolder) convertView.getTag(); 
 	    }
-	    // Bind the data efficiently with the holder.
-	    //Log.e(DataConstants.TAG,"pos:"+position+" path:"+ imgPaths.get(position));
-	    //Log.e(DataConstants.TAG,"convertView.getWidth"+convertView.getWidth());
-	    int width=(DataConstants.screenWidth-10)/4;
-	    
-	   // Log.e(DataConstants.TAG,"chooseState:"+chooseState);
-//	    if(chooseState)
-//	    	holder.chooseFlag.setVisibility(View.VISIBLE);
-//	    else
-//	    	holder.chooseFlag.setVisibility(View.INVISIBLE);
-	    //Picasso.with(context).load(new File(imgPaths.get(position))).centerInside().resize(width,width).into(holder.img);
+	    int width=(DataConstants.screenWidth-10)/4;	   
 	    FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(width,width);
 	    holder.img.setLayoutParams(param);
-	   //Picasso.with(context).load(new File(imgPaths.get(position))).resize(width,width).into(holder.img);
 	   BitmapFactory.Options opt=new BitmapFactory.Options();
 	   opt.outHeight=width;
 	   opt.outWidth=width;
@@ -143,7 +138,7 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		.showImageOnLoading(R.drawable.note_thumb)
 		.decodingOptions(opt)
 		.build();
-	    ImageUtil.imageLoader.displayImage(photoInfos.get(position).getPhotoPath(), holder.img,opts);
+	    ImageUtil.imageLoader.displayImage(photoInfos.get(position).getPhotoPath(), holder.img,opts,new PhotoLoadingListener(holder.loading, context));
 	   if(holder.flag==1)
 	    	{
 				holder.importanceFlag.setVisibility(View.VISIBLE);
@@ -470,11 +465,55 @@ public class PhotoShowGridAdapter extends BaseAdapter
 //		return courseAndRecordsMap;
 //	}
 }
+	class PhotoLoadingListener extends SimpleImageLoadingListener
+	{
 
+		ProgressBar bar;
+		Context context;
+		
+
+		public PhotoLoadingListener(ProgressBar bar, Context context) {
+			super();
+			this.bar = bar;
+			this.context = context;
+		}
+
+		@Override
+		public void onLoadingCancelled(String imageUri, View view) {
+			// TODO Auto-generated method stub
+			super.onLoadingCancelled(imageUri, view);
+		}
+
+		@Override
+		public void onLoadingComplete(String imageUri, View view,
+				Bitmap loadedImage) {
+			// TODO Auto-generated method stub
+			super.onLoadingComplete(imageUri, view, loadedImage);
+			bar.setVisibility(View.INVISIBLE);
+			view.setEnabled(true);
+		}
+
+		@Override
+		public void onLoadingFailed(String imageUri, View view,
+				FailReason failReason) {
+			// TODO Auto-generated method stub
+			super.onLoadingFailed(imageUri, view, failReason);
+		}
+
+		@Override
+		public void onLoadingStarted(String imageUri, View view) {
+			// TODO Auto-generated method stub
+			super.onLoadingStarted(imageUri, view);
+			bar.setVisibility(View.VISIBLE);
+			view.setEnabled(false);
+		}
+		
+	}
 class GridViewHolder { 
 
     ImageView img; 
     ImageView chooseFlag;
     ImageView importanceFlag;
+    ProgressBar loading;
     int flag;
 } 

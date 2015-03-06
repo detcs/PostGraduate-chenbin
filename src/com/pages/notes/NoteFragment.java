@@ -26,9 +26,15 @@ import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
 import com.data.util.GloableData;
+import com.data.util.ImageUtil;
 import com.data.util.NetWorkUtil;
+import com.data.util.RequestAndParseUtil;
 import com.data.util.SysCall;
 import com.data.util.UploadInfoUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.pages.funsquare.ButtonsGridViewAdapter;
 import com.pages.notes.camera.CameraActivity;
 import com.pages.notes.footprint.FootPrintActivity;
@@ -42,6 +48,7 @@ import com.view.util.AutoScrollView;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -71,6 +78,7 @@ public class NoteFragment  extends Fragment{
 	List<String> courseTableNames;
 	List<String> names;
 	View rootView;
+	TextView countClockTv;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_notes, container, false);
@@ -99,8 +107,7 @@ public class NoteFragment  extends Fragment{
 		{
 			Picasso.with(getActivity()).load(R.drawable.note_bg).resize(200, 200).into(bg);
 		}
-		ImageView headImg=(ImageView) v.findViewById(R.id.head_img);
-		Picasso.with(getActivity()).load(R.drawable.note_default_male).resize(100, 100).into(headImg);
+		initHeadImg(v);
 		
 		initCountInfo(v);
 		
@@ -267,14 +274,38 @@ public class NoteFragment  extends Fragment{
 			}
 		});
 		//TextView count_note=(TextView)v.findViewById(R.id.count_note);
-		
+		requestClockedDaysInfo(RequestAndParseUtil.getClockedDaysURL(date));
 	}
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		initHeadImg(rootView);
 		initCountInfo(rootView);
 		updateNoteClassList();
+	}
+	private void initHeadImg(View v) 
+	{
+		ImageView headImg=(ImageView) v.findViewById(R.id.head_img);
+		String headPath=FileDataHandler.APP_DIR_PATH+"/"+getResources().getString(R.string.head_img);
+		File headFile=new File(headPath);
+		if(headFile.exists())
+		{
+			BitmapFactory.Options opt=new BitmapFactory.Options();
+			opt.inJustDecodeBounds=true;
+			Bitmap head=BitmapFactory.decodeFile(headPath,opt);			
+			int raids=opt.outHeight/2;
+			DisplayImageOptions options=new DisplayImageOptions.Builder().cacheInMemory(false)
+			.cacheOnDisk(false)
+			.displayer(new RoundedBitmapDisplayer(raids))
+			.build();
+			
+			MemoryCacheUtils.removeFromCache(ImageUtil.filePre+headPath, ImageUtil.imageLoader.getMemoryCache()); 
+			DiskCacheUtils.removeFromCache(ImageUtil.filePre+headPath, ImageUtil.imageLoader.getDiskCache());
+			ImageUtil.imageLoader.displayImage(ImageUtil.filePre+headPath,headImg,options);
+		}
+		else
+			Picasso.with(getActivity()).load(R.drawable.note_default_male).resize(100, 100).into(headImg);
 	}
 	private void initFootprint()
 	{
@@ -294,7 +325,7 @@ public class NoteFragment  extends Fragment{
 	{
 		float countSize=DisplayUtil.spTopx(60*DataConstants.dpiRate, DataConstants.displayMetricsScaledDensity);
 		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"font/fangzhenglanting.ttf");
-		TextView countClockTv=(TextView) v.findViewById(R.id.count_clock);
+		countClockTv=(TextView) v.findViewById(R.id.count_clock);
 		int countClock=UserConfigs.getClockDays();
 		countClockTv.setText(""+countClock);
 		countClockTv.setTypeface(typeFace);
@@ -354,6 +385,45 @@ public class NoteFragment  extends Fragment{
 			names.add(UserConfigs.getCourseProfessTwoName());
 			courseTableNames.add(getResources().getString(R.string.db_profess2_table));
 		}
+	}
+	private void requestClockedDaysInfo(String url) {
+		//final FootprintInfo fpInfo;
+		//RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "ClockedDays response=" + response);
+						try {
+							int errorCode=response.getInt("errorCode");
+							if(errorCode==0)
+							{
+								JSONObject data=response.getJSONObject("data");
+								int count=data.getInt("totoalCount_");
+								Log.e(DataConstants.TAG, "count:"+count);
+								countClockTv.setText(count+"");
+								UserConfigs.storeClockDay(count);
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+						// if (progressDialog.isShowing()
+						// && progressDialog != null) {
+						// progressDialog.dismiss();
+						// }
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+		// return fpInfo;
 	}
 	private void requestTodayFootprintInfo(String url) {
 		//final FootprintInfo fpInfo;

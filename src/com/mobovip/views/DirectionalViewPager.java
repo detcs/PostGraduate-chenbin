@@ -1,6 +1,9 @@
 package com.mobovip.views;
 
 import java.util.ArrayList;
+
+import com.view.util.FixedSpeedScroller;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
@@ -20,6 +23,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Scroller;
 
 /**
@@ -57,7 +61,8 @@ public class DirectionalViewPager extends ViewPager {
 	private int mRestoredCurItem = -1;
 	private Parcelable mRestoredAdapterState = null;
 	private ClassLoader mRestoredClassLoader = null;
-	private Scroller mScroller;
+	//private Scroller mScroller;
+	FixedSpeedScroller mScroller;
 	private VerticalViewPagerCompat.DataSetObserver mObserver;
 
 	private int mChildWidthMeasureSpec;
@@ -120,7 +125,7 @@ public class DirectionalViewPager extends ViewPager {
 
 	void initViewPager() {
 		setWillNotDraw(false);
-		mScroller = new Scroller(getContext());
+		mScroller =new FixedSpeedScroller(getContext(),new AccelerateInterpolator());
 		final ViewConfiguration configuration = ViewConfiguration
 				.get(getContext());
 		mTouchSlop = ViewConfigurationCompat
@@ -1383,4 +1388,9 @@ public class DirectionalViewPager extends ViewPager {
 		gv.setAdapter(new ButtonsGridViewAdapter(names, MainActivity.this));
 	}
 */
+	
+	public void setScrollDuration(int duration)
+	{
+		mScroller.setmDuration(duration);
+	}
 }

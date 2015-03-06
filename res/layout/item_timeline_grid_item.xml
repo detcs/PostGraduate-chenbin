@@ -36,4 +36,11 @@
     	 android:layout_marginRight="2dp"
     	 android:layout_marginBottom="2dp"
          />
+      <ProgressBar  
+        android:id="@+id/loading"  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:layout_gravity="center"  
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/load_progressbar" /> 
 </FrameLayout>

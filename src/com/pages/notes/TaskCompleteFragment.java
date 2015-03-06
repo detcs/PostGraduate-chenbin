@@ -3,6 +3,7 @@ package com.pages.notes;
 import com.app.ydd.R;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
+import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
 import com.data.util.UploadInfoUtil;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,19 @@ public class TaskCompleteFragment extends Fragment{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				goClock.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.clock_click));
-				UserConfigs.storeClockDay();
+				
+				String todayDate=DateUtil.getTodayDateString();
+				if(UserConfigs.getLatestClockedDate()==null || !UserConfigs.getLatestClockedDate().equals(todayDate))
+				{
+					
+					UserConfigs.storeClockDay(UserConfigs.getClockDays()+1);
+					UserConfigs.storeLatestClockedDate(todayDate);
+					SQLiteDatabase db= DataConstants.dbHelper.getReadableDatabase();
+					String clockedDays="";
+					DataConstants.dbHelper.updateFootprintRecord(getActivity(), db, getResources().getString(R.string.dbcol_clocked_days), clockedDays, todayDate);
+					db.close();
+				}
+					
 				UploadInfoUtil.uploadClock(getActivity(), UploadInfoUtil.getUploadClockURL(type, subject, date));
 				getActivity().finish();
 				//Picasso.with(getActivity()).load(R.drawable.clock_click).into(goClock);
@@ -77,7 +91,7 @@ public class TaskCompleteFragment extends Fragment{
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				//Log.e(DataConstants.TAG, "clock complete");
-				UserConfigs.storeClockDay();
+				//UserConfigs.storeClockDay();
 				getActivity().finish();
 			}
 		});

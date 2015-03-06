@@ -3,13 +3,17 @@ package com.pages.funsquare.person;
 import java.io.File;
 
 import com.app.ydd.R;
+import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.BitmapUtil;
 import com.data.util.ComputeURL;
+import com.data.util.ImageUtil;
 import com.data.util.NetCall;
 import com.data.util.SysCall;
 import com.data.util.NetCall.InfoChangeCallback;
 import com.data.util.NetCall.UploadHeadCallback;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
 
@@ -56,7 +60,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 	private ImageView sexchooseImg;
 	private int showSex = 1;
 	private String headimg;
-
+	private String headImgPath;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle saveInstanceState) {
@@ -74,9 +78,20 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 	}
 
 	private void init(View view) {
+		headImgPath=FileDataHandler.APP_DIR_PATH+"/"+getActivity().getResources().getString(R.string.head_img);
 		backView = view.findViewById(R.id.backView);
 		saveView = view.findViewById(R.id.saveView);
 		imageView1 = (ImageView) view.findViewById(R.id.imageView1);
+		String headPath=FileDataHandler.APP_DIR_PATH+"/"+getResources().getString(R.string.head_img);
+		File headFile=new File(headPath);
+		if(headFile.exists())
+		{
+			ImageUtil.imageLoader.displayImage(ImageUtil.filePre+headPath,imageView1);
+		}
+		else
+		Picasso.with(getActivity())
+				.load(ComputeURL.getHeadImgURL(UserConfigs.getHeadImg()))
+				.error(R.drawable.person_center_boyhead).into(imageView1);
 		initShow(view);
 		backView.setOnClickListener(new OnClickListener() {
 
@@ -168,9 +183,10 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 				view.startAnimation(AnimationUtil.hideAnimation());
 				frame.removeView(view);
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
-						Environment.getExternalStorageDirectory() + "/",
-						"temp.jpg")));
+//				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(
+//						Environment.getExternalStorageDirectory() + "/",
+//						"temp.jpg")));
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(headImgPath)));
 				intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, true);
 				startActivityForResult(intent, TAKE);
 			}
@@ -224,16 +240,13 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 2;
 				Bitmap bitmap = BitmapFactory
-						.decodeFile(Environment.getExternalStorageDirectory()
-								+ "/temp.jpg", options);
-				BitmapUtil.saveBitmap(Environment.getExternalStorageDirectory()
-						+ "/temp.jpg", bitmap);
+						.decodeFile(headImgPath, options);
+				BitmapUtil.saveBitmap(headImgPath, bitmap);
 				bitmap.recycle();
-
+				
 				Intent intent = new Intent();
 				intent.setAction("com.android.camera.action.CROP");
-				intent.setDataAndType(Uri.fromFile(new File(Environment
-						.getExternalStorageDirectory() + "/", "temp.jpg")),
+				intent.setDataAndType(Uri.fromFile(new File(FileDataHandler.APP_DIR_PATH + "/", getActivity().getResources().getString(R.string.head_img))),
 						"image/*");// mUri是已经选择的图片Uri
 				intent.putExtra("crop", "true");
 				intent.putExtra("aspectX", 1);// 裁剪框比例
@@ -257,6 +270,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 				Bitmap bitmap = (Bitmap) bundle.get("data");
 				// change head
 				imageView1.setImageBitmap(bitmap);
+				//FileDataHandler.saveBitmap(bitmap, path);
 				NetCall.uploadHead2(BitmapUtil.bitmapToString(bitmap),
 						PersonInfoFragment.this);
 				break;
@@ -299,6 +313,7 @@ public class PersonInfoFragment extends Fragment implements InfoChangeCallback,
 	public void headsuccess(String headImg) {
 		// TODO Auto-generated method stub
 		this.headimg = headImg;
+		//UserConfigs.
 	}
 
 	@Override

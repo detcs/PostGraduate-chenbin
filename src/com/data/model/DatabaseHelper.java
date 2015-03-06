@@ -71,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     			+context.getResources().getString(R.string.dbcol_days)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_daysleft)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_ifupload)+" TEXT not null,"
+    			+context.getResources().getString(R.string.dbcol_clocked_days)+" TEXT not null,"
     			+context.getResources().getString(R.string.dbcol_date)+" TEXT not null );";          
         //Log.e(DataConstants.TAG, "sql:"+sql);
     	db.execSQL(sql);
@@ -168,7 +169,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        String encourage=result.getString(8);
 	        String days=result.getString(9);
 	        String daysleft=result.getString(10);
-	        fpInfo=new FootprintInfo(coverPicPath,coverSongFile,coverSongName,coverSinger,footprintPic,coverTwoPic,diary,date,encourage,days,daysleft,context.getResources().getString(R.string.upload_no)); 
+	        String ifUpload=result.getString(11);
+	        String clockedDays=result.getString(12);
+	        fpInfo=new FootprintInfo(coverPicPath,coverSongFile,coverSongName,coverSinger,footprintPic,coverTwoPic,diary,date,encourage,days,daysleft,ifUpload,clockedDays); 
 	        fpInfo.setId(id+"");
 	        // Log.e(DataConstants.TAG,"db:query "+id+","+name);
 	        result.moveToNext(); 
@@ -194,6 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(context.getResources().getString(R.string.dbcol_days), fpInfo.getDays());
     	cv.put(context.getResources().getString(R.string.dbcol_daysleft), fpInfo.getDaysLeft());
     	cv.put(context.getResources().getString(R.string.dbcol_ifupload), fpInfo.getIfUpload());
+    	cv.put(context.getResources().getString(R.string.dbcol_clocked_days), fpInfo.getClockedDays());
     	long rowid=db.insert(context.getResources().getString(R.string.db_footprint_table), null, cv);
     	Log.e(DataConstants.TAG,"insert footprint rowid:"+rowid);
     }
@@ -467,7 +471,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	         
 	        String date=result.getString(0); 
 	        dates.add(date); 
-	        Log.e(DataConstants.TAG,"db:queryDates "+tableName+","+date);
+	       // Log.e(DataConstants.TAG,"db:queryDates "+tableName+","+date);
 	        result.moveToNext(); 
 	      } 
 	      result.close();

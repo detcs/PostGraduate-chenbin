@@ -16,11 +16,12 @@ public class FootprintInfo {
 	String days;
 	String daysLeft;
 	String ifUpload;
+	String clockedDays;
 	public FootprintInfo(String coverPicName, String coverSongFileName,
 			String coverSongName, String coverSingerName,
 			String footprintPicName, String coverNotePicName, String diary,
 			String date, String encourage, String days, String daysLeft,
-			String ifUpload) {
+			String ifUpload,String clockedDays) {
 		super();
 		this.coverPicName = coverPicName;
 		this.coverSongFileName = coverSongFileName;
@@ -34,8 +35,18 @@ public class FootprintInfo {
 		this.days = days;
 		this.daysLeft = daysLeft;
 		this.ifUpload = ifUpload;
+		this.clockedDays=clockedDays;
+		
 	}
 	
+	public String getClockedDays() {
+		return clockedDays;
+	}
+
+	public void setClockedDays(String clockedDays) {
+		this.clockedDays = clockedDays;
+	}
+
 	public String getId() {
 		return id;
 	}

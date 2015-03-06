@@ -41,6 +41,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.pages.notes.footprint.FootprintInfo;
 import com.squareup.picasso.Picasso;
+import com.view.util.AnimationUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -312,6 +313,7 @@ public class TodayRecommenderActivity extends Activity{
 								View view, Bitmap loadedImage) {
 							// TODO Auto-generated method stub
 							super.onLoadingComplete(imageUri, view, loadedImage);
+							//spinner.clearAnimation();
 							spinner.setVisibility(View.INVISIBLE); 
 							Log.e(DataConstants.TAG, "loading complete");
 							 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd|HH:mm:ss");
@@ -346,6 +348,7 @@ public class TodayRecommenderActivity extends Activity{
 							super.onLoadingStarted(imageUri, view);
 							Log.e(DataConstants.TAG, "loading start");
 							spinner.setVisibility(View.VISIBLE); 
+							//spinner.startAnimation(AnimationUtil.loadingAnimation(getApplicationContext()));
 						}
 						
 					});

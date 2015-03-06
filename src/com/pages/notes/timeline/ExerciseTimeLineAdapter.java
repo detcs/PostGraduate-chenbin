@@ -6,11 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.app.ydd.R;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
 import com.data.model.FileDataHandler;
+import com.data.model.UserConfigs;
 import com.data.model.DataConstants.PageName;
+import com.data.util.GloableData;
+import com.data.util.RequestAndParseUtil;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -39,16 +48,17 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	String tableName;
 	PhotoShowGridAdapter photoShowAdapter;
 	boolean chooseState;
+	List<CourseRecordInfo> records;
 	//List<CourseRecordInfo> photoInfos;
-	HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap;
- 	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates,HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap) {
+	//HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap;
+ 	public ExerciseTimeLineAdapter(Context context,String tableName,List<String> dates) {
 		super();
 		//this.paths = paths;
 		this.context=context;
 		mInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.dates=dates;
 		this.tableName=tableName;
-		this.dateAndPhotoInfosMap=dateAndPhotoInfosMap;
+		//this.dateAndPhotoInfosMap=dateAndPhotoInfosMap;
 	}
 
  	public void setDates(List<String> dates)
@@ -91,15 +101,32 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	       
 	        holder = (ViewHolder) convertView.getTag(); 
 	    }
+	    records=new ArrayList<CourseRecordInfo>();
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, tableName, dates.get(position));
-		List<String> photoPaths=new ArrayList<String>();
-		String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableName);
-		 for(String name:photoNames)
-			photoPaths.add(dirPath+"/"+name);
+		Log.e(DataConstants.TAG, "size");
+		if(photoNames.size()>0)
+		{
+			for(String photoName:photoNames)
+			{
+				CourseRecordInfo cri=DataConstants.dbHelper.queryCourseRecordByPhotoName(context, db, tableName, photoName);
+				records.add(cri);
+			}
+			photoShowAdapter=new PhotoShowGridAdapter(context,tableName,records,chooseState,PageName.NoteReviewChoose);
+			holder.grid.setAdapter(photoShowAdapter);
+//			List<String> photoPaths=new ArrayList<String>();
+//			String dirPath=FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(tableName);
+//			 for(String name:photoNames)
+//				photoPaths.add(dirPath+"/"+name);
+		}
+		else
+		{
+			requestQuesInfo(RequestAndParseUtil.getQuesURL(dates.get(position)),holder.grid);
+		}
 		db.close();
-		photoShowAdapter=new PhotoShowGridAdapter(context,tableName,dateAndPhotoInfosMap.get(dates.get(position)),chooseState,PageName.NoteReviewChoose);
-	    holder.grid.setAdapter(photoShowAdapter);
+		
+		
+	    
 	    holder.day.setText(dates.get(position));
 	    holder.day.setTypeface(DataConstants.typeFZLT);
 	    if(position==0)
@@ -120,6 +147,67 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 		//photoShowAdapter.updateChooseState(chooseState);
 		//
 	}
-	
+	private void requestQuesInfo(String url,final GridView gridView) {
+		//final FootprintInfo fpInfo;
+		
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.e(DataConstants.TAG, "ques response=" + response);
+						int errorCode;
+						try {
+							errorCode = response.getInt("errorCode");
+							if(errorCode==0)
+							{
+								HashMap<String, List<CourseRecordInfo>> courseAndReocrdsMap=RequestAndParseUtil.parseQuesInfo(context,response);
+								String course="";
+								
+								for(String courseName:UserConfigs.getCourseNames())
+								{
+									if(UserConfigs.getCourseNameAndTableMap().get(courseName).equals(tableName))
+									{
+										course=courseName;
+										break;
+									}
+								}
+								records=courseAndReocrdsMap.get(course);
+								SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
+								if(records!=null)
+								{
+									for(CourseRecordInfo record:records)
+									{
+										Log.e(DataConstants.TAG, "insert ques record:"+record.getDate());
+										DataConstants.dbHelper.insertCourseRecord(context, db, tableName, record);
+									}
+								}
+								db.close();
+								photoShowAdapter=new PhotoShowGridAdapter(context,tableName,records,chooseState,PageName.NoteReviewChoose);
+								gridView.setAdapter(photoShowAdapter);
+
+								
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						//Picasso.with(getApplicationContext()).load(DataConstants.DOWNLOAD_URL+todayRecList.get(0).getImgId()).into(recImg);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError arg0) {
+						// tv_1.setText(arg0.toString());
+						Log.i(DataConstants.TAG,
+								"sorry,Error" + arg0.toString());
+						// if (progressDialog.isShowing()
+						// && progressDialog != null) {
+						// progressDialog.dismiss();
+						// }
+					}
+				});
+		GloableData.requestQueue.add(jsonObjectRequest);
+		// return fpInfo;
+	}
 
 }

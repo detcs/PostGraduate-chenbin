@@ -1,8 +1,12 @@
 package com.pages.funsquare.person;
 
+import java.io.File;
+
 import com.app.ydd.R;
+import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.ComputeURL;
+import com.data.util.ImageUtil;
 import com.data.util.SysCall;
 import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
@@ -84,9 +88,17 @@ public class PersonCenterFragment extends Fragment {
 	}
 
 	private void initView() {
+		String headPath=FileDataHandler.APP_DIR_PATH+"/"+getResources().getString(R.string.head_img);
+		File headFile=new File(headPath);
+		if(headFile.exists())
+		{
+			ImageUtil.imageLoader.displayImage(ImageUtil.filePre+headPath,imageView2);
+		}
+		else
 		Picasso.with(getActivity())
 				.load(ComputeURL.getHeadImgURL(UserConfigs.getHeadImg()))
 				.error(R.drawable.person_center_boyhead).into(imageView2);
+		
 		nameText.setText(UserConfigs.getAccount());
 		idText.setText("研大大ID：" + UserConfigs.getId());
 		if (null == UserConfigs.getEmail() || UserConfigs.getEmail().equals("")) {

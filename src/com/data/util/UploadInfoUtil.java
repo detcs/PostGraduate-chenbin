@@ -471,4 +471,6 @@ public class UploadInfoUtil {
 		});
 		GloableData.requestQueue.add(jsonObjectRequest);
 	}
+	
+	
 }

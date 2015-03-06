@@ -7,15 +7,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.app.ydd.R;
 import com.data.model.CourseRecordInfo;
 import com.data.model.DataConstants;
+import com.data.model.DatabaseHelper;
 import com.data.model.FileDataHandler;
 import com.data.model.UserConfigs;
 import com.data.util.DisplayUtil;
+import com.data.util.GloableData;
 import com.data.util.PhotoNamePathUtil;
+import com.data.util.RequestAndParseUtil;
 import com.data.util.UploadInfoUtil;
 import com.pages.notes.ReviewFragment;
+import com.pages.notes.footprint.FootprintNoteListAdapter;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -72,11 +84,12 @@ public class ReviewChooseFragment extends Fragment{
 		tableName=getArguments().getString("course_table_name");
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
-		final List<String> dates=new ArrayList<String>();
+		final List<String> dbDates=new ArrayList<String>();
 		HashMap<String, List<CourseRecordInfo>> dateAndPhotoInfosMap=new HashMap<String, List<CourseRecordInfo>>();
+		Log.e(DataConstants.TAG, "dateSet:"+dateSet);
 		for(String date:dateSet)
 		{
-			dates.add(date);
+			dbDates.add(date);
 			List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(getActivity(), db, tableName, date);
 			if(photoNames.size()>0)
 			{
@@ -90,13 +103,14 @@ public class ReviewChooseFragment extends Fragment{
 			}
 		}
 		db.close();
-		Collections.reverse(dates);
+		
+		int type=UserConfigs.getTableAndCourseTypeMap().get(tableName);
+		
+		requestPhotoedDates(RequestAndParseUtil.getPhotoedDatesURL(type),dbDates);
+		
 		bgLayout=(LinearLayout) rootView.findViewById(R.id.reviewchoose_bg);
 		layout=(RelativeLayout)rootView.findViewById(R.id.reviewchoose_layout);
-		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);	
-	
-		timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates,dateAndPhotoInfosMap);
-		exerciseTimeLine.setAdapter(timeLineAdapter);
+		reviewChooseLayout=(LinearLayout)rootView.findViewById(R.id.review_choose);			
 		reviewEbbin=(Button)rootView.findViewById(R.id.ebbinghaus_review);
 		reviewEbbin.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
 		reviewReverse=(Button)rootView.findViewById(R.id.reverse_review);
@@ -106,7 +120,7 @@ public class ReviewChooseFragment extends Fragment{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				jumpToReview(dates.get(0));
+				jumpToReview(dbDates.get(0));
 			}
 		});
 		initTitleView();
@@ -122,6 +136,9 @@ public class ReviewChooseFragment extends Fragment{
 		super.onResume();
 	}
 
+	
+	
+	
 	private void initTitleView()
 	{
 		//typefaceFZLT= Typeface.createFromAsset (getActivity().getAssets(),"font/fangzhenglanting.ttf");
@@ -379,6 +396,46 @@ public class ReviewChooseFragment extends Fragment{
                 Animation.RELATIVE_TO_SELF,1.0f);    
 		mHiddenAction.setDuration(500);
 	    return mHiddenAction;
+	}
+	private void requestPhotoedDates(String url,final List<String> dbDates)
+	{
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				Log.e(DataConstants.TAG, "requestPhotoedDates response=" + response);
+				int error=-1;
+				try {
+					error = response.getInt("errorCode");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(error==0)
+				{
+					List<String> dates=RequestAndParseUtil.parsePhotoedDatesInfo(response);
+					//Log.e(DataConstants.TAG, "dates size"+dates.size());
+					for(String dbDate:dbDates)
+					{
+						if(!dates.contains(dbDate))
+							dates.add(dbDate);
+					}
+					Collections.reverse(dates);
+					timeLineAdapter=new ExerciseTimeLineAdapter(getActivity(),tableName,dates);
+					exerciseTimeLine.setAdapter(timeLineAdapter);
+				}
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError arg0) {
+				// tv_1.setText(arg0.toString());
+				Log.i(DataConstants.TAG,
+						"sorry,Error" + arg0.toString());
+			
+			}
+		});
+		GloableData.requestQueue.add(jsonObjectRequest);
 	}
 
 }
