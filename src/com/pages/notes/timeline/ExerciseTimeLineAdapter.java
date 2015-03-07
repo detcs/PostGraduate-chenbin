@@ -104,7 +104,7 @@ public class ExerciseTimeLineAdapter extends BaseAdapter {
 	    records=new ArrayList<CourseRecordInfo>();
 		SQLiteDatabase db = DataConstants.dbHelper.getReadableDatabase();
 		List<String> photoNames=DataConstants.dbHelper.queryPhotoNamesAtDate(context, db, tableName, dates.get(position));
-		Log.e(DataConstants.TAG, "size");
+		Log.e(DataConstants.TAG, dates.get(position)+" size "+photoNames.size());
 		if(photoNames.size()>0)
 		{
 			for(String photoName:photoNames)

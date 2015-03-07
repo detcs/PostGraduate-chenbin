@@ -26,6 +26,7 @@ import com.data.model.MusicService;
 import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
 import com.data.util.DisplayUtil;
+import com.data.util.ImageUtil;
 import com.data.util.NetWorkUtil;
 import com.pages.notes.footprint.DownloadTask;
 import com.pages.notes.footprint.FootprintInfo;
@@ -77,8 +78,12 @@ public class TodayFragment extends Fragment {
 	public void initTodayView(View v) {
 
 		todayBgImg=(ImageView) v.findViewById(R.id.today_bg_img);
-		Picasso.with(getActivity()).load(R.drawable.today_background).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
-		TextView useDays=(TextView) v.findViewById(R.id.use_days);
+		todayBgImg.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.today_background));
+		//ImageUtil.imageLoader.displayImage(uri, imageAware);
+		//Picasso.with(getActivity()).load(R.drawable.today_background).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
+		/*
+		 * TextView useDays=(TextView) v.findViewById(R.id.use_days);
+		 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		//calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
@@ -93,7 +98,7 @@ public class TodayFragment extends Fragment {
 		Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"font/AvenirNextLTPro-UltLt.otf");
 		useDays.setTypeface(typeFace);
 		useDays.setTextSize(useDaysSize);
-		
+		*/
 
 		//mRoundProgressBar=(RoundProgressBar)v.findViewById(R.id.roundProgressBar);
 		//mp = MediaPlayer.create(getActivity(), R.raw.song);
@@ -103,6 +108,10 @@ public class TodayFragment extends Fragment {
 		//musicName.setTypeface(DataConstants.typeFZLT);
 		//singerName=(TextView) v.findViewById(R.id.singer_name);
 		//singerName.setTypeface(DataConstants.typeFZLT);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		//calendar.roll(Calendar.DAY_OF_YEAR,1);//tomorrow
+		String date = sdf.format(calendar.getTime());
 		db= DataConstants.dbHelper.getReadableDatabase();
 		FootprintInfo footPrintInfo=DataConstants.dbHelper.queryFootPrintInfo(getActivity(), db, date);
 		if(footPrintInfo!=null)
@@ -197,9 +206,9 @@ public class TodayFragment extends Fragment {
 		//singerName.setText(info.getCoverSingerName());
 		String bgPath=FileDataHandler.COVER_PIC_DIR_PATH+"/"+info.getCoverPicName();
 		Picasso.with(getActivity()).load(new File(bgPath)).resize(DataConstants.screenWidth/2, DataConstants.screenHeight/2).into(todayBgImg);
-		TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);
-		TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
-		encourageTv.setText(info.getEncourage());
+//		TextView experienceTv = (TextView) rootView.findViewById(R.id.experience);
+//		TextView encourageTv = (TextView) rootView.findViewById(R.id.encourage);
+//		encourageTv.setText(info.getEncourage());
 	}
 	private void requestFirstPageJasonInfo(String url, final String date,final boolean updateUI) {
 		final FootprintInfo fpInfo;
@@ -321,12 +330,15 @@ public class TodayFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onResume();
 		db= DataConstants.dbHelper.getReadableDatabase();
+		//todayBgImg.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.today_background));
 	}
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
 		db.close();
+		//todayBgImg.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.today_background));
+		//todayBgImg.setBackground(null);
 	}
 	
 

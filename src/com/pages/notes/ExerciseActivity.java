@@ -4,6 +4,7 @@ package com.pages.notes;
 
 import com.app.ydd.R;
 import com.data.model.DataConstants;
+import com.data.util.DisplayUtil;
 import com.pages.notes.timeline.ReviewChooseFragment;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 public class ExerciseActivity extends Activity{
 
@@ -24,6 +26,8 @@ public class ExerciseActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_exercise);
+		RelativeLayout title=(RelativeLayout) findViewById(R.id.title);
+		title.setBackground(DisplayUtil.drawableTransfer(ExerciseActivity.this, R.drawable.register_title));
 		Intent intent=getIntent();
 		String tag=intent.getStringExtra("tag");
 		if(tag.equals(getResources().getString(R.string.first_use)))

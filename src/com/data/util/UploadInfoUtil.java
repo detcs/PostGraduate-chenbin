@@ -1,6 +1,8 @@
 package com.data.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,10 +90,10 @@ public class UploadInfoUtil {
 		return resultURL;
 	}
 	
-	public static void uploadQues(final Context context,final CourseRecordInfo cri,final String tableName,final String imgId)
+	public static void uploadQues(final String url,final Context context,final CourseRecordInfo cri,final String tableName,final String imgId)
 	{
-		//RequestQueue requestQueue = Volley.newRequestQueue(context);
-		String url=getUploadQuesURL(context, cri, tableName,imgId);
+		RequestQueue requestQueue = Volley.newRequestQueue(context);
+		
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
 				new Response.Listener<JSONObject>() {
 			@Override
@@ -124,7 +126,8 @@ public class UploadInfoUtil {
 			
 			}
 		});
-		GloableData.requestQueue.add(jsonObjectRequest);
+		//Log.e(DataConstants.TAG, "UploadQues add jsonObjectRequest");
+		requestQueue.add(jsonObjectRequest);
 	}
 	
 	public static String getUploadQuesURL(Context context,CourseRecordInfo cri,String tableName,String imgId) {
@@ -184,6 +187,13 @@ public class UploadInfoUtil {
 		String createDate=cri.getDate();
 		String[] time=cri.getTime().split("\\|");
 		String createTime=time[0]+" "+time[1];
+		try {
+			createTime=URLEncoder.encode(createTime,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Log.e(DataConstants.TAG, "after encode:"+createTime);
 		pair = new BasicNameValuePair("createTime",createTime);
 		params.add(pair);
 		pair = new BasicNameValuePair("subject",subject);
@@ -206,6 +216,7 @@ public class UploadInfoUtil {
 		Log.e(DataConstants.TAG, "Upload ques:" + resultURL);
 		return resultURL;
 	}
+	/*
 	public static void uploadQuesImg(final Context context,final CourseRecordInfo cri,final String tableName,String imgBase64)
 	{
 		//RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -248,6 +259,7 @@ public class UploadInfoUtil {
 		});
 		GloableData.requestQueue.add(jsonObjectRequest);
 	}
+	*/
 	public static void uploadImg(String base64, Context context,CourseRecordInfo cri, String tableName)
 	{
 		new UploadPictureTask(base64,context,cri,tableName).execute(DataConstants.SERVER_URL);
@@ -306,7 +318,8 @@ public class UploadInfoUtil {
 			JSONObject obj;
 			try {
 				String imgId=parseJson(result);
-				uploadQues(context, cri, tableName, imgId);
+				String url=getUploadQuesURL(context, cri, tableName,imgId);
+				uploadQues(url,context, cri, tableName, imgId);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

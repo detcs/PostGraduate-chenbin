@@ -138,7 +138,7 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="@drawable/untransfered_course" 
+                
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="6dp"/>
 
@@ -148,7 +148,6 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="@drawable/untransfered_course"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 />
@@ -159,7 +158,6 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:gravity="center" 
-                android:background="@drawable/untransfered_course"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="12dp"/>
         </LinearLayout>
@@ -184,7 +182,7 @@
         	android:textSize="20sp"
         	android:gravity="center"
         	android:text="@string/delete"
-        	android:background="@drawable/delete_long_btn"
+        	
             />
         <TextView
             android:id="@+id/delete_cancel_bg"
@@ -195,7 +193,7 @@
         	android:gravity="center"
         	android:layout_marginTop="8dp"
         	android:text="@string/cancel"
-        	android:background="@drawable/delete_long_btn"
+        	
             />
         </LinearLayout>
 </FrameLayout>

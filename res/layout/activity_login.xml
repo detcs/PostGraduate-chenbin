@@ -10,9 +10,11 @@
 	 	android:layout_height="match_parent"
         />
 	<RelativeLayout
+	    android:id="@+id/setting_layout"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:orientation="vertical" >
+	    android:orientation="vertical" 
+	    android:alpha="0">
 	    <LinearLayout 
 	  	    android:id="@+id/login_div"
 	  	    android:layout_width="match_parent"

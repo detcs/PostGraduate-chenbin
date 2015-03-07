@@ -30,10 +30,10 @@ public class FunctionsSquareFragment extends Fragment{
 		BitmapFactory.Options opt=new BitmapFactory.Options();
 		//opt.inJustDecodeBounds=true;
 		opt.inSampleSize=10;
-		Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.today_background, opt);
+		//Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.today_background, opt);
 		//Log.e(DataConstants.TAG,"null?"+(bitmap==null));
-		bitmap=DisplayUtil.doBlur(bitmap, 10, false);
-		bg.setImageBitmap(bitmap);
+		//bitmap=DisplayUtil.doBlur(bitmap, 10, false);
+		bg.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.today_background));
 		initFunctionsSquareView(rootView);
 		return rootView;
 	}

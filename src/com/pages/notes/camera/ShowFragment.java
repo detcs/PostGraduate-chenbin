@@ -548,7 +548,7 @@ public class ShowFragment extends Fragment {
 			CourseRecordInfo criWithID=dbHelper.queryCourseRecordByPhotoName(getActivity(), db, tableName, photoName);	
 			//Log.e(DataConstants.TAG, "to64 "+photoPath);
 			String imgBase64=FileDataHandler.getBase64ImageStr(photoPath);
-			UploadInfoUtil.uploadImg(imgBase64,getActivity(), criWithID, tableName);
+			UploadInfoUtil.uploadImg(imgBase64,getActivity().getApplicationContext(), criWithID, tableName);
 			//new UploadInfoUtil.UploadPictureTask(imgBase64).execute(DataConstants.SERVER_URL);
 			//UploadInfoUtil.uploadQuesImg(getActivity(), criWithID, tableName, imgBase64);
 		}

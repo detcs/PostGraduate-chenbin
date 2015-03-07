@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
     	android:layout_height="50dp"
     	android:layout_gravity="top"
-    	android:background="@drawable/register_title"
     	android:id="@+id/title"
     	android:alpha="0.5"
         >

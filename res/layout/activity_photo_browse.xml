@@ -104,7 +104,7 @@
 				        	<TextView
 				        	    android:id="@+id/extends_img"
 					            android:layout_gravity="right"
-					            android:background="@drawable/look_all"
+					            
 					            android:layout_marginRight="0dp"
 					            android:layout_marginBottom="0dp"
 						        android:layout_width="40dp"
@@ -215,7 +215,7 @@
         	android:textSize="20sp"
         	android:gravity="center"
         	android:text="@string/delete"
-        	android:background="@drawable/delete_long_btn"
+        	
             />
         <TextView
             android:id="@+id/browse_delete_cancel_bg"
@@ -226,7 +226,6 @@
         	android:gravity="center"
         	android:layout_marginTop="8dp"
         	android:text="@string/cancel"
-        	android:background="@drawable/delete_long_btn"
             />
         </LinearLayout>
         

@@ -50,7 +50,7 @@ public class FootPrintActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_footprint);
 		RelativeLayout titleLayout=(RelativeLayout) findViewById(R.id.footprint_title);
-		titleLayout.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.register_title));
+		titleLayout.setBackground(DisplayUtil.drawableTransfer(FootPrintActivity.this, R.drawable.register_title));
 		//tableName=getIntent().getStringExtra("tableName");
 		dates=new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -124,7 +124,7 @@ public class TodayRecommenderActivity extends Activity{
 	private void initTitleView()
 	{
 		RelativeLayout title=(RelativeLayout) findViewById(R.id.today_rec_title);
-		title.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_title_bg));
+		title.setBackground(DisplayUtil.drawableTransfer(TodayRecommenderActivity.this, R.drawable.gradual_title_bg));
 		titleBack=(TextView) findViewById(R.id.todayrec_back);
 		titleBack.setOnClickListener(new OnClickListener() {
 			

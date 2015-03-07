@@ -1,6 +1,7 @@
 package com.pages.notes.camera;
 
 import com.app.ydd.R;
+import com.data.util.DisplayUtil;
 import com.data.util.SysCall;
 import com.pages.notes.camera.MySurfaceView.MyCallBack;
 import com.view.util.AnimationUtil;
@@ -149,6 +150,7 @@ public class TakeFragment extends Fragment implements MyCallBack {
 		closeView = (ImageView) view.findViewById(R.id.closeView);
 		pickView = (ImageView) view.findViewById(R.id.pickView);
 		takeBu = (ImageView) view.findViewById(R.id.takeBu);
+		takeBu.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.camera_take));
 		surfaceView = (MySurfaceView) view.findViewById(R.id.mySurfaceView);
 	}
 

@@ -18,7 +18,9 @@ import com.android.volley.toolbox.Volley;
 import com.data.model.DataConstants;
 import com.data.model.UserConfigs;
 import com.data.util.DateUtil;
+import com.data.util.DisplayUtil;
 import com.data.util.GloableData;
+import com.data.util.ImageUtil;
 import com.data.util.NetWorkUtil;
 import com.app.ydd.R;
 import com.pages.viewpager.MainActivity;
@@ -45,6 +47,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +62,7 @@ public class LoginActivity extends Activity{
 	TextView phoneLogin;
 	TextView forgetPwd;
 	ImageView loginBg;
+	RelativeLayout settingLayout;
 	//weibo
 //		 private AuthInfo mAuthInfo;
 //		 /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
@@ -71,14 +75,15 @@ public class LoginActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.activity_login);
+		settingLayout=(RelativeLayout) findViewById(R.id.setting_layout);
+		loginBg=(ImageView)findViewById(R.id.login_bg);
+		Picasso.with(getApplicationContext()).load(R.drawable.login_background).into(loginBg);
 		if(UserConfigs.getId()==null || 
 		  (UserConfigs.getLoginWay().equals(getResources().getString(R.string.user_phone))
 				  && UserConfigs.getPassword()==null))//debug
 		{
-			setContentView(R.layout.activity_login);
-			loginBg=(ImageView)findViewById(R.id.login_bg);
-			Picasso.with(getApplicationContext()).load(R.drawable.login_background).into(loginBg);
+			settingLayout.setVisibility(View.VISIBLE);
 			phone=(EditText)findViewById(R.id.username_edit);
 			password=(EditText)findViewById(R.id.password_edit);
 			phoneLogin=(TextView)findViewById(R.id.signin_button);
@@ -93,9 +98,13 @@ public class LoginActivity extends Activity{
 			weiboLogin=(ImageView )findViewById(R.id.weibologin);
 			qqLogin=(ImageView )findViewById(R.id.qqlogin);
 			wxLogin=(ImageView )findViewById(R.id.wxlogin);
-			Picasso.with(getApplicationContext()).load(R.drawable.login_qq_normal).into(qqLogin);
-			Picasso.with(getApplicationContext()).load(R.drawable.login_wx_normal).into(wxLogin);
-			Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_normal).into(weiboLogin);
+			//ImageUtil.imageLoader.displayImage(uri, imageAware);
+			qqLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_qq_normal));
+			wxLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_wx_normal));
+			weiboLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_weibo_normal));
+//			Picasso.with(getApplicationContext()).load(R.drawable.login_qq_normal).into(qqLogin);
+//			Picasso.with(getApplicationContext()).load(R.drawable.login_wx_normal).into(wxLogin);
+//			Picasso.with(getApplicationContext()).load(R.drawable.login_weibo_normal).into(weiboLogin);
 			qqLogin.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -155,6 +164,7 @@ public class LoginActivity extends Activity{
 		}
 		else
 		{
+			settingLayout.setVisibility(View.INVISIBLE);
 			String loginWay=UserConfigs.getLoginWay();
 			if(loginWay.equals(getResources().getString(R.string.user_weibo)))
 				;//weiboLogin();
@@ -485,5 +495,33 @@ public class LoginActivity extends Activity{
 		}
     	
     }
-	
+    
+    
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		releaseBackground();
+		super.onStop();
+		
+	}
+	private void resumeBackground()
+	{
+		qqLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_qq_normal));
+		wxLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_wx_normal));
+		weiboLogin.setBackground(DisplayUtil.drawableTransfer(LoginActivity.this,R.drawable.login_weibo_normal));
+	}
+	private void releaseBackground()
+	{
+		if(qqLogin!=null)
+		qqLogin.setBackground(null);
+		if(wxLogin!=null)
+		wxLogin.setBackground(null);
+		if(weiboLogin!=null)
+		weiboLogin.setBackground(null);
+	}
 }

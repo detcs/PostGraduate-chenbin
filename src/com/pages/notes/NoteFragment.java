@@ -205,9 +205,18 @@ public class NoteFragment  extends Fragment{
 				// TODO Auto-generated method stub
 				Log.i("filp", "" + arg0.getId() + " button 1");
 				Intent intent = new Intent();
+				boolean isFirstUse = UserConfigs.getIsFirstTakePhoto() == null ? true
+						: false;
+				if (isFirstUse) {
+					intent.setClass(getActivity(), ExerciseActivity.class);
+					intent.putExtra("tag",getResources().getString(R.string.first_use));
+					startActivityForResult(intent, 0);
+				}
+			   else 
+			   {
 				intent.setClass(getActivity(), CameraActivity.class);
 				getActivity().startActivityForResult(intent,DataConstants.REQUEST_CODE_CAMERA);
-
+			   }
 			}
 		});
 		// GridView gv=(GridView)v.findViewById(R.id.notes_grid);

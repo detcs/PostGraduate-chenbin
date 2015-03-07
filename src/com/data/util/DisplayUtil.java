@@ -297,6 +297,7 @@ public class DisplayUtil {
 			opt.inPreferredConfig = Bitmap.Config.RGB_565;
 			opt.inPurgeable = true;
 			opt.inInputShareable = true;
+			opt.inSampleSize=2;
 			InputStream is = context.getResources().openRawResource(resId );
 			Bitmap bm = BitmapFactory.decodeStream(is, null, opt);
 			BitmapDrawable bd = new BitmapDrawable(context.getResources(), bm);

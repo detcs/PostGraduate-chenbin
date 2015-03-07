@@ -22,7 +22,9 @@ import com.data.util.PhotoNameTableInfo;
 import com.data.util.SysCall;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.squareup.picasso.Picasso;
 import com.view.util.AnimationUtil;
 import com.view.util.BitmapUtil;
@@ -150,12 +152,53 @@ public class PhotoBrowseActivity extends Activity{
 					BitmapFactory.Options opt=new BitmapFactory.Options();
 					opt.inSampleSize=8;
 					DisplayImageOptions opts=new DisplayImageOptions.Builder()
-					.cacheInMemory(true)
+					.cacheInMemory(false)
 					.cacheOnDisk(true)
-					.showImageOnLoading(R.drawable.note_thumb)
+					//.showImageOnLoading(R.drawable.note_thumb)
+					.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+					.bitmapConfig(Bitmap.Config.RGB_565)
 					.decodingOptions(opt)
 					.build();
-					ImageUtil.imageLoader.loadImage(courseInfos.get(position).getPhotoPath(), opts,new ImageLoadingListener() {
+					ImageUtil.imageLoader.displayImage(courseInfos.get(position).getPhotoPath(), img,opts, new SimpleImageLoadingListener()
+					{
+
+						@Override
+						public void onLoadingCancelled(String imageUri,
+								View view) {
+							// TODO Auto-generated method stub
+							super.onLoadingCancelled(imageUri, view);
+						}
+
+						@Override
+						public void onLoadingComplete(String imageUri,
+								View view, Bitmap loadedImage) {
+							// TODO Auto-generated method stub
+							super.onLoadingComplete(imageUri, view, loadedImage);
+							img.setmActivity(PhotoBrowseActivity.this);// ע��Activity.
+							img.setLayout(content);
+							img.setBumpHeight(300);
+							img.setScreen_H(windowHeight-stateHeight);
+							img.setScreen_W(windowWidth);
+						}
+
+						@Override
+						public void onLoadingFailed(String imageUri, View view,
+								FailReason failReason) {
+							// TODO Auto-generated method stub
+							super.onLoadingFailed(imageUri, view, failReason);
+							Log.e(DataConstants.TAG, "fail");
+						}
+
+						@Override
+						public void onLoadingStarted(String imageUri, View view) {
+							// TODO Auto-generated method stub
+							super.onLoadingStarted(imageUri, view);
+							Log.e(DataConstants.TAG, "start");
+						}
+						
+					});
+					/*
+					ImageUtil.imageLoader.loadImage(courseInfos.get(position).getPhotoPath(),opts,new ImageLoadingListener() {
 						
 						@Override
 						public void onLoadingStarted(String arg0, View arg1) {
@@ -188,6 +231,7 @@ public class PhotoBrowseActivity extends Activity{
 							
 						}
 					});
+					*/
 					return contents.get(position);
 				}
 	
@@ -233,9 +277,11 @@ public class PhotoBrowseActivity extends Activity{
 					//textUtil.setTextContent(text, true);
 					
 					if(cri.getFlag()==1)
-						Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance_click).into(importantImg);
+						importantImg.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.notespec_importance_click));
+						//Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance_click).into(importantImg);
 					else
-						Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
+						importantImg.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.notespec_importance));
+						//Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
 					boolean currentFlag=cri.getFlag()==1?true:false;
 					importantImg.setOnClickListener(new ImportanceFlagOnClickListener(courseInfos.get(currentIndex).getPhotoName(),courseInfos.get(currentIndex).getTableName(), PhotoBrowseActivity.this,importantImg,currentFlag,PageName.NoteSpec));
 				}
@@ -260,9 +306,12 @@ public class PhotoBrowseActivity extends Activity{
 	private void initTitleView()
 	{
 		RelativeLayout browseTop=(RelativeLayout) findViewById(R.id.browse_top);
+		//ImageUtil.imageLoader.
+		//browseTop.setBackgroundResource(R.drawable.gradual_title_bg);
 		browseTop.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_title_bg));
 		TextView back=(TextView) findViewById(R.id.browse_back);
-		back.setOnClickListener(new OnClickListener() {
+		back.setOnClickListener(new OnClickListener() 
+		{
 			
 			@Override
 			public void onClick(View arg0) {
@@ -283,7 +332,11 @@ public class PhotoBrowseActivity extends Activity{
 			}
 		});
 		TextView delete=(TextView)findViewById(R.id.browse_delete_bg);
+		//delete.setBackgroundResource(R.drawable.delete_long_btn);
+		delete.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.delete_long_btn));
 		TextView deleteCancel=(TextView)findViewById(R.id.browse_delete_cancel_bg);
+		//deleteCancel.setBackgroundResource(R.drawable.delete_long_btn);
+		deleteCancel.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.delete_long_btn));
 		delete.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -314,7 +367,8 @@ public class PhotoBrowseActivity extends Activity{
 	private void initBottomView()
 	{
 		FrameLayout bottomFrame=(FrameLayout) findViewById(R.id.browse_bottom_frame);
-		bottomFrame.setBackground(DisplayUtil.drawableTransfer(getApplicationContext(), R.drawable.gradual_text_bg));
+		//bottomFrame.setBackgroundResource(R.drawable.gradual_text_bg);
+		bottomFrame.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.gradual_text_bg));
 		//ImageView textBg=(ImageView) findViewById(R.id.gradual_text_bg);
 		//Picasso.with(getApplicationContext()).load(R.drawable.gradual_text_bg).into(textBg);
 		
@@ -333,16 +387,20 @@ public class PhotoBrowseActivity extends Activity{
 		//bmp=BitmapFactory.decodeFile(photoInfos.get(i).getPath(), opt);
 		flurImg=(ImageView)findViewById(R.id.blur_img);
 		importantImg=(ImageView)findViewById(R.id.important_img);
-		Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
+		importantImg.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.notespec_importance));
+		//Picasso.with(getApplicationContext()).load(R.drawable.notespec_importance).into(importantImg);
 		rotateImg=(ImageView)findViewById(R.id.rotate_img);
-		Picasso.with(getApplicationContext()).load(R.drawable.notespec_rotate).into(rotateImg);
+		rotateImg.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.notespec_rotate));
+		//Picasso.with(getApplicationContext()).load(R.drawable.notespec_rotate).into(rotateImg);
 		remarkImg=(ImageView)findViewById(R.id.remark_img);
-		Picasso.with(getApplicationContext()).load(R.drawable.notespec_remark).into(remarkImg);
+		remarkImg.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.notespec_remark));
+		//Picasso.with(getApplicationContext()).load(R.drawable.notespec_remark).into(remarkImg);
 	}
 	private void initRemarkEditView()
 	{
 		remarkContent=(TextView)findViewById(R.id.text_remark_content);
 		TextView extendBtn=(TextView)findViewById(R.id.extends_img);
+		extendBtn.setBackground(DisplayUtil.drawableTransfer(PhotoBrowseActivity.this, R.drawable.look_all));
 		remarkContent.setTypeface(DataConstants.typeFZLT);
 		String tableName=courseInfos.get(currentIndex).getTableName();
 		String photoName=courseInfos.get(currentIndex).getPhotoName();
@@ -429,12 +487,41 @@ public class PhotoBrowseActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onResume();
 		db = DataConstants.dbHelper.getReadableDatabase();
+		initBottomView();initRemarkEditView();initTitleView();
 	}
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
 		db.close();
+		releaseTitleBackground();
+		releaseBottomBackground();
+	}
+	private void releaseRemarkBackground()
+	{
+		TextView extendBtn=(TextView)findViewById(R.id.extends_img);
+		extendBtn.setBackground(null);
+	}
+	private void releaseTitleBackground()
+	{
+		RelativeLayout browseTop=(RelativeLayout) findViewById(R.id.browse_top);
+		//ImageUtil.imageLoader.
+		//browseTop.setBackgroundResource(R.drawable.gradual_title_bg);
+		browseTop.setBackground(null);
+		TextView delete=(TextView)findViewById(R.id.browse_delete_bg);
+		//delete.setBackgroundResource(R.drawable.delete_long_btn);
+		delete.setBackground(null);
+		TextView deleteCancel=(TextView)findViewById(R.id.browse_delete_cancel_bg);
+		//deleteCancel.setBackgroundResource(R.drawable.delete_long_btn);
+		deleteCancel.setBackground(null);
+	}
+	private void releaseBottomBackground()
+	{
+		FrameLayout bottomFrame=(FrameLayout) findViewById(R.id.browse_bottom_frame);
+		bottomFrame.setBackground(null);
+		importantImg.setBackground(null);
+		rotateImg.setBackground(null);
+		remarkImg.setBackground(null);
 	}
 	
 }

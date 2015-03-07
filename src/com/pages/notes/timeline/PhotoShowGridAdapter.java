@@ -53,6 +53,7 @@ import com.data.util.PhotoNamePathUtil;
 import com.data.util.PhotoNameTableInfo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.pages.notes.ExerciseActivity;
 import com.pages.notes.ReviewFragment;
@@ -130,12 +131,15 @@ public class PhotoShowGridAdapter extends BaseAdapter
 	    FrameLayout.LayoutParams param=new FrameLayout.LayoutParams(width,width);
 	    holder.img.setLayoutParams(param);
 	   BitmapFactory.Options opt=new BitmapFactory.Options();
-	   opt.outHeight=width;
-	   opt.outWidth=width;
+	   //opt.outHeight=width;
+	   //opt.outWidth=width;
+	   opt.inSampleSize=8;
 	    DisplayImageOptions opts=new DisplayImageOptions.Builder()
-		.cacheInMemory(true)
+		.cacheInMemory(false)
 		.cacheOnDisk(true)
-		.showImageOnLoading(R.drawable.note_thumb)
+		//.showImageOnLoading(R.drawable.note_thumb)
+		.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+		.bitmapConfig(Bitmap.Config.RGB_565)
 		.decodingOptions(opt)
 		.build();
 	    ImageUtil.imageLoader.displayImage(photoInfos.get(position).getPhotoPath(), holder.img,opts,new PhotoLoadingListener(holder.loading, context));
@@ -309,7 +313,8 @@ public class PhotoShowGridAdapter extends BaseAdapter
 		intent.putExtra("courseInfos", (Serializable)photoInfos);
 		//intent.putParcelableArrayListExtra(name, value)
 		context.startActivity(intent);
-	
+		//for(CourseRecordInfo )
+		//ImageUtil.imageLoader.clearMemoryCache();
 	}
 //
 //	private void requestQuesInfo(String url) {

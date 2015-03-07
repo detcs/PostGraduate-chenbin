@@ -77,6 +77,8 @@ public class ReviewChooseFragment extends Fragment{
 	boolean chooseState=false;
 	static List<CourseRecordInfo> choosedRecords;
 	String targetTransferCourse;
+	TextView delete;
+	TextView deleteCancel;
 	@Override
 	public View onCreateView(final LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View  rootView = inflater.inflate(R.layout.fragment_reviewchoose, container, false);
@@ -133,6 +135,7 @@ public class ReviewChooseFragment extends Fragment{
 		// TODO Auto-generated method stub
 		
 		initTitleView();
+		resumeBackground();
 		super.onResume();
 	}
 
@@ -208,13 +211,13 @@ public class ReviewChooseFragment extends Fragment{
 					if (courseButtons[i] == v) {
 						targetTransferCourse=courseButtons[i].getText().toString();
 						courseButtons[i].setTextColor(0);
-						courseButtons[i].setBackgroundResource(R.drawable.transferd_course);
+						courseButtons[i].setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.transferd_course));
 						courseButtons[i].setTextColor(courseChoosedColor);
 					}
 					else
 					{
 						courseButtons[i].setTextColor(courseNormalColor);
-						courseButtons[i].setBackgroundResource(R.drawable.untransfered_course);
+						courseButtons[i].setBackground(DisplayUtil.drawableTransfer(getActivity(),R.drawable.untransfered_course));
 					}
 				}
 			}
@@ -228,8 +231,11 @@ public class ReviewChooseFragment extends Fragment{
 		courseTransferChooseLayout=(LinearLayout)rootView.findViewById(R.id.course_transfer_choose);
 		TextView[] courseButtons = new TextView[3];
 		courseButtons[0]=(TextView)rootView.findViewById(R.id.course1);
-		courseButtons[1]=(TextView)rootView.findViewById(R.id.course2);
+		courseButtons[1]=(TextView)rootView.findViewById(R.id.course2); 
 		courseButtons[2]=(TextView)rootView.findViewById(R.id.course3);
+		courseButtons[0].setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.untransfered_course));
+		courseButtons[1].setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.untransfered_course));
+		courseButtons[2].setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.untransfered_course));
 		int index=0,targetIndex=0;
 		final HashMap<String, String> courseNameTableMap=UserConfigs.getCourseNameAndTableMap();
 		for(String name:courseNameTableMap.keySet())
@@ -284,7 +290,8 @@ public class ReviewChooseFragment extends Fragment{
 					DataConstants.dbHelper.insertCourseRecord(getActivity(), db, targetTable, cri);
 					//FileDataHandler.transferFile(path,FileDataHandler.APP_DIR_PATH+"/"+DataConstants.TABLE_DIR_MAP.get(targetTable)+"/"+photoname);
 					//UploadInfoUtil.upl
-					UploadInfoUtil.uploadQues(getActivity(), cri, targetTable, cri.getPhotoName());
+					String url=UploadInfoUtil.getUploadQuesURL(getActivity(), cri, tableName,cri.getPhotoName());
+					UploadInfoUtil.uploadQues(url,getActivity(), cri, targetTable, cri.getPhotoName());
 				}
 				TreeSet<String> dateSet=DataConstants.dbHelper.queryDates(getActivity(), db, tableName);
 				final List<String> dates=new ArrayList<String>();
@@ -318,8 +325,10 @@ public class ReviewChooseFragment extends Fragment{
 			}
 		});
 		final LinearLayout deleteLayout=(LinearLayout) rootView.findViewById(R.id.bottom_delete);
-		TextView delete=(TextView) rootView.findViewById(R.id.delete_bg);
-		TextView deleteCancel=(TextView) rootView.findViewById(R.id.delete_cancel_bg);
+		delete=(TextView) rootView.findViewById(R.id.delete_bg);
+		delete.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.delete_long_btn));
+		deleteCancel=(TextView) rootView.findViewById(R.id.delete_cancel_bg);
+		deleteCancel.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.delete_long_btn));
 		delete.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -437,6 +446,27 @@ public class ReviewChooseFragment extends Fragment{
 		});
 		GloableData.requestQueue.add(jsonObjectRequest);
 	}
+	private void resumeBackground()
+	{
+		reviewEbbin.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
+		reviewReverse.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.review_btn_bg));
+		delete.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.delete_long_btn));
+		deleteCancel.setBackground(DisplayUtil.drawableTransfer(getActivity(), R.drawable.delete_long_btn));
+	}
+	private void releaseBackground()
+	{
+		reviewEbbin.setBackground(null);
+		reviewReverse.setBackground(null);
+		delete.setBackground(null);
+		deleteCancel.setBackground(null);
+	}
 
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		releaseBackground();
+	}
+	
 }
 
